@@ -11,11 +11,13 @@ export default function(props: FileProps): IFile {
     return path.resolve(props.dir, `${props.name}.${props.extension}`)
   }
   const getTemplateString = () => props.templateString
+  const getRole = () => props.role
 
   return {
     getName,
     getPath,
     getTemplateString,
-    getExtension
+    getExtension,
+    getRole
   }
 }

@@ -7,13 +7,14 @@ import createReactComponent from "./lib/ReactComponent/factory"
 import type { ReactComponentProps } from "./lib/ReactComponent/types"
 import type { IReactComponent } from "./lib/ReactComponent/interfaces"
 import writeComponentFiles from "./lib/ReactComponent/write-component-files"
+import { reduceComponentPaths } from "./lib/ReactComponent/utils"
 
 export default function(config: IConfig) {
   const componentsPath = config.paths.components || "components"
   const componentExtension = config.extension || "js"
   const componentsHome: string = path.join(process.cwd(), componentsPath)
 
-  const createDir = function(
+  const createComponentDir = function(
     component: IReactComponent
   ): Promise<IReactComponent> {
     return mkdirp(component.getPath()).then(() => component)
@@ -35,9 +36,11 @@ export default function(config: IConfig) {
       componentsHome
     )
 
-    return createDir(component)
+    return createComponentDir(component)
       .then(writeComponentFiles)
-      .then(filesWritten => (filesWritten ? component.getPath() : null))
+      .then((componentFilesPaths: Array<Object>) => {
+        return reduceComponentPaths(component, componentFilesPaths)
+      })
   }
   return {
     generate

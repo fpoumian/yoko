@@ -14,6 +14,7 @@ export default function(
       name: props.name,
       extension: "js",
       dir: props.path,
+      role: "main",
       templateString: `
 import React from 'react'
 
@@ -30,6 +31,7 @@ export default {{ componentName }}
       name: "index",
       extension: "js",
       dir: props.path,
+      role: "index",
       templateString: `
       export { default } from "./{{ componentName }}"
       
@@ -38,6 +40,7 @@ export default {{ componentName }}
     stylesheetFile: createComponentFile({
       name: "styles",
       extension: "css",
+      role: "stylesheet",
       dir: props.path,
       templateString: ""
     })

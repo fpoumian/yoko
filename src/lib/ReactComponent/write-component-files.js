@@ -34,7 +34,11 @@ export default function(component: IReactComponent): Promise<any> {
       componentName: component.getName()
     })
 
-    return writeFile(file, renderedTemplate)
+    return writeFile(file, renderedTemplate).then(path => {
+      return {
+        [file.getRole()]: path
+      }
+    })
   })
 
   return Promise.all(filePromises)

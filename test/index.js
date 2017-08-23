@@ -48,9 +48,9 @@ describe("generate", () => {
 
   it("should create one directory inside of components Home directory", () => {
     expect.assertions(1)
-    return expect(
-      rcg.generate("StatelessFunctionalComponent")
-    ).resolves.toEqual(resolveInComponents("StatelessFunctionalComponent"))
+    return rcg.generate("TestComponent").then(componentPaths => {
+      expect(resolveInComponents("TestComponent")).toEqual(componentPaths.root)
+    })
   })
 
   it("should create five directories inside of components Home directory", () => {
@@ -73,7 +73,10 @@ describe("generate", () => {
     expect.assertions(1)
     return expect(
       rcg.generate("ParentDirectory/TestComponent")
-    ).resolves.toEqual(resolveInComponents("ParentDirectory", "TestComponent"))
+    ).resolves.toHaveProperty(
+      "root",
+      resolveInComponents("ParentDirectory", "TestComponent")
+    )
   })
 
   it("should create component inside existing directory if it already exists", () => {
@@ -93,8 +96,8 @@ describe("generate", () => {
 
   it("should create a main JS file for the component", () => {
     expect.assertions(1)
-    return rcg.generate("TestComponent").then(componentDirPath => {
-      expect(getDirContents(componentDirPath)).toContain("TestComponent.js")
+    return rcg.generate("TestComponent").then(paths => {
+      expect(getDirContents(paths.root)).toContain("TestComponent.js")
     })
   })
 
@@ -118,36 +121,28 @@ describe("generate", () => {
 
   it("should create a valid React Component", () => {
     expect.assertions(1)
-    return rcg.generate("TestComponent").then(componentDirPath => {
-      const testComponent: string = fs.readFileSync(
-        path.resolve(componentDirPath, "TestComponent.js"),
-        {
-          encoding: "utf8"
-        }
-      )
+    return rcg.generate("TestComponent").then(paths => {
+      const testComponent: string = fs.readFileSync(path.resolve(paths.main), {
+        encoding: "utf8"
+      })
       expect(validateMainFile(testComponent, "TestComponent")).toBe(true)
     })
   })
 
   it("should create a valid React Component within parent directory", () => {
     expect.assertions(1)
-    return rcg
-      .generate("ParentDirectory/TestComponent")
-      .then(componentDirPath => {
-        const testComponent: string = fs.readFileSync(
-          path.resolve(componentDirPath, "TestComponent.js"),
-          {
-            encoding: "utf8"
-          }
-        )
-        expect(validateMainFile(testComponent, "TestComponent")).toBe(true)
+    return rcg.generate("ParentDirectory/TestComponent").then(paths => {
+      const testComponent: string = fs.readFileSync(path.resolve(paths.main), {
+        encoding: "utf8"
       })
+      expect(validateMainFile(testComponent, "TestComponent")).toBe(true)
+    })
   })
 
   it("should create a index JS file for the component", () => {
     expect.assertions(1)
-    return rcg.generate("TestComponent").then(componentDirPath => {
-      expect(getDirContents(componentDirPath)).toContain("index.js")
+    return rcg.generate("TestComponent").then(paths => {
+      expect(getDirContents(paths.root)).toContain("index.js")
     })
   })
 
@@ -171,29 +166,26 @@ describe("generate", () => {
 
   it("should create a valid index.js file", () => {
     expect.assertions(1)
-    return rcg.generate("TestComponent").then(componentDirPath => {
-      const indexFile: string = fs.readFileSync(
-        path.resolve(componentDirPath, "index.js"),
-        {
-          encoding: "utf8"
-        }
-      )
+    return rcg.generate("TestComponent").then(paths => {
+      const indexFile: string = fs.readFileSync(path.resolve(paths.index), {
+        encoding: "utf8"
+      })
       expect(validateIndexFile(indexFile, "TestComponent")).toBe(true)
     })
   })
 
   it("should create a stylesheet file for the component", () => {
     expect.assertions(1)
-    return rcg.generate("TestComponent").then(componentDirPath => {
-      expect(getDirContents(componentDirPath)).toContain("styles.css")
+    return rcg.generate("TestComponent").then(paths => {
+      expect(getDirContents(paths.root)).toContain("styles.css")
     })
   })
 
   it("should create an empty stylesheet file", () => {
     expect.assertions(1)
-    return rcg.generate("TestComponent").then(componentDirPath => {
+    return rcg.generate("TestComponent").then(paths => {
       const stylesheet: string = fs.readFileSync(
-        path.resolve(componentDirPath, "styles.css"),
+        path.resolve(paths.stylesheet),
         {
           encoding: "utf8"
         }
