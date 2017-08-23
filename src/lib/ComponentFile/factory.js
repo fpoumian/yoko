@@ -5,6 +5,8 @@ import type { FileProps } from "../File/types"
 import type { IFile } from "../File/interfaces"
 
 export default function(props: FileProps): IFile {
+
+  // Public API
   const getName = () => props.name
   const getExtension = () => props.extension
   const getPath = () => {

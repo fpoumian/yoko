@@ -1,9 +1,9 @@
 // @flow
 import type { ReactComponentProps } from "./types"
 import type { IReactComponent } from "./interfaces"
-
-import path from "path"
 import createComponentFile from "../ComponentFile/factory"
+import mainTemplateString from "./templates/mainFile"
+import indexTemplateString from "./templates/indexFile"
 
 export default function(
   props: ReactComponentProps,
@@ -15,27 +15,14 @@ export default function(
       extension: "js",
       dir: props.path,
       role: "main",
-      templateString: `
-import React from 'react'
-
-/** {{ componentName }} */
-function {{ componentName }}() {
-  return (
-    <div>{{ componentName }}</div>
-  )
-}
-export default {{ componentName }}
-`
+      templateString: mainTemplateString
     }),
     indexFile: createComponentFile({
       name: "index",
       extension: "js",
       dir: props.path,
       role: "index",
-      templateString: `
-      export { default } from "./{{ componentName }}"
-      
-      `
+      templateString: indexTemplateString
     }),
     stylesheetFile: createComponentFile({
       name: "styles",
@@ -46,6 +33,7 @@ export default {{ componentName }}
     })
   }
 
+  // Public API
   const getName = () => props.name
   const getPath = () => props.path
   const getFiles = () => files
