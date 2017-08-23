@@ -6,6 +6,7 @@
       }
     }],
     "stage-2",
-    "flow"
+    "flow",
+    "react-app"
   ]
 }
