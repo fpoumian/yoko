@@ -4,29 +4,30 @@ import type { IReactComponent } from "./interfaces"
 import createComponentFile from "../ComponentFile/factory"
 import mainTemplateString from "./templates/mainFile"
 import indexTemplateString from "./templates/indexFile"
+import type { Config } from "../Config/types"
 
 export default function(
   props: ReactComponentProps,
-  home: string
+  config: Config
 ): IReactComponent {
   const files = {
     mainFile: createComponentFile({
       name: props.name,
-      extension: "js",
+      extension: config.extensions.js.main,
       dir: props.path,
       role: "main",
       templateString: mainTemplateString
     }),
     indexFile: createComponentFile({
       name: "index",
-      extension: "js",
+      extension: config.extensions.js.index,
       dir: props.path,
       role: "index",
       templateString: indexTemplateString
     }),
     stylesheetFile: createComponentFile({
       name: "styles",
-      extension: "css",
+      extension: config.extensions.stylesheet.main,
       role: "stylesheet",
       dir: props.path,
       templateString: ""

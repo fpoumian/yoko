@@ -30,7 +30,7 @@ export default function(customConfig: Object = {}) {
 
     const component: IReactComponent = createReactComponent(
       props,
-      config.paths.components
+      config
     )
 
     return createComponentDir(component)
