@@ -55,6 +55,7 @@
     "generator"
   ],
   "dependencies": {
+    "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mkdirp-promise": "^5.0.1",
     "nunjucks": "^3.0.1",

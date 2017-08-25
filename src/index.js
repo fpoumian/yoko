@@ -2,17 +2,16 @@
 import mkdirp from "mkdirp-promise"
 import path from "path"
 
-import { IConfig } from "./lib/Interfaces/Config"
 import createReactComponent from "./lib/ReactComponent/factory"
 import type { ReactComponentProps } from "./lib/ReactComponent/types"
 import type { IReactComponent } from "./lib/ReactComponent/interfaces"
 import writeComponentFiles from "./lib/ReactComponent/write-component-files"
 import { reduceComponentPaths } from "./lib/ReactComponent/utils"
+import { parseConfig } from "./lib/Config/utils"
+import type { Config } from "./lib/Config/types"
 
-export default function(config: IConfig) {
-  const componentsPath = config.paths.components || "components"
-  const componentExtension = config.extension || "js"
-  const componentsHome: string = path.join(process.cwd(), componentsPath)
+export default function(customConfig: Object = {}) {
+  const config: Config = parseConfig(customConfig)
 
   const createComponentDir = function(
     component: IReactComponent
@@ -20,20 +19,18 @@ export default function(config: IConfig) {
     return mkdirp(component.getPath()).then(() => component)
   }
 
-  const generate = function(
-    componentName: string,
-    options?: Object
-  ): Promise<any> {
+  // Public API
+  const generate = function(componentName: string): Promise<any> {
     const splitName: Array<string> = componentName.split(path.sep)
 
     const props: ReactComponentProps = {
       name: splitName[splitName.length - 1],
-      path: path.resolve(componentsHome, ...splitName)
+      path: path.resolve(config.paths.components, ...splitName)
     }
 
     const component: IReactComponent = createReactComponent(
       props,
-      componentsHome
+      config.paths.components
     )
 
     return createComponentDir(component)

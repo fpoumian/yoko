@@ -30,10 +30,9 @@ describe("generate", () => {
 
   const config = {
     paths: {
-      components: "/src/components",
-      containers: "/src/containers"
-    },
-    extension: "js"
+      components: "./src/components",
+      containers: "./src/containers"
+    }
   }
 
   const rcg = reactCG(config)
