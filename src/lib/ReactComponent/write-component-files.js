@@ -1,11 +1,22 @@
 // @flow
 
 import nunjucks from "nunjucks"
+import fse from "fs-extra"
 
 import type { IReactComponent } from "./interfaces"
 import type { IFile } from "../File/interfaces"
 import type { IRenderable } from "../Interfaces/IRenderable"
 import writeFile from "../File/write-file"
+
+function getTemplateString(templatePath: string | null): Promise<string> {
+  if (!templatePath) {
+    return Promise.resolve("")
+  }
+
+  return fse.readFile(templatePath, {
+    encoding: "utf8"
+  })
+}
 
 function compileTemplateString(templateString: string): IRenderable {
   return nunjucks.compile(templateString)
@@ -26,19 +37,20 @@ export default function(component: IReactComponent): Promise<any> {
   ).map(fileKey => {
     const file: IFile = componentFiles[fileKey]
 
-    const compiledTemplate: IRenderable = compileTemplateString(
-      file.getTemplateString()
-    )
-
-    const renderedTemplate = renderCompiledTemplate(compiledTemplate, {
-      componentName: component.getName()
-    })
-
-    return writeFile(file, renderedTemplate).then(path => {
-      return {
-        [file.getRole()]: path
-      }
-    })
+    return getTemplateString(file.getTemplatePath())
+      .then(compileTemplateString)
+      .then(compiledTemplate => {
+        return renderCompiledTemplate(compiledTemplate, {
+          componentName: component.getName()
+        })
+      })
+      .then(renderedTemplate => {
+        return writeFile(file, renderedTemplate).then(path => {
+          return {
+            [file.getRole()]: path
+          }
+        })
+      })
   })
 
   return Promise.all(filePromises)

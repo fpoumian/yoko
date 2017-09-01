@@ -6,7 +6,8 @@ import type { Config } from "./types"
 const config: Config = {
   paths: {
     components: path.resolve(process.cwd(), "components"),
-    containers: path.resolve(process.cwd(), "containers")
+    containers: path.resolve(process.cwd(), "containers"),
+    templates: ""
   },
   extensions: {
     js: {

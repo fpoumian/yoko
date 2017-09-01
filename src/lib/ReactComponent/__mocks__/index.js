@@ -1,1 +1,1 @@
-export { default } from "./MainComponentFile"
+export { default } from "./StatelessFunctionalComponent"

@@ -1,13 +1,19 @@
 const templateString = `
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 /** {{ componentName }} */
 function {{ componentName }}() {
   return (
-    <div>{{ componentName }}</div>
+    <div>
+    <h1>{{ componentName }}</h1>
+    </div>
   )
 }
+
+{{ componentName }}.propTypes = {}
+
 export default {{ componentName }}
 `
 

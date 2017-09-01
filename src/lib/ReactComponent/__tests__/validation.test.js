@@ -1,37 +1,64 @@
 import fs from "fs"
 import path from "path"
 
-import { validateMainFile, validateIndexFile } from "../validation"
-import UnparsableTypeError from "../../Errors/UnparsableTypeError"
+import {
+  validateStatelessFunctionalComponent,
+  validateIndexFile,
+  validateES6ClassComponent,
+  validateJSXText,
+  validateJSXIdentifier
+} from "../validation"
+import * as constants from "../constants"
 
-describe("validateMainFile", () => {
-  it("should validate a correct React Component main file", done => {
-    expect.assertions(1)
-    fs.readFile(
-      path.resolve(__dirname, "..", "__mocks__", "MainComponentFile.js"),
-      "utf8",
-      (err, data) => {
-        expect(validateMainFile(data, "TestComponent")).toBe(true)
-        done()
-      }
-    )
-  })
+const sfComponent = path.resolve(
+  __dirname,
+  "..",
+  "__mocks__",
+  constants.SFC_TEMPLATE_FILE_NAME
+)
 
-  it("should detect an empty string and throw an error", done => {
+const es6ClassComponent = path.resolve(
+  __dirname,
+  "..",
+  "__mocks__",
+  constants.ES6_CLASS_TEMPLATE_FILE_NAME
+)
+
+describe("validateStatelessFunctionalComponent", () => {
+  it("should validate a correct React Stateless Functional Component file", done => {
     expect.assertions(1)
-    fs.readFile("", "utf8", (err, data) => {
-      expect(() => {
-        validateMainFile(data, "ReactComponent")
-      }).toThrowError(UnparsableTypeError)
+    fs.readFile(sfComponent, "utf8", (err, data) => {
+      expect(validateStatelessFunctionalComponent(data, "TestComponent")).toBe(
+        true
+      )
       done()
     })
   })
+  it("should not validate a React ES6 Class Component file", done => {
+    expect.assertions(1)
+    fs.readFile(es6ClassComponent, "utf8", (err, data) => {
+      expect(validateStatelessFunctionalComponent(data, "TestComponent")).toBe(
+        false
+      )
+      done()
+    })
+  })
+})
 
-  it("should detect an empty string and throw an error", done => {
-    expect(() => {
-      validateMainFile(undefined, "ReactComponent")
-    }).toThrowError(UnparsableTypeError)
-    done()
+describe("validateE6ClassComponent", () => {
+  it("should validate a correct React ES6 Class Component file", done => {
+    expect.assertions(1)
+    fs.readFile(es6ClassComponent, "utf8", (err, data) => {
+      expect(validateES6ClassComponent(data, "TestComponent")).toBe(true)
+      done()
+    })
+  })
+  it("should not validate a Stateless Functional Component file", done => {
+    expect.assertions(1)
+    fs.readFile(sfComponent, "utf8", (err, data) => {
+      expect(validateES6ClassComponent(data, "TestComponent")).toBe(false)
+      done()
+    })
   })
 })
 
@@ -42,9 +69,32 @@ describe("validateIndexFile", () => {
       path.join(__dirname, "..", "__mocks__", "index.js"),
       "utf8",
       (err, data) => {
-        expect(validateIndexFile(data, "MainComponentFile")).toBe(true)
+        expect(validateIndexFile(data, "StatelessFunctionalComponent")).toBe(
+          true
+        )
         done()
       }
     )
+  })
+})
+
+describe("validateJSXText", () => {
+  it("should validate JSX Text inside a component file", done => {
+    expect.assertions(1)
+    fs.readFile(sfComponent, "utf8", (err, data) => {
+      expect(validateJSXText(data, "TestComponent")).toBe(true)
+      done()
+    })
+  })
+})
+
+describe("validateJSXElement", () => {
+  it("should validate JSX Element inside a component file", () => {
+    expect.assertions(1)
+    const JSX = `<div>
+    <TestElement/>
+      <p>React Component</p>
+    </div>`
+    expect(validateJSXIdentifier(JSX, "TestElement")).toBe(true)
   })
 })

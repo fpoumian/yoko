@@ -3,7 +3,8 @@
 export type Config = {
   paths: {
     components: string,
-    containers: string
+    containers: string,
+    templates: string
   },
   extensions: {
     js: {

@@ -11,7 +11,8 @@ describe("given that the user did not provide any custom configuration", () => {
     expect(parseConfig(userConfig)).toEqual({
       paths: {
         components: path.resolve(process.cwd(), "components"),
-        containers: path.resolve(process.cwd(), "containers")
+        containers: path.resolve(process.cwd(), "containers"),
+        templates: ""
       },
       extensions: {
         js: {
@@ -149,7 +150,7 @@ describe("given that the user provided a custom JS extensions", () => {
 })
 
 describe("given that the user provided a custom stylesheet extension", () => {
-  it("should be able to return a configuration object includes a custom extension for main stylesheet", () => {
+  it("should be able to return a configuration object that includes a custom extension for main stylesheet", () => {
     const userConfig = {
       extensions: {
         stylesheet: {
@@ -161,6 +162,21 @@ describe("given that the user provided a custom stylesheet extension", () => {
     expect(parseConfig(userConfig)).toHaveProperty(
       "extensions.stylesheet.main",
       "scss"
+    )
+  })
+})
+
+describe("given that the user provided a custom templates path", () => {
+  it("should be able to return a configuration object that includes a custom path for templates", () => {
+    const userConfig = {
+      paths: {
+        templates: "./src/templates"
+      }
+    }
+
+    expect(parseConfig(userConfig)).toHaveProperty(
+      "paths.templates",
+      path.resolve(process.cwd(), "src", "templates")
     )
   })
 })

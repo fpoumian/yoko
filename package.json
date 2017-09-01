@@ -55,11 +55,14 @@
     "generator"
   ],
   "dependencies": {
+    "acorn-jsx": "^4.0.1",
+    "ast-query": "^2.0.0",
+    "fs-extra": "^4.0.1",
+    "grasp-squery": "^0.4.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mkdirp-promise": "^5.0.1",
-    "nunjucks": "^3.0.1",
-    "react": "^15.6.1"
+    "nunjucks": "^3.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -69,8 +72,6 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react-app": "^3.0.2",
     "babel-preset-stage-2": "^6.18.0",
-    "babel-traverse": "^6.26.0",
-    "babylon": "^6.18.0",
     "documentation": "4.0.0-rc.1",
     "eslint": "^4.0.0",
     "eslint-config-airbnb-base": "^11.0.1",

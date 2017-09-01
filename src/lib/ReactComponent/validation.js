@@ -1,79 +1,66 @@
 // @flow
 
-import { parse } from "babylon"
-import traverse from "babel-traverse"
+import * as acorn from "acorn-jsx"
+import * as squery from "grasp-squery"
 
-import UnparsableTypeError from "../Errors/UnparsableTypeError"
-
-// TODO: Refactor validation methods (DRY)
-
-export function validateMainFile(code: string, componentName: string): boolean {
-  let ast
+function parseCode(code: string) {
   try {
-    ast = parse(code, {
+    return acorn.parse(code, {
       sourceType: "module",
-      plugins: ["jsx"]
-    })
-  } catch (e) {
-    if (e instanceof TypeError) {
-      throw new UnparsableTypeError(
-        `Type ${typeof componentName} cannot be parsed.`
-      )
-    }
-  }
-
-  let isValid = false
-
-  try {
-    traverse(ast, {
-      enter(path) {
-        if (path.type === "ExportDefaultDeclaration") {
-          isValid = path.node.declaration.name === componentName
-        }
+      plugins: {
+        jsx: true
       }
     })
   } catch (e) {
-    console.error(e)
-    throw e
+    if (e instanceof TypeError) {
+      throw e
+    }
   }
-  return isValid
+}
+
+function validateCode(code, selectors: Array<string>): boolean {
+  return selectors.every(selector => {
+    const results = squery.queryParsed(squery.parse(selector), parseCode(code))
+    return results.length > 0
+  })
+}
+
+export function validateStatelessFunctionalComponent(
+  code: string,
+  componentName: string
+): boolean {
+  return validateCode(code, [
+    `program > FunctionDeclaration > ident#${componentName}`,
+    `program > ExportDefaultDeclaration > ident#${componentName}`
+  ])
+}
+
+export function validateES6ClassComponent(
+  code: string,
+  componentName: string
+): boolean {
+  return validateCode(code, [
+    `program > ClassDeclaration > ident#${componentName}`,
+    `program > ExportDefaultDeclaration > ident#${componentName}`
+  ])
 }
 
 export function validateIndexFile(
   code: string,
-  componentFileName: string
+  componentName: string
 ): boolean {
-  let ast
-  try {
-    ast = parse(code, {
-      sourceType: "module",
-      plugins: ["jsx"]
-    })
-  } catch (e) {
-    if (e instanceof TypeError) {
-      throw new UnparsableTypeError(
-        `Type ${typeof componentFileName} cannot be parsed.`
-      )
-    }
-    throw e
-  }
+  return validateCode(code, [
+    `Program > ExportNamedDeclaration > Literal[value="./${componentName}"]`,
+    `Program > ExportNamedDeclaration > ExportSpecifier > Identifier[name="default"]`
+  ])
+}
 
-  let isValid = false
+export function validateJSXText(code: string, text: string): boolean {
+  return validateCode(code, [`Program JSXElement JSXText[value=${text}]`])
+}
 
-  try {
-    traverse(ast, {
-      enter(path) {
-        if (path.type === "ExportSpecifier") {
-          isValid = path.node.exported.name === "default"
-        }
-        if (path.type === "StringLiteral") {
-          isValid = path.node.value === `./${componentFileName}`
-        }
-      }
-    })
-  } catch (e) {
-    console.error(e)
-    throw e
-  }
-  return isValid
+export function validateJSXIdentifier(code: string, name: string): boolean {
+  return validateCode(code, [
+    `Program JSXElement JSXIdentifier[name="${name}"]`
+  ])
 }

@@ -1,36 +1,52 @@
 // @flow
-import type { ReactComponentProps } from "./types"
+import path from "path"
+
+import type {
+  ReactComponentProps,
+  ReactComponentFiles,
+  ReactComponentFileTemplatePaths
+} from "./types"
 import type { IReactComponent } from "./interfaces"
 import createComponentFile from "../ComponentFile/factory"
-import mainTemplateString from "./templates/mainFile"
-import indexTemplateString from "./templates/indexFile"
 import type { Config } from "../Config/types"
+import { getFilesTemplatesPaths } from "./utils"
 
 export default function(
   props: ReactComponentProps,
   config: Config
 ): IReactComponent {
-  const files = {
+  const templatePaths: ReactComponentFileTemplatePaths = getFilesTemplatesPaths(
+    config,
+    props
+  )
+
+  const files: ReactComponentFiles = {
     mainFile: createComponentFile({
       name: props.name,
       extension: config.extensions.js.main,
       dir: props.path,
       role: "main",
-      templateString: mainTemplateString
-    }),
-    indexFile: createComponentFile({
+      templatePath: templatePaths.main
+    })
+  }
+
+  if (props.index) {
+    files.indexFile = createComponentFile({
       name: "index",
       extension: config.extensions.js.index,
       dir: props.path,
       role: "index",
-      templateString: indexTemplateString
-    }),
-    stylesheetFile: createComponentFile({
+      templatePath: templatePaths.index
+    })
+  }
+
+  if (props.stylesheet) {
+    files.stylesheetFile = createComponentFile({
       name: "styles",
       extension: config.extensions.stylesheet.main,
-      role: "stylesheet",
       dir: props.path,
-      templateString: ""
+      role: "stylesheet",
+      templatePath: null
     })
   }
 

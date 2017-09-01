@@ -1,7 +1,11 @@
 import React from "react"
 
 function TestComponent() {
-  return <p>React Component</p>
+  return (
+    <div>
+      <p>TestComponent</p>
+    </div>
+  )
 }
 
 export default TestComponent

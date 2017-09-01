@@ -4,6 +4,6 @@ export type FileProps = {
   name: string,
   extension: string,
   dir: string,
-  templateString: string,
+  templatePath: string | null,
   role: string
 }
