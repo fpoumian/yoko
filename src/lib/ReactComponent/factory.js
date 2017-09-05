@@ -1,5 +1,5 @@
 // @flow
-import path from "path"
+import { get } from "lodash"
 
 import type {
   ReactComponentProps,
@@ -7,14 +7,14 @@ import type {
   ReactComponentFileTemplatePaths
 } from "./types"
 import type { IReactComponent } from "./interfaces"
-import createComponentFile from "../ComponentFile/factory"
 import type { Config } from "../Config/types"
 import { getFilesTemplatesPaths } from "./utils"
+import defaultConfig from "../Config/default"
 
-export default function(
+export default (createComponentFile: Function) => (
   props: ReactComponentProps,
   config: Config
-): IReactComponent {
+): IReactComponent => {
   const templatePaths: ReactComponentFileTemplatePaths = getFilesTemplatesPaths(
     config,
     props
@@ -23,7 +23,11 @@ export default function(
   const files: ReactComponentFiles = {
     mainFile: createComponentFile({
       name: props.name,
-      extension: config.extensions.js.main,
+      extension: get(
+        config,
+        "extensions.js.main",
+        defaultConfig.extensions.js.main
+      ),
       dir: props.path,
       role: "main",
       templatePath: templatePaths.main
@@ -33,7 +37,11 @@ export default function(
   if (props.index) {
     files.indexFile = createComponentFile({
       name: "index",
-      extension: config.extensions.js.index,
+      extension: get(
+        config,
+        "extensions.js.index",
+        defaultConfig.extensions.js.index
+      ),
       dir: props.path,
       role: "index",
       templatePath: templatePaths.index
@@ -43,7 +51,11 @@ export default function(
   if (props.stylesheet) {
     files.stylesheetFile = createComponentFile({
       name: "styles",
-      extension: config.extensions.stylesheet.main,
+      extension: get(
+        config,
+        "extensions.stylesheet.main",
+        defaultConfig.extensions.stylesheet.main
+      ),
       dir: props.path,
       role: "stylesheet",
       templatePath: null

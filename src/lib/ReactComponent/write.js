@@ -6,7 +6,6 @@ import fse from "fs-extra"
 import type { IReactComponent } from "./interfaces"
 import type { IFile } from "../File/interfaces"
 import type { IRenderable } from "../Interfaces/IRenderable"
-import writeFile from "../File/write-file"
 
 function getTemplateString(templatePath: string | null): Promise<string> {
   if (!templatePath) {
@@ -29,7 +28,9 @@ function renderCompiledTemplate(
   return compiledTemplate.render(context)
 }
 
-export default function(component: IReactComponent): Promise<any> {
+export default (writeFile: Function) => (
+  component: IReactComponent
+): Promise<any> => {
   const componentFiles: { [string]: IFile } = component.getFiles()
 
   const filePromises: Array<Promise<any>> = Object.keys(

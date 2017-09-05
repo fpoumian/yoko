@@ -2,8 +2,9 @@ import mkdirp from "mkdirp-promise"
 import fse from "fs-extra"
 
 import type { IReactComponent } from "./interfaces"
-import writeComponentFiles from "./write-component-files"
+import writeComponentFiles from "./write"
 import { reduceComponentPaths } from "./utils"
+import writeFile from "../File/write"
 
 const removeComponentDir = function(
   component: IReactComponent
@@ -20,7 +21,7 @@ const createComponentDir = function(
 export default function(component: IReactComponent) {
   return removeComponentDir(component)
     .then(createComponentDir)
-    .then(writeComponentFiles)
+    .then(writeComponentFiles(writeFile))
     .then((componentFilesPaths: Array<Object>) => {
       return reduceComponentPaths(component, componentFilesPaths)
     })

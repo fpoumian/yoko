@@ -2,6 +2,7 @@
 import path from "path"
 
 import createReactComponent from "./lib/ReactComponent/factory"
+import createComponentFile from "./lib/ComponentFile/factory"
 import type {
   ReactComponentProps,
   ReactComponentOptions
@@ -32,7 +33,9 @@ export default function(customConfig: Object = {}) {
       stylesheet: options.stylesheet || false
     }
 
-    const component: IReactComponent = createReactComponent(props, config)
+    const component: IReactComponent = createReactComponent(
+      createComponentFile
+    )(props, config)
 
     return generateReactComponent(component)
   }
