@@ -11,6 +11,7 @@ import type { IReactComponent } from "./lib/ReactComponent/interfaces"
 import { parseConfig } from "./lib/Config/utils"
 import type { Config } from "./lib/Config/types"
 import generateReactComponent from "./lib/ReactComponent/generate"
+import writeFile from "./lib/File/write"
 
 export default function(customConfig: Object = {}) {
   const config: Config = parseConfig(customConfig)
@@ -37,7 +38,7 @@ export default function(customConfig: Object = {}) {
       createComponentFile
     )(props, config)
 
-    return generateReactComponent(component)
+    return generateReactComponent(writeFile)(component)
   }
   return {
     generate
