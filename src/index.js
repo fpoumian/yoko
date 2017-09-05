@@ -1,6 +1,4 @@
 // @flow
-import mkdirp from "mkdirp-promise"
-import fse from "fs-extra"
 import path from "path"
 
 import createReactComponent from "./lib/ReactComponent/factory"
@@ -9,25 +7,12 @@ import type {
   ReactComponentOptions
 } from "./lib/ReactComponent/types"
 import type { IReactComponent } from "./lib/ReactComponent/interfaces"
-import writeComponentFiles from "./lib/ReactComponent/write-component-files"
-import { reduceComponentPaths } from "./lib/ReactComponent/utils"
 import { parseConfig } from "./lib/Config/utils"
 import type { Config } from "./lib/Config/types"
+import generateReactComponent from "./lib/ReactComponent/generate"
 
 export default function(customConfig: Object = {}) {
   const config: Config = parseConfig(customConfig)
-
-  const removeComponentDir = function(
-    component: IReactComponent
-  ): Promise<IReactComponent> {
-    return fse.remove(component.getPath()).then(() => component)
-  }
-
-  const createComponentDir = function(
-    component: IReactComponent
-  ): Promise<IReactComponent> {
-    return mkdirp(component.getPath()).then(() => component)
-  }
 
   // Public API
   const generate = function(
@@ -49,13 +34,7 @@ export default function(customConfig: Object = {}) {
 
     const component: IReactComponent = createReactComponent(props, config)
 
-    return removeComponentDir(component)
-      .then(createComponentDir)
-      .then(writeComponentFiles)
-      .then((componentFilesPaths: Array<Object>) => {
-        return reduceComponentPaths(component, componentFilesPaths)
-      })
-      .catch(console.error)
+    return generateReactComponent(component)
   }
   return {
     generate
