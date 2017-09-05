@@ -34,9 +34,9 @@ describe("write", () => {
       writeComponentFiles = write(writeFile)
     })
 
-    it("should call thr writeFile function that is passed as parameter", () => {
+    it("should call thr writeFile function as many times as there are files to write", () => {
       return writeComponentFiles(component).then(() => {
-        expect(writeFile).toHaveBeenCalled()
+        expect(writeFile).toHaveBeenCalledTimes(2)
       })
     })
 
