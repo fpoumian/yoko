@@ -1,5 +1,6 @@
 // @flow
 import path from "path"
+import EventEmitter from "events"
 
 import createReactComponent from "./lib/ReactComponent/factory"
 import createComponentFile from "./lib/ComponentFile/factory"
@@ -10,7 +11,7 @@ import type {
 import type { IReactComponent } from "./lib/ReactComponent/interfaces"
 import { parseConfig } from "./lib/Config/utils"
 import type { Config } from "./lib/Config/types"
-import generateReactComponent from "./lib/ReactComponent/generate"
+import makeGenerateReactComponent from "./lib/ReactComponent/generate"
 import writeFile from "./lib/File/write"
 
 export default function(customConfig: Object = {}) {
@@ -34,11 +35,22 @@ export default function(customConfig: Object = {}) {
       stylesheet: options.stylesheet || false
     }
 
+    const emitter = new EventEmitter()
+
     const component: IReactComponent = createReactComponent(
-      createComponentFile
+      createComponentFile,
+      emitter
     )(props, config)
 
-    return generateReactComponent(writeFile)(component)
+    const generateReactComponent = makeGenerateReactComponent(writeFile)
+
+    component.getEmitter().on("start", (component: IReactComponent) => {
+      console.log(component.getName())
+    })
+
+    component.getEmitter().emit("start", component)
+
+    return generateReactComponent(component)
   }
   return {
     generate

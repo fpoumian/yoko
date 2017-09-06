@@ -14,7 +14,13 @@ const removeComponentDir = function(
 const createComponentDir = function(
   component: IReactComponent
 ): Promise<IReactComponent> {
-  return mkdirp(component.getPath()).then(() => component)
+  return mkdirp(component.getPath()).then(() => {
+    component.getEmitter().emit("componentDirCreated", {
+      name: component.getName(),
+      path: component.getPath()
+    })
+    return component
+  })
 }
 
 export default (writeFile: Function) => (component: IReactComponent) => {

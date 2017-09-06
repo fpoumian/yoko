@@ -10,8 +10,9 @@ import type { IReactComponent } from "./interfaces"
 import type { Config } from "../Config/types"
 import { getFilesTemplatesPaths } from "./utils"
 import defaultConfig from "../Config/default"
+import EventEmitter from "events"
 
-export default (createComponentFile: Function) => (
+export default (createComponentFile: Function, emitter: EventEmitter) => (
   props: ReactComponentProps,
   config: Config
 ): IReactComponent => {
@@ -66,10 +67,12 @@ export default (createComponentFile: Function) => (
   const getName = () => props.name
   const getPath = () => props.path
   const getFiles = () => files
+  const getEmitter = () => emitter
 
   return {
     getName,
     getPath,
-    getFiles
+    getFiles,
+    getEmitter
   }
 }
