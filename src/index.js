@@ -22,7 +22,7 @@ export default function(customConfig: Object = {}) {
     options: ReactComponentOptions = {}
   ): Promise<any> {
     const splitName: Array<string> = componentName.split(path.sep)
-    const componentHome = options.container
+    const componentHome: string = options.container
       ? config.paths.containers
       : config.paths.components
 

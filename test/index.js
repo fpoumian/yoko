@@ -78,7 +78,7 @@ describe("generate", () => {
 
     const rcg = reactCG(config)
 
-    describe("given no aditional component options were provided", () => {
+    describe("given no additional component options were provided", () => {
       it("should create one directory inside of components Home directory", () => {
         expect.assertions(1)
         return rcg.generate("TestComponent").then(paths => {
