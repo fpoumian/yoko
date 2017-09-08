@@ -7,6 +7,7 @@ describe("write", () => {
   let getRole
   let createComponentFile
   let component
+  let emitter
   let writeFile
   let writeComponentFiles
 
@@ -21,7 +22,13 @@ describe("write", () => {
         getRole: getRole
       })
 
-      component = createReactComponent(createComponentFile)({ index: true }, {})
+      emitter = {
+        emit: jest.fn()
+      }
+
+      component = createReactComponent(createComponentFile, emitter)({
+        index: true
+      })
 
       writeFile = jest
         .fn()
@@ -34,7 +41,7 @@ describe("write", () => {
       writeComponentFiles = write(writeFile)
     })
 
-    it("should call thr writeFile function as many times as there are files to write", () => {
+    it("should call the writeFile function as many times as there are files to write", () => {
       return writeComponentFiles(component).then(() => {
         expect(writeFile).toHaveBeenCalledTimes(2)
       })
@@ -53,7 +60,7 @@ describe("write", () => {
       })
     })
 
-    it("should return a Promise which resolves into an array of Paths objects", () => {
+    it("should return a Promise which resolves into an array of Paths objects with the correct file roles", () => {
       expect.assertions(2)
       return writeComponentFiles(component).then(paths => {
         expect(find(paths, o => o.main)).toEqual({
@@ -62,6 +69,28 @@ describe("write", () => {
         expect(find(paths, o => o.index)).toEqual({
           index: path.resolve(process.cwd(), "index.js")
         })
+      })
+    })
+
+    it("should call the component emitter emit method as many times as files were created", () => {
+      expect.assertions(1)
+      return writeComponentFiles(component).then(() => {
+        expect(emitter.emit).toHaveBeenCalledTimes(4)
+      })
+    })
+
+    it("should call the component emitter fileWritten event with the correct file path as an argument", () => {
+      expect.assertions(3)
+      return writeComponentFiles(component).then(() => {
+        expect(emitter.emit).toHaveBeenCalledWith(
+          "mainFileWritten",
+          path.resolve(process.cwd(), "TestComponent.js")
+        )
+        expect(emitter.emit).toHaveBeenLastCalledWith(
+          "indexFileWritten",
+          path.resolve(process.cwd(), "index.js")
+        )
+        expect(emitter.emit).toHaveBeenCalledTimes(4)
       })
     })
   })

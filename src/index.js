@@ -21,7 +21,7 @@ export default function(customConfig: Object = {}) {
   const generate = function(
     componentName: string,
     options: ReactComponentOptions = {}
-  ): Promise<any> {
+  ): EventEmitter {
     const splitName: Array<string> = componentName.split(path.sep)
     const componentHome: string = options.container
       ? config.paths.containers
@@ -35,22 +35,40 @@ export default function(customConfig: Object = {}) {
       stylesheet: options.stylesheet || false
     }
 
-    const emitter = new EventEmitter()
-
+    const emitter: EventEmitter = new EventEmitter()
     const component: IReactComponent = createReactComponent(
       createComponentFile,
       emitter
     )(props, config)
 
     const generateReactComponent = makeGenerateReactComponent(writeFile)
+    const componentEmitter: EventEmitter = component.getEmitter()
 
-    component.getEmitter().on("start", (component: IReactComponent) => {
-      console.log(component.getName())
+    componentEmitter.once("start", (component: IReactComponent) => {
+      generateReactComponent(component)
+        .then(paths => {
+          return component.getEmitter().emit("done", paths)
+        })
+        .catch(error => {
+          return component.getEmitter().emit("error", error)
+        })
     })
 
-    component.getEmitter().emit("start", component)
+    componentEmitter.on("error", error => {
+      if (process.env.NODE_ENV === "test") {
+        if (error.code === "EBADF") {
+          return null
+        }
+      } else {
+        console.error(error)
+      }
+    })
 
-    return generateReactComponent(component)
+    process.nextTick(() => {
+      componentEmitter.emit("start", component)
+    })
+
+    return componentEmitter
   }
   return {
     generate

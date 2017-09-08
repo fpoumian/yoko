@@ -47,11 +47,20 @@ export default (writeFile: Function) => (
       })
       .then(renderedTemplate => {
         return writeFile(file, renderedTemplate).then(path => {
+          const fileRole = file.getRole()
+          component.getEmitter().emit("fileWritten", path)
+          component.getEmitter().emit(fileRole + "FileWritten", path)
           return {
-            [file.getRole()]: path
+            [fileRole]: path
           }
         })
       })
+    // .catch(e => {
+    //   const err: Error = new Error()
+    //   err.message = `Error writing file to ${file.getPath()}`
+    //   err.stack = e.stack
+    //   throw err
+    // })
   })
 
   return Promise.all(filePromises)

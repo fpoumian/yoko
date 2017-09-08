@@ -4,7 +4,7 @@ import path from "path"
 import type { FileProps } from "../File/types"
 import type { IFile } from "../File/interfaces"
 
-export default function(props: FileProps): IFile {
+export default function(props: FileProps, callback?: Function): IFile {
   // Public API
   const getName = () => props.name
   const getExtension = () => props.extension
@@ -13,6 +13,10 @@ export default function(props: FileProps): IFile {
   }
   const getTemplatePath = () => props.templatePath
   const getRole = () => props.role
+
+  if (callback) {
+    callback()
+  }
 
   return {
     getName,

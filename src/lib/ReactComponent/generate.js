@@ -30,4 +30,7 @@ export default (writeFile: Function) => (component: IReactComponent) => {
     .then((componentFilesPaths: Array<Object>) => {
       return reduceComponentPaths(component, componentFilesPaths)
     })
+    .catch(err => {
+      throw err
+    })
 }
