@@ -26,7 +26,7 @@
     "docs": "documentation readme src --section=API",
     "clean": "rimraf dist",
     "prebuild": "npm run docs && npm run clean",
-    "build": "babel src -d dist",
+    "build": "babel src -d dist --ignore src/**/__mocks__,src/**/__tests__",
     "watch": "npm-watch",
     "patch": "npm version patch && npm publish",
     "minor": "npm version minor && npm publish",

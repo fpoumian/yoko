@@ -1,5 +1,4 @@
-const templateString = `
-import React, { Component } from 'react'
+const templateString = `import React, { Component } from 'react'
 
 /** {{ componentName }} */
 class {{ componentName }} extends Component {

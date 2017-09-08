@@ -36,11 +36,6 @@ const mockDefaultTemplatePaths = {
   }
 }
 
-const mockCustomTemplates = {
-  customJSX: require("../src/lib/ReactComponent/templates/mainFileCustomJSX.js")
-    .default
-}
-
 function mockFileSystem() {
   mock({
     src: {
@@ -62,7 +57,7 @@ describe("generate", () => {
     resolveInContainers = (...items) => path.resolve(containersDir, ...items)
   })
 
-  describe("given a global configuration with custom paths for components and containers", () => {
+  describe("given a global configuration with custom relative paths for components and containers", () => {
     beforeEach(() => {
       srcDir = path.resolve(process.cwd(), "src")
       componentsDir = path.resolve(srcDir, "components")
@@ -534,50 +529,76 @@ describe("generate", () => {
     })
   })
 
-  describe("given a global configuration with custom paths for templates", () => {
-    beforeEach(() => {
-      componentsDir = path.resolve(process.cwd(), "client", "app", "components")
-      containersDir = path.resolve(process.cwd(), "client", "app", "containers")
+  xdescribe(
+    "given a global configuration with custom paths for templates",
+    () => {
+      const customSFCTemplate = fs.readFileSync(
+        path.resolve(
+          __dirname,
+          "..",
+          "src/lib/ReactComponent/templates/mainFileCustomJSX.js"
+        ),
+        "utf8"
+      )
 
-      mock({
+      const dir = {
         "client/app/templates": {
-          [constants.SFC_TEMPLATE_FILE_NAME]: mockCustomTemplates.customJSX
-        },
-        src: {
-          ...mockDefaultTemplatePaths
+          [constants.SFC_TEMPLATE_FILE_NAME]: customSFCTemplate
         }
-      })
-    })
-
-    const config = {
-      paths: {
-        components: "./client/app/components",
-        containers: "./client/app/containers",
-        templates: "./client/app/templates"
       }
-    }
 
-    const rcg = reactCG(config)
+      beforeEach(() => {
+        componentsDir = path.resolve(
+          process.cwd(),
+          "client",
+          "app",
+          "components"
+        )
+        containersDir = path.resolve(
+          process.cwd(),
+          "client",
+          "app",
+          "containers"
+        )
 
-    it("should generate a valid React component using the custom template provided in config", done => {
-      expect.assertions(2)
-      rcg.generate("TestComponent").on("done", paths => {
-        const testComponent: string = fs.readFileSync(
-          path.resolve(paths.main),
-          {
-            encoding: "utf8"
+        mock({
+          ...dir,
+          src: {
+            ...mockDefaultTemplatePaths
           }
-        )
-        expect(
-          validateStatelessFunctionalComponent(testComponent, "TestComponent")
-        ).toBe(true)
-        expect(validateJSXIdentifier(testComponent, "CustomComponent")).toBe(
-          true
-        )
-        done()
+        })
       })
-    })
-  })
+
+      const config = {
+        paths: {
+          components: "./client/app/components",
+          containers: "./client/app/containers",
+          templates: "./client/app/templates"
+        }
+      }
+
+      const rcg = reactCG(config)
+
+      it("should generate a valid React component using the custom template provided in config", done => {
+        expect.assertions(2)
+        rcg.generate("TestComponent").on("done", paths => {
+          const testComponent: string = fs.readFileSync(
+            path.resolve(paths.main),
+            {
+              encoding: "utf8"
+            }
+          )
+          expect(
+            validateStatelessFunctionalComponent(testComponent, "TestComponent")
+          ).toBe(true)
+          expect(validateJSXIdentifier(testComponent, "CustomComponent")).toBe(
+            true
+          )
+          done()
+        })
+      })
+    }
+  )
 
   // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("generate") block,
   // otherwise the rest of the test suites won't work

@@ -7,12 +7,15 @@ import type { Config } from "./types"
 import defaultConfig from "./default"
 
 function normalizePath(originalPath: string): string {
-  if (!originalPath || typeof originalPath === "undefined") return ""
-  return path.resolve(...originalPath.trim().split(path.sep))
+  if (originalPath === "") return ""
+  const newPath = path.isAbsolute(originalPath)
+    ? originalPath
+    : path.resolve(...originalPath.trim().split(path.sep))
+  return newPath
 }
 
 function normalizePaths(originalPaths: Object): Object {
-  return mapValues(originalPaths, value => normalizePath(value))
+  return mapValues(originalPaths, path => normalizePath(path))
 }
 
 function normalizeExtension(originalExt: string): string {

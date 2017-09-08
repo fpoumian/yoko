@@ -27,11 +27,11 @@ describe("given that the user did not provide any custom configuration", () => {
   })
 })
 
-describe("given that the user provided a custom components path", () => {
+describe("given that the user provided a custom relative components path", () => {
   it("should be able to return a configuration object includes a custom components path", () => {
     const userConfig = {
       paths: {
-        components: "./src/components"
+        components: "src/components"
       }
     }
 
@@ -55,6 +55,25 @@ describe("given that the user provided a custom components path", () => {
     expect(parseConfig(userConfig)).toHaveProperty(
       "paths.components",
       path.resolve(process.cwd(), "src", "components")
+    )
+  })
+})
+
+describe("given that the user provided a custom absolute components path", () => {
+  it("should be able to return a configuration object includes a custom components path", () => {
+    const userConfig = {
+      paths: {
+        components: path.resolve(__dirname, "src", "components")
+      }
+    }
+
+    expect(parseConfig(userConfig)).toHaveProperty(
+      "paths.components",
+      path.resolve(__dirname, "src", "components")
+    )
+    expect(parseConfig(userConfig)).toHaveProperty(
+      "paths.containers",
+      path.resolve(process.cwd(), "containers")
     )
   })
 })

@@ -1,7 +1,8 @@
 // @flow
+/* eslint import/no-dynamic-require: off  */
+/* eslint global-require: off  */
 
 import nunjucks from "nunjucks"
-import fse from "fs-extra"
 
 import type { IReactComponent } from "./interfaces"
 import type { IFile } from "../File/interfaces"
@@ -12,9 +13,7 @@ function getTemplateString(templatePath: string | null): Promise<string> {
     return Promise.resolve("")
   }
 
-  return fse.readFile(templatePath, {
-    encoding: "utf8"
-  })
+  return Promise.resolve(require(templatePath).default)
 }
 
 function compileTemplateString(templateString: string): IRenderable {
@@ -55,12 +54,12 @@ export default (writeFile: Function) => (
           }
         })
       )
-    // .catch(e => {
-    //   const err: Error = new Error()
-    //   err.message = `Error writing file to ${file.getPath()}`
-    //   err.stack = e.stack
-    //   throw err
-    // })
+      .catch(e => {
+        const err: Error = new Error()
+        err.message = `Error writing file to ${file.getPath()}`
+        err.stack = e.stack
+        throw err
+      })
   })
 
   return Promise.all(filePromises)
