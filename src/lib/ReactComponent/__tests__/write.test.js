@@ -1,7 +1,8 @@
-import write from "../write"
-import createReactComponent from "../factory"
 import path from "path"
 import { find } from "lodash"
+
+import write from "../write"
+import createReactComponent from "../factory"
 
 describe("write", () => {
   let getRole
@@ -19,7 +20,7 @@ describe("write", () => {
         getPath: jest.fn(),
         getTemplatePath: jest.fn(),
         getExtension: jest.fn(),
-        getRole: getRole
+        getRole
       })
 
       emitter = {
@@ -41,11 +42,10 @@ describe("write", () => {
       writeComponentFiles = write(writeFile)
     })
 
-    it("should call the writeFile function as many times as there are files to write", () => {
-      return writeComponentFiles(component).then(() => {
+    it("should call the writeFile function as many times as there are files to write", () =>
+      writeComponentFiles(component).then(() => {
         expect(writeFile).toHaveBeenCalledTimes(2)
-      })
-    })
+      }))
 
     it("should return a Promise", () => {
       expect(writeComponentFiles(component)).toBeInstanceOf(Promise)

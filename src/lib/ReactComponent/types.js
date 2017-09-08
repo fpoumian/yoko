@@ -1,3 +1,5 @@
+// @flow
+
 import type { IFile } from "../File/interfaces"
 
 export type ReactComponentProps = {

@@ -15,13 +15,13 @@ function normalizePaths(originalPaths: Object): Object {
   return mapValues(originalPaths, value => normalizePath(value))
 }
 
-function normalizeExtensions(originalExtensions: Object): Object {
-  return mapValues(originalExtensions, value => normalizeExtension(value))
-}
-
 function normalizeExtension(originalExt: string): string {
   if (!originalExt || typeof originalExt === "undefined") return ""
   return originalExt.trim().replace(".", "")
+}
+
+function normalizeExtensions(originalExtensions: Object): Object {
+  return mapValues(originalExtensions, value => normalizeExtension(value))
 }
 
 function normalizeConfig(config) {
@@ -51,7 +51,7 @@ function normalizeConfig(config) {
   }
 }
 
-export function parseConfig(config: Object): Config {
+export default function(config: Object): Config {
   if (Object.keys(config).length === 0) {
     return merge({}, defaultConfig, config)
   }

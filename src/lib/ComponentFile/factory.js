@@ -8,9 +8,8 @@ export default function(props: FileProps, callback?: Function): IFile {
   // Public API
   const getName = () => props.name
   const getExtension = () => props.extension
-  const getPath = () => {
-    return path.resolve(props.dir, `${props.name}.${props.extension}`)
-  }
+  const getPath = () =>
+    path.resolve(props.dir, `${props.name}.${props.extension}`)
   const getTemplatePath = () => props.templatePath
   const getRole = () => props.role
 

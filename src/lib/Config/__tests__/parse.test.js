@@ -2,7 +2,7 @@
 
 import path from "path"
 
-import { parseConfig } from "../utils"
+import parseConfig from "../parse"
 
 describe("given that the user did not provide any custom configuration", () => {
   const userConfig = {}

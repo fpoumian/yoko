@@ -1,5 +1,6 @@
 // @flow
 import { get } from "lodash"
+import EventEmitter from "events"
 
 import type {
   ReactComponentProps,
@@ -10,7 +11,6 @@ import type { IReactComponent } from "./interfaces"
 import type { Config } from "../Config/types"
 import { getFilesTemplatesPaths } from "./utils"
 import defaultConfig from "../Config/default"
-import EventEmitter from "events"
 
 export default (createComponentFile: Function, emitter: EventEmitter) => (
   props: ReactComponentProps,

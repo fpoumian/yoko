@@ -157,12 +157,6 @@ describe("getFilesTemplatesPaths", () => {
       })
     })
 
-    describe("given an options object with es6class type specified", () => {
-      const options = {
-        type: "esclass"
-      }
-    })
-
     afterEach(() => {
       mock.restore()
     })

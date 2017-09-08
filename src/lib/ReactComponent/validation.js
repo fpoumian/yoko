@@ -4,8 +4,9 @@ import * as acorn from "acorn-jsx"
 import * as squery from "grasp-squery"
 
 function parseCode(code: string) {
+  let parsedCode
   try {
-    return acorn.parse(code, {
+    parsedCode = acorn.parse(code, {
       sourceType: "module",
       plugins: {
         jsx: true
@@ -16,6 +17,7 @@ function parseCode(code: string) {
       throw e
     }
   }
+  return parsedCode
 }
 
 function validateCode(code, selectors: Array<string>): boolean {

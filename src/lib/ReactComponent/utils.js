@@ -16,12 +16,10 @@ export function reduceComponentPaths(
   paths: Array<Object>
 ) {
   return paths.reduce(
-    (paths: Object, pathObj: Object) => {
-      return {
-        ...paths,
-        ...pathObj
-      }
-    },
+    (newPaths: Object, pathObj: Object) => ({
+      ...newPaths,
+      ...pathObj
+    }),
     {
       root: component.getPath()
     }
@@ -57,14 +55,14 @@ export function getFilesTemplatesPaths(
     return defaultPaths
   }
 
-  const paths: Object = keys(fileNames).reduce((paths, key) => {
+  const paths: Object = keys(fileNames).reduce((newPaths, key) => {
     const temp = {
       [key]: fs.existsSync(path.resolve(customTemplatesDirPath, fileNames[key]))
         ? path.resolve(customTemplatesDirPath, fileNames[key])
         : path.resolve(defaultTemplatesDirPath, fileNames[key])
     }
 
-    return { ...temp, ...paths }
+    return { ...temp, ...newPaths }
   }, {})
 
   return paths

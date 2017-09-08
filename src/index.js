@@ -9,7 +9,7 @@ import type {
   ReactComponentOptions
 } from "./lib/ReactComponent/types"
 import type { IReactComponent } from "./lib/ReactComponent/interfaces"
-import { parseConfig } from "./lib/Config/utils"
+import parseConfig from "./lib/Config/parse"
 import type { Config } from "./lib/Config/types"
 import makeGenerateReactComponent from "./lib/ReactComponent/generate"
 import writeFile from "./lib/File/write"
@@ -18,7 +18,7 @@ export default function(customConfig: Object = {}) {
   const config: Config = parseConfig(customConfig)
 
   // Public API
-  const generate = function(
+  const generate = function generate(
     componentName: string,
     options: ReactComponentOptions = {}
   ): EventEmitter {
@@ -44,14 +44,10 @@ export default function(customConfig: Object = {}) {
     const generateReactComponent = makeGenerateReactComponent(writeFile)
     const componentEmitter: EventEmitter = component.getEmitter()
 
-    componentEmitter.once("start", (component: IReactComponent) => {
+    componentEmitter.once("start", () => {
       generateReactComponent(component)
-        .then(paths => {
-          return component.getEmitter().emit("done", paths)
-        })
-        .catch(error => {
-          return component.getEmitter().emit("error", error)
-        })
+        .then(paths => component.getEmitter().emit("done", paths))
+        .catch(error => component.getEmitter().emit("error", error))
     })
 
     componentEmitter.on("error", error => {
@@ -59,13 +55,12 @@ export default function(customConfig: Object = {}) {
         if (error.code === "EBADF") {
           return null
         }
-      } else {
-        console.error(error)
       }
+      return console.error(error)
     })
 
     process.nextTick(() => {
-      componentEmitter.emit("start", component)
+      componentEmitter.emit("start")
     })
 
     return componentEmitter

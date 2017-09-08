@@ -11,12 +11,14 @@ import {
   validateES6ClassComponent,
   validateJSXIdentifier
 } from "../src/lib/ReactComponent/validation"
-import index from "../src/index"
 import * as constants from "../src/lib/ReactComponent/constants"
 
 function getDirContents(path: string) {
   return fs.readdirSync(path)
 }
+
+/* eslint import/no-dynamic-require: off  */
+/* eslint global-require: off  */
 
 const defaultTemplatesDirRelativePath = "../src/lib/ReactComponent/templates/"
 const mockDefaultTemplatePaths = {
@@ -51,13 +53,11 @@ describe("generate", () => {
   let srcDir
   let componentsDir
   let containersDir
-  let getComponentsDirContents
   let resolveInComponents
   let resolveInContainers
 
   beforeEach(() => {
     mockFileSystem()
-    getComponentsDirContents = () => getDirContents(componentsDir)
     resolveInComponents = (...items) => path.resolve(componentsDir, ...items)
     resolveInContainers = (...items) => path.resolve(containersDir, ...items)
   })
@@ -388,7 +388,7 @@ describe("generate", () => {
         expect(getDirContents(resolveInComponents("TestComponent"))).toContain(
           "TestComponent.js"
         )
-        rcg.generate("TestComponent").on("done", paths => {
+        rcg.generate("TestComponent").on("done", () => {
           expect(
             getDirContents(resolveInComponents("TestComponent"))
           ).not.toContain("index.js")
@@ -535,19 +535,9 @@ describe("generate", () => {
   })
 
   describe("given a global configuration with custom paths for templates", () => {
-    let templatesDir
-
-    const templateString: string = fs.readFileSync(
-      path.resolve("./src/lib/ReactComponent/templates/mainFileCustomJSX.js"),
-      {
-        encoding: "utf8"
-      }
-    )
-
     beforeEach(() => {
       componentsDir = path.resolve(process.cwd(), "client", "app", "components")
       containersDir = path.resolve(process.cwd(), "client", "app", "containers")
-      templatesDir = path.resolve(process.cwd(), "client", "app", "templates")
 
       mock({
         "client/app/templates": {

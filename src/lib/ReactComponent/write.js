@@ -40,21 +40,21 @@ export default (writeFile: Function) => (
 
     return getTemplateString(file.getTemplatePath())
       .then(compileTemplateString)
-      .then(compiledTemplate => {
-        return renderCompiledTemplate(compiledTemplate, {
+      .then(compiledTemplate =>
+        renderCompiledTemplate(compiledTemplate, {
           componentName: component.getName()
         })
-      })
-      .then(renderedTemplate => {
-        return writeFile(file, renderedTemplate).then(path => {
+      )
+      .then(renderedTemplate =>
+        writeFile(file, renderedTemplate).then(path => {
           const fileRole = file.getRole()
           component.getEmitter().emit("fileWritten", path)
-          component.getEmitter().emit(fileRole + "FileWritten", path)
+          component.getEmitter().emit(`${fileRole}FileWritten`, path)
           return {
             [fileRole]: path
           }
         })
-      })
+      )
     // .catch(e => {
     //   const err: Error = new Error()
     //   err.message = `Error writing file to ${file.getPath()}`

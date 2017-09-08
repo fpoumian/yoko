@@ -70,7 +70,6 @@
     "babel-jest": "^20.0.0",
     "babel-preset-env": "^1.1.8",
     "babel-preset-flow": "^6.23.0",
-    "babel-preset-react-app": "^3.0.2",
     "babel-preset-stage-2": "^6.18.0",
     "documentation": "4.0.0-rc.1",
     "eslint": "^4.0.0",
