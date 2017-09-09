@@ -3,6 +3,7 @@
 import mock from "mock-fs"
 import fs from "fs"
 import path from "path"
+import eventToPromise from "event-to-promise"
 
 import reactCG from "../src"
 import {
@@ -95,6 +96,22 @@ describe("generate", () => {
         })
       })
 
+      it("should create five directories inside of components Home directory", () => {
+        expect.assertions(1)
+
+        const promises = [
+          eventToPromise(rcg.generate("ComponentOne"), "done"),
+          eventToPromise(rcg.generate("ComponentTwo"), "done"),
+          eventToPromise(rcg.generate("ComponentThree"), "done"),
+          eventToPromise(rcg.generate("ComponentFour"), "done"),
+          eventToPromise(rcg.generate("ComponenFive"), "done")
+        ]
+
+        return Promise.all(promises).then(() => {
+          expect(getDirContents(componentsDir)).toHaveLength(5)
+        })
+      })
+
       it("should emit a mainFileWritten event", done => {
         expect.assertions(1)
 
@@ -117,11 +134,48 @@ describe("generate", () => {
         })
       })
 
+      it("should create component inside existing directory if it already exists", () => {
+        expect.assertions(1)
+
+        const promises = [
+          eventToPromise(rcg.generate("ParentDirectory/ComponentOne"), "done"),
+          eventToPromise(rcg.generate("ParentDirectory/ComponentTwo"), "done")
+        ]
+
+        return Promise.all(promises).then(() => {
+          expect(
+            getDirContents(resolveInComponents("ParentDirectory"))
+          ).toHaveLength(2)
+        })
+      })
+
       it("should create a main JS file for the component", done => {
         expect.assertions(1)
         rcg.generate("TestComponent").on("done", paths => {
           expect(getDirContents(paths.root)).toContain("TestComponent.js")
           done()
+        })
+      })
+
+      it("should create main JS files for multiple components inside existing directories", () => {
+        expect.assertions(2)
+
+        const promises = [
+          eventToPromise(rcg.generate("ParentDirectory/ComponentOne"), "done"),
+          eventToPromise(rcg.generate("ParentDirectory/ComponentTwo"), "done")
+        ]
+
+        return Promise.all(promises).then(() => {
+          expect(
+            getDirContents(
+              resolveInComponents("ParentDirectory", "ComponentOne")
+            )
+          ).toContain("ComponentOne.js")
+          expect(
+            getDirContents(
+              resolveInComponents("ParentDirectory", "ComponentTwo")
+            )
+          ).toContain("ComponentTwo.js")
         })
       })
 
@@ -191,6 +245,40 @@ describe("generate", () => {
           })
           expect(validateIndexFile(indexFile, "TestComponent")).toBe(true)
           done()
+        })
+      })
+
+      it("should create index.js files for first two components, but not the third one", () => {
+        expect.assertions(3)
+
+        const promises = [
+          eventToPromise(
+            rcg.generate("ParentDirectory/ComponentOne", { index: true }),
+            "done"
+          ),
+          eventToPromise(
+            rcg.generate("ParentDirectory/ComponentTwo", { index: true }),
+            "done"
+          ),
+          eventToPromise(rcg.generate("ParentDirectory/ComponentThree"), "done")
+        ]
+
+        return Promise.all(promises).then(() => {
+          expect(
+            getDirContents(
+              resolveInComponents("ParentDirectory", "ComponentOne")
+            )
+          ).toContain("index.js")
+          expect(
+            getDirContents(
+              resolveInComponents("ParentDirectory", "ComponentTwo")
+            )
+          ).toContain("index.js")
+          expect(
+            getDirContents(
+              resolveInComponents("ParentDirectory", "ComponentThree")
+            )
+          ).not.toContain("index.js")
         })
       })
 
@@ -601,7 +689,7 @@ describe("generate", () => {
   )
 
   // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("generate") block,
-  // otherwise the rest of the test suites won't work
+  // otherwise the rest of the test suites won't work!
   afterEach(() => {
     mock.restore()
   })
