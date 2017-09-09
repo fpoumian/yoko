@@ -14,10 +14,15 @@ import type { Config } from "./lib/Config/types"
 import makeGenerateReactComponent from "./lib/ReactComponent/generate"
 import writeFile from "./lib/File/write"
 
+/**
+ *  Create a generator
+ */
 export default function(customConfig: Object = {}) {
   const config: Config = parseConfig(customConfig)
 
-  // Public API
+  /**
+   * Generate a React component
+   */
   const generate = function generate(
     componentName: string,
     options: ReactComponentOptions = {}
