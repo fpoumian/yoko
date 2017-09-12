@@ -30,12 +30,19 @@ function renderCompiledTemplate(
 export default (writeFile: Function) => (
   component: IReactComponent
 ): Promise<any> => {
-  const componentFiles: { [string]: IFile } = component.getFiles()
+  const componentFiles: Map<string, IFile> = component.getFiles()
+  const roles: Array<string> = Array.from(componentFiles.keys())
 
-  const filePromises: Array<Promise<any>> = Object.keys(
-    componentFiles
-  ).map(fileKey => {
-    const file: IFile = componentFiles[fileKey]
+  const filePromises: Array<Promise<any>> = roles.map((role: string) => {
+    const temp = componentFiles.get(role)
+
+    if (typeof temp === "undefined") {
+      throw new Error()
+    }
+
+    const file: IFile = {
+      ...temp
+    }
 
     return getTemplateString(file.getTemplatePath())
       .then(compileTemplateString)

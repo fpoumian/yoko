@@ -25,10 +25,7 @@ export type ReactComponentOptions = {
 }
 
 export type ReactComponentFiles = {
-  mainFile: IFile,
-  indexFile?: IFile,
-  stylesheetFile?: IFile,
-  testsFile?: IFile
+  [string]: IFile
 }
 
 export type ReactComponentFileTemplatePaths = {

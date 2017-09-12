@@ -12,6 +12,8 @@ import type { IReactComponent } from "./interfaces"
 import type { Config } from "../Config/types"
 import { getFilesTemplatesPaths } from "./utils"
 import defaultConfig from "../Config/default"
+import createFileList from "../FileList/factory"
+import type { IFile } from "../File/interfaces"
 
 export default (createComponentFile: Function, emitter: EventEmitter) => (
   props: ReactComponentProps,
@@ -22,8 +24,10 @@ export default (createComponentFile: Function, emitter: EventEmitter) => (
     props
   )
 
-  const files: ReactComponentFiles = {
-    mainFile: createComponentFile({
+  const files: Map<string, IFile> = createFileList()
+  files.set(
+    "main",
+    createComponentFile({
       name: props.name,
       extension: get(
         config,
@@ -34,48 +38,57 @@ export default (createComponentFile: Function, emitter: EventEmitter) => (
       role: "main",
       templatePath: templatePaths.main
     })
-  }
+  )
 
   if (props.index) {
-    files.indexFile = createComponentFile({
-      name: "index",
-      extension: get(
-        config,
-        "extensions.js.index",
-        defaultConfig.extensions.js.index
-      ),
-      dir: props.path,
-      role: "index",
-      templatePath: templatePaths.index
-    })
+    files.set(
+      "index",
+      createComponentFile({
+        name: "index",
+        extension: get(
+          config,
+          "extensions.js.index",
+          defaultConfig.extensions.js.index
+        ),
+        dir: props.path,
+        role: "index",
+        templatePath: templatePaths.index
+      })
+    )
   }
 
   if (props.stylesheet) {
-    files.stylesheetFile = createComponentFile({
-      name: "styles",
-      extension: get(
-        config,
-        "extensions.stylesheet.main",
-        defaultConfig.extensions.stylesheet.main
-      ),
-      dir: props.path,
-      role: "stylesheet",
-      templatePath: null
-    })
+    files.set(
+      "stylesheet",
+      createComponentFile({
+        name: "styles",
+        extension: get(
+          config,
+          "extensions.stylesheet.main",
+          defaultConfig.extensions.stylesheet.main
+        ),
+        dir: props.path,
+        role: "stylesheet",
+        templatePath: null
+      })
+    )
   }
 
   if (props.tests) {
-    files.testsFile = createComponentFile({
-      name: `${props.name}.test`,
-      extension: get(
-        config,
-        "extensions.js.tests",
-        defaultConfig.extensions.js.tests
-      ),
-      dir: path.resolve(props.path, "__tests__"),
-      role: "tests",
-      templatePath: templatePaths.tests
-    })
+    files.set(
+      "tests",
+      createComponentFile({
+        name: `${props.name}.test`,
+        extension: get(
+          config,
+          "extensions.js.tests",
+          defaultConfig.extensions.js.tests
+        ),
+        dir: path.resolve(props.path, "__tests__"),
+        role: "tests",
+        templatePath: templatePaths.tests
+      })
+    )
   }
 
   // Public API
