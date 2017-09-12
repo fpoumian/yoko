@@ -5,7 +5,6 @@ import EventEmitter from "events"
 
 import type {
   ReactComponentProps,
-  ReactComponentFiles,
   ReactComponentFileTemplatePaths
 } from "./types"
 import type { IReactComponent } from "./interfaces"

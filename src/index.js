@@ -2,7 +2,7 @@
 import path from "path"
 import EventEmitter from "events"
 
-import createReactComponent from "./lib/ReactComponent/factory"
+import makeCreateReactComponent from "./lib/ReactComponent/factory"
 import createComponentFile from "./lib/ComponentFile/factory"
 import type {
   ReactComponentProps,
@@ -42,10 +42,11 @@ export default function(customConfig: Object = {}) {
     }
 
     const emitter: EventEmitter = new EventEmitter()
-    const component: IReactComponent = createReactComponent(
+    const createReactComponent = makeCreateReactComponent(
       createComponentFile,
       emitter
-    )(props, config)
+    )
+    const component: IReactComponent = createReactComponent(props, config)
 
     const generateReactComponent = makeGenerateReactComponent(writeFile)
     const componentEmitter: EventEmitter = component.getEmitter()
