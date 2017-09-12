@@ -20,16 +20,19 @@ export type ReactComponentOptions = {
   container?: boolean,
   type?: string,
   index?: boolean,
-  stylesheet?: boolean
+  stylesheet?: boolean,
+  tests?: boolean
 }
 
 export type ReactComponentFiles = {
   mainFile: IFile,
   indexFile?: IFile,
-  stylesheetFile?: IFile
+  stylesheetFile?: IFile,
+  testsFile?: IFile
 }
 
 export type ReactComponentFileTemplatePaths = {
   main: string,
-  index: string
+  index: string,
+  tests: string
 }

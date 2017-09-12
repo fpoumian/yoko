@@ -17,7 +17,8 @@ describe("given that the user did not provide any custom configuration", () => {
       extensions: {
         js: {
           main: "js",
-          index: "js"
+          index: "js",
+          tests: "js"
         },
         stylesheet: {
           main: "css"
@@ -105,7 +106,8 @@ describe("given that the user provided a custom JS extensions", () => {
 
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
       main: "jsx",
-      index: "js"
+      index: "js",
+      tests: "js"
     })
   })
 
@@ -120,7 +122,8 @@ describe("given that the user provided a custom JS extensions", () => {
 
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
       main: "js",
-      index: "ts"
+      index: "ts",
+      tests: "js"
     })
   })
 
@@ -135,7 +138,8 @@ describe("given that the user provided a custom JS extensions", () => {
 
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
       main: "js",
-      index: "ts"
+      index: "ts",
+      tests: "js"
     })
   })
 
@@ -156,14 +160,16 @@ describe("given that the user provided a custom JS extensions", () => {
       extensions: {
         js: {
           main: ".tsx",
-          index: ".ts"
+          index: ".ts",
+          tests: ".js"
         }
       }
     }
 
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
       main: "tsx",
-      index: "ts"
+      index: "ts",
+      tests: "js"
     })
   })
 })

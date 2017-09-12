@@ -1,5 +1,6 @@
 // @flow
 import { get } from "lodash"
+import path from "path"
 import EventEmitter from "events"
 
 import type {
@@ -60,6 +61,20 @@ export default (createComponentFile: Function, emitter: EventEmitter) => (
       dir: props.path,
       role: "stylesheet",
       templatePath: null
+    })
+  }
+
+  if (props.tests) {
+    files.testsFile = createComponentFile({
+      name: `${props.name}.test`,
+      extension: get(
+        config,
+        "extensions.js.tests",
+        defaultConfig.extensions.js.tests
+      ),
+      dir: path.resolve(props.path, "__tests__"),
+      role: "tests",
+      templatePath: templatePaths.tests
     })
   }
 

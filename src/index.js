@@ -37,7 +37,8 @@ export default function(customConfig: Object = {}) {
       path: path.resolve(componentHome, ...splitName),
       type: options.type || "sfc",
       index: options.index || false,
-      stylesheet: options.stylesheet || false
+      stylesheet: options.stylesheet || false,
+      tests: options.tests || false
     }
 
     const emitter: EventEmitter = new EventEmitter()

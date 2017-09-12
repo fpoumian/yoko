@@ -12,7 +12,8 @@ const config: Config = {
   extensions: {
     js: {
       main: "js",
-      index: "js"
+      index: "js",
+      tests: "js"
     },
     stylesheet: {
       main: "css"

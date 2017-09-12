@@ -12,8 +12,8 @@ function getTemplateString(templatePath: string | null): Promise<string> {
   if (!templatePath) {
     return Promise.resolve("")
   }
-
-  return Promise.resolve(require(templatePath).default)
+  const template = require(templatePath).default
+  return Promise.resolve(template)
 }
 
 function compileTemplateString(templateString: string): IRenderable {

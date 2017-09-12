@@ -10,7 +10,8 @@ import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
   validateES6ClassComponent,
-  validateJSXIdentifier
+  validateJSXIdentifier,
+  validateTestsFile
 } from "../src/lib/ReactComponent/validation"
 import * as constants from "../src/lib/ReactComponent/constants"
 
@@ -22,6 +23,7 @@ function getDirContents(path: string) {
 /* eslint global-require: off  */
 
 const defaultTemplatesDirRelativePath = "../src/lib/ReactComponent/templates/"
+
 const mockDefaultTemplatePaths = {
   lib: {
     ReactComponent: {
@@ -31,8 +33,21 @@ const mockDefaultTemplatePaths = {
         [constants.ES6_CLASS_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
           constants.ES6_CLASS_TEMPLATE_FILE_NAME).default,
         [constants.INDEX_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.INDEX_TEMPLATE_FILE_NAME).default
+          constants.INDEX_TEMPLATE_FILE_NAME).default,
+        [constants.TESTS_FILE_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
+          constants.TESTS_FILE_TEMPLATE_FILE_NAME).default
       }
+    }
+  }
+}
+
+const CUSTOM_SFC_TEMPLATE_FILE_NAME = "mainFileCustomJSX.js"
+
+const mockCustomTemplatesPaths = {
+  app: {
+    templates: {
+      [constants.SFC_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
+        CUSTOM_SFC_TEMPLATE_FILE_NAME).default
     }
   }
 }
@@ -41,6 +56,9 @@ function mockFileSystem() {
   mock({
     src: {
       ...mockDefaultTemplatePaths
+    },
+    client: {
+      ...mockCustomTemplatesPaths
     }
   })
 }
@@ -353,6 +371,64 @@ describe("generate", () => {
       })
     })
 
+    describe("given that the test option is set to true", () => {
+      it("should return a path object with root, tests and main properties", done => {
+        expect.assertions(1)
+        rcg
+          .generate("TestComponent", {
+            tests: true
+          })
+          .on("done", paths => {
+            expect(paths).toEqual({
+              root: resolveInComponents("TestComponent"),
+              main: resolveInComponents("TestComponent", "TestComponent.js"),
+              tests: resolveInComponents(
+                "TestComponent",
+                "__tests__",
+                "TestComponent.test.js"
+              )
+            })
+            done()
+          })
+      })
+      it("should create a test file for the component", done => {
+        expect.assertions(1)
+        rcg.generate("TestComponent", { tests: true }).on("done", paths => {
+          expect(
+            getDirContents(path.resolve(paths.root, "__tests__"))
+          ).toContain("TestComponent.test.js")
+          done()
+        })
+      })
+      it("should create a valid test file", done => {
+        expect.assertions(1)
+        rcg.generate("TestComponent", { tests: true }).on("done", paths => {
+          const testsFile: string = fs.readFileSync(path.resolve(paths.tests), {
+            encoding: "utf8"
+          })
+          expect(validateTestsFile(testsFile, "TestComponent")).toBe(true)
+          done()
+        })
+      })
+
+      it("should emit a testsFileWritten event", done => {
+        expect.assertions(1)
+
+        rcg
+          .generate("TestComponent", { tests: true })
+          .on("testsFileWritten", path => {
+            expect(path).toEqual(
+              resolveInComponents(
+                "TestComponent",
+                "__tests__",
+                "TestComponent.test.js"
+              )
+            )
+            done()
+          })
+      })
+    })
+
     describe("given that the ES6 Class option is set to true", () => {
       it("should create a valid React Component using the ES6 class template inside the default components home dir", done => {
         expect.assertions(1)
@@ -582,7 +658,7 @@ describe("generate", () => {
     })
   })
 
-  describe("given no global configuration file", () => {
+  describe("given no global configuration object", () => {
     beforeEach(() => {
       componentsDir = path.resolve(process.cwd(), "components")
       containersDir = path.resolve(process.cwd(), "containers")
@@ -620,48 +696,9 @@ describe("generate", () => {
   xdescribe(
     "given a global configuration with custom paths for templates",
     () => {
-      const customSFCTemplate = fs.readFileSync(
-        path.resolve(
-          __dirname,
-          "..",
-          "src/lib/ReactComponent/templates/mainFileCustomJSX.js"
-        ),
-        "utf8"
-      )
-
-      const dir = {
-        "client/app/templates": {
-          [constants.SFC_TEMPLATE_FILE_NAME]: customSFCTemplate
-        }
-      }
-
-      beforeEach(() => {
-        componentsDir = path.resolve(
-          process.cwd(),
-          "client",
-          "app",
-          "components"
-        )
-        containersDir = path.resolve(
-          process.cwd(),
-          "client",
-          "app",
-          "containers"
-        )
-
-        mock({
-          ...dir,
-          src: {
-            ...mockDefaultTemplatePaths
-          }
-        })
-      })
-
       const config = {
         paths: {
-          components: "./client/app/components",
-          containers: "./client/app/containers",
-          templates: "./client/app/templates"
+          templates: "./client/app/templates/"
         }
       }
 

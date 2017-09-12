@@ -40,7 +40,8 @@ export function getFilesTemplatesPaths(
 
   const fileNames = {
     main: mainTemplateFileName,
-    index: constants.INDEX_TEMPLATE_FILE_NAME
+    index: constants.INDEX_TEMPLATE_FILE_NAME,
+    tests: constants.TESTS_FILE_TEMPLATE_FILE_NAME
   }
 
   const defaultPaths = {
@@ -48,6 +49,10 @@ export function getFilesTemplatesPaths(
     index: path.resolve(
       defaultTemplatesDirPath,
       constants.INDEX_TEMPLATE_FILE_NAME
+    ),
+    tests: path.resolve(
+      defaultTemplatesDirPath,
+      constants.TESTS_FILE_TEMPLATE_FILE_NAME
     )
   }
 

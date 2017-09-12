@@ -51,6 +51,10 @@ describe("getFilesTemplatesPaths", () => {
           index: path.resolve(
             defaultTemplatesDir,
             constants.INDEX_TEMPLATE_FILE_NAME
+          ),
+          tests: path.resolve(
+            defaultTemplatesDir,
+            constants.TESTS_FILE_TEMPLATE_FILE_NAME
           )
         })
       })
@@ -60,17 +64,14 @@ describe("getFilesTemplatesPaths", () => {
         type: "es6class"
       }
 
-      it("should return an object with paths pointing to the default templates and SFC as the Main file template", () => {
-        expect(getFilesTemplatesPaths(config, options)).toEqual({
-          main: path.resolve(
+      it("should return an object with paths pointing to the default templates and ES6 Class as the Main file template", () => {
+        expect(getFilesTemplatesPaths(config, options)).toHaveProperty(
+          "main",
+          path.resolve(
             defaultTemplatesDir,
             constants.ES6_CLASS_TEMPLATE_FILE_NAME
-          ),
-          index: path.resolve(
-            defaultTemplatesDir,
-            constants.INDEX_TEMPLATE_FILE_NAME
           )
-        })
+        )
       })
     })
   })
@@ -102,6 +103,10 @@ describe("getFilesTemplatesPaths", () => {
             index: path.resolve(
               defaultTemplatesDir,
               constants.INDEX_TEMPLATE_FILE_NAME
+            ),
+            tests: path.resolve(
+              defaultTemplatesDir,
+              constants.TESTS_FILE_TEMPLATE_FILE_NAME
             )
           })
         })
@@ -127,6 +132,10 @@ describe("getFilesTemplatesPaths", () => {
             index: path.resolve(
               defaultTemplatesDir,
               constants.INDEX_TEMPLATE_FILE_NAME
+            ),
+            tests: path.resolve(
+              defaultTemplatesDir,
+              constants.TESTS_FILE_TEMPLATE_FILE_NAME
             )
           })
         })
@@ -141,18 +150,15 @@ describe("getFilesTemplatesPaths", () => {
         })
 
         it("should return an object with the path to the custom index template in the index property", () => {
-          expect(getFilesTemplatesPaths(config, options, fs)).toEqual({
-            main: path.resolve(
-              defaultTemplatesDir,
-              constants.SFC_TEMPLATE_FILE_NAME
-            ),
-            index: path.resolve(
+          expect(getFilesTemplatesPaths(config, options, fs)).toHaveProperty(
+            "index",
+            path.resolve(
               process.cwd(),
               "src",
               "templates",
               constants.INDEX_TEMPLATE_FILE_NAME
             )
-          })
+          )
         })
       })
     })

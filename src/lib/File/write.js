@@ -1,16 +1,11 @@
 // @flow
 
-import fs from "fs"
+import fse from "fs-extra"
 import type { IFile } from "./interfaces"
 
-export default function(file: IFile, data: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(file.getPath(), data, "utf8", err => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(file.getPath())
-      }
-    })
-  })
+export default function(file: IFile, data: string): Promise<string> {
+  return fse
+    .ensureFile(file.getPath())
+    .then(() => fse.writeFile(file.getPath(), data, "utf8"))
+    .then(() => file.getPath())
 }

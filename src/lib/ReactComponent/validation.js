@@ -20,11 +20,39 @@ function parseCode(code: string) {
   return parsedCode
 }
 
-function validateCode(code, selectors: Array<string>): boolean {
+function validateCode(code, selectors: Array<string | boolean>): boolean {
   return selectors.every(selector => {
-    const results = squery.queryParsed(squery.parse(selector), parseCode(code))
-    return results.length > 0
+    if (typeof selector === "string") {
+      const results = squery.queryParsed(
+        squery.parse(selector),
+        parseCode(code)
+      )
+      return results.length > 0
+    }
+    return selector
   })
+}
+
+// function validateJSXText(code: string, text: string): boolean {
+//   return validateCode(code, [`Program JSXElement JSXText[value=${text}]`])
+// }
+
+export function validateJSXIdentifier(code: string, name: string): boolean {
+  return validateCode(code, [
+    `Program JSXElement JSXIdentifier[name="${name}"]`
+  ])
+}
+
+function validateReactImport(code: string): boolean {
+  return validateCode(code, [
+    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name="React"]`
+  ])
+}
+
+function validateComponentImport(code: string, value: string): boolean {
+  return validateCode(code, [
+    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name=${value}]`
+  ])
 }
 
 export function validateStatelessFunctionalComponent(
@@ -32,6 +60,7 @@ export function validateStatelessFunctionalComponent(
   componentName: string
 ): boolean {
   return validateCode(code, [
+    validateReactImport(code),
     `program > FunctionDeclaration > ident#${componentName}`,
     `program > ExportDefaultDeclaration > ident#${componentName}`
   ])
@@ -42,6 +71,7 @@ export function validateES6ClassComponent(
   componentName: string
 ): boolean {
   return validateCode(code, [
+    validateReactImport(code),
     `program > ClassDeclaration > ident#${componentName}`,
     `program > ExportDefaultDeclaration > ident#${componentName}`
   ])
@@ -57,12 +87,13 @@ export function validateIndexFile(
   ])
 }
 
-export function validateJSXText(code: string, text: string): boolean {
-  return validateCode(code, [`Program JSXElement JSXText[value=${text}]`])
-}
-
-export function validateJSXIdentifier(code: string, name: string): boolean {
+export function validateTestsFile(
+  code: string,
+  componentName: string
+): boolean {
   return validateCode(code, [
-    `Program JSXElement JSXIdentifier[name="${name}"]`
+    validateReactImport(code),
+    validateComponentImport(code, componentName),
+    `Program > ImportDeclaration > Literal[value="enzyme"]`
   ])
 }

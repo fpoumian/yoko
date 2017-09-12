@@ -6,7 +6,8 @@ import {
   validateIndexFile,
   validateES6ClassComponent,
   validateJSXText,
-  validateJSXIdentifier
+  validateJSXIdentifier,
+  validateTestsFile
 } from "../validation"
 import * as constants from "../constants"
 
@@ -22,6 +23,20 @@ const es6ClassComponent = path.resolve(
   "..",
   "__mocks__",
   constants.ES6_CLASS_TEMPLATE_FILE_NAME
+)
+
+const indexFile = path.resolve(
+  __dirname,
+  "..",
+  "__mocks__",
+  constants.INDEX_TEMPLATE_FILE_NAME
+)
+
+const testsFile = path.resolve(
+  __dirname,
+  "..",
+  "__mocks__",
+  constants.TESTS_FILE_TEMPLATE_FILE_NAME
 )
 
 describe("validateStatelessFunctionalComponent", () => {
@@ -65,20 +80,24 @@ describe("validateE6ClassComponent", () => {
 describe("validateIndexFile", () => {
   it("should validate a correct React Component index file", done => {
     expect.assertions(1)
-    fs.readFile(
-      path.join(__dirname, "..", "__mocks__", "index.js"),
-      "utf8",
-      (err, data) => {
-        expect(validateIndexFile(data, "StatelessFunctionalComponent")).toBe(
-          true
-        )
-        done()
-      }
-    )
+    fs.readFile(indexFile, "utf8", (err, data) => {
+      expect(validateIndexFile(data, "StatelessFunctionalComponent")).toBe(true)
+      done()
+    })
   })
 })
 
-describe("validateJSXText", () => {
+describe("validateTestsFile", () => {
+  it("should validate a correct React Component tests file", done => {
+    expect.assertions(1)
+    fs.readFile(testsFile, "utf8", (err, data) => {
+      expect(validateTestsFile(data, "TestComponent")).toBe(true)
+      done()
+    })
+  })
+})
+
+xdescribe("validateJSXText", () => {
   it("should validate JSX Text inside a component file", done => {
     expect.assertions(1)
     fs.readFile(sfComponent, "utf8", (err, data) => {

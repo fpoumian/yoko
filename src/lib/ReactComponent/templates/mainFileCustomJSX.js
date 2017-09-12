@@ -1,6 +1,4 @@
-const templateString = `
-
-import React from 'react'
+const templateString = `import React from 'react'
 import PropTypes from 'prop-types'
 
 /** {{ componentName }} */

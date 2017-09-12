@@ -9,7 +9,8 @@ export type Config = {
   extensions: {
     js: {
       main: string,
-      index: string
+      index: string,
+      tests: string
     },
     stylesheet: {
       main: string
