@@ -56,8 +56,10 @@
     "scaffold"
   ],
   "dependencies": {
+    "acorn-jsx": "^4.0.1",
     "common-errors": "^1.0.4",
     "fs-extra": "^4.0.1",
+    "grasp-squery": "^0.4.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mkdirp-promise": "^5.0.1",
@@ -66,7 +68,6 @@
     "sanitize-filename": "^1.6.1"
   },
   "devDependencies": {
-    "acorn-jsx": "^4.0.1",
     "babel-cli": "^6.18.0",
     "babel-eslint": "^7.1.1",
     "babel-jest": "^20.0.0",
@@ -82,7 +83,6 @@
     "eslint-plugin-import": "^2.2.0",
     "event-to-promise": "^0.8.0",
     "flow-bin": "^0.50.0",
-    "grasp-squery": "^0.4.0",
     "jest": "^20.0.4",
     "jest-cli": "^20.0.0",
     "mock-fs": "^4.4.1",

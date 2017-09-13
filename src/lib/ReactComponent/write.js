@@ -4,9 +4,8 @@
 
 import nunjucks from "nunjucks"
 
-import type { IReactComponent } from "./interfaces"
+import type { IReactComponent, IRenderable } from "./interfaces"
 import type { IFile } from "../File/interfaces"
-import type { IRenderable } from "../Interfaces/IRenderable"
 
 function getTemplateString(templatePath: string | null): Promise<string> {
   if (!templatePath) {

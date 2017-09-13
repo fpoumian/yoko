@@ -9,3 +9,7 @@ export interface IReactComponent {
   getName(): string,
   getEmitter(): EventEmitter
 }
+
+export interface IRenderable {
+  render(context: Object): string
+}
