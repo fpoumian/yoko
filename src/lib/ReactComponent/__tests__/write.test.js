@@ -2,7 +2,6 @@ import path from "path"
 import { find } from "lodash"
 
 import write from "../write"
-import makeCreateReactComponent from "../factory"
 
 describe("write", () => {
   let getRole
@@ -54,7 +53,7 @@ describe("write", () => {
     })
 
     it("should call the writeFile function as many times as there are files to write", () =>
-      writeComponentFiles(component).then(paths => {
+      writeComponentFiles(component).then(() => {
         expect(writeFile).toHaveBeenCalledTimes(fileList.size)
       }))
 
