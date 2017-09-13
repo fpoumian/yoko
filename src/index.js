@@ -3,16 +3,20 @@ import path from "path"
 import EventEmitter from "events"
 
 import makeCreateReactComponent from "./lib/ReactComponent/factory"
+import makeCreateFileList from "./lib/FileList/factory"
 import createComponentFile from "./lib/ComponentFile/factory"
 import type {
   ReactComponentProps,
-  ReactComponentOptions
+  ReactComponentOptions,
+  ReactComponentFileTemplatePaths
 } from "./lib/ReactComponent/types"
 import type { IReactComponent } from "./lib/ReactComponent/interfaces"
 import parseConfig from "./lib/Config/parse"
 import type { Config } from "./lib/Config/types"
 import makeGenerateReactComponent from "./lib/ReactComponent/generate"
 import writeFile from "./lib/File/write"
+import { getFilesTemplatesPaths } from "./lib/ReactComponent/utils"
+import type { IFile } from "./lib/File/interfaces"
 
 /**
  *  Create a generator
@@ -41,12 +45,21 @@ export default function(customConfig: Object = {}) {
       tests: options.tests || false
     }
 
-    const emitter: EventEmitter = new EventEmitter()
-    const createReactComponent = makeCreateReactComponent(
-      createComponentFile,
-      emitter
+    const templatePaths: ReactComponentFileTemplatePaths = getFilesTemplatesPaths(
+      config,
+      props
     )
-    const component: IReactComponent = createReactComponent(props, config)
+
+    const createFileList = makeCreateFileList(createComponentFile)
+    const fileList: Map<string, IFile> = createFileList(
+      props,
+      config,
+      templatePaths
+    )
+
+    const emitter: EventEmitter = new EventEmitter()
+    const createReactComponent = makeCreateReactComponent(emitter)
+    const component: IReactComponent = createReactComponent(props, fileList)
 
     const generateReactComponent = makeGenerateReactComponent(writeFile)
     const componentEmitter: EventEmitter = component.getEmitter()
@@ -60,10 +73,16 @@ export default function(customConfig: Object = {}) {
     componentEmitter.on("error", error => {
       if (process.env.NODE_ENV === "test") {
         if (error.code === "EBADF") {
-          return null
+          return
         }
       }
-      return console.error(error)
+      console.error(error)
+      process.exit(1)
+    })
+
+    process.on("uncaughtException", err => {
+      console.error(err)
+      process.exit(1)
     })
 
     process.nextTick(() => {

@@ -1,8 +1,6 @@
-// @flow
-
 import createFileList from "../factory"
 
-describe("createFileList", () => {
+xdescribe("createFileList", () => {
   it("should have no files by default", () => {
     const files = createFileList()
     expect(files.size).toBe(0)
