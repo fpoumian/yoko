@@ -1,9 +1,8 @@
-// @flow
-
 import mock from "mock-fs"
 import fs from "fs"
 import path from "path"
 import eventToPromise from "event-to-promise"
+import { ArgumentError } from "common-errors"
 
 import reactCG from "../src"
 import {
@@ -200,12 +199,9 @@ describe("generate", () => {
       it("should create a valid React Component using the default Stateless Functional Component template", done => {
         expect.assertions(1)
         rcg.generate("TestComponent").on("done", paths => {
-          const testComponent: string = fs.readFileSync(
-            path.resolve(paths.main),
-            {
-              encoding: "utf8"
-            }
-          )
+          const testComponent = fs.readFileSync(path.resolve(paths.main), {
+            encoding: "utf8"
+          })
           expect(
             validateStatelessFunctionalComponent(testComponent, "TestComponent")
           ).toBe(true)
@@ -724,6 +720,44 @@ describe("generate", () => {
       })
     }
   )
+
+  describe("given an invalid argument type for the componentName and options arguments", () => {
+    const rcg = reactCG()
+    it("should throw an Error", () => {
+      expect(() => {
+        rcg.generate([1, 2, 3])
+      }).toThrowError()
+      expect(() => {
+        rcg.generate("C", [1, 2])
+      }).toThrowError()
+    })
+    it("should throw an Error with correct type", () => {
+      expect(() => {
+        rcg.generate([1, 2, 3], {})
+      }).toThrowError(TypeError)
+      expect(() => {
+        rcg.generate("", {})
+      }).toThrowError(ArgumentError)
+      expect(() => {
+        rcg.generate("C", [1, 2, 3])
+      }).toThrowError(TypeError)
+    })
+    it("should throw an Error with message", () => {
+      expect(() => {
+        rcg.generate([1, 2, 3], {})
+      }).toThrowError(
+        "You must provide a String type for the componentName argument. Array provided."
+      )
+      expect(() => {
+        rcg.generate("", {})
+      }).toThrowError("The componentName argument cannot be an empty string.")
+      expect(() => {
+        rcg.generate("C", [1, 2, 3])
+      }).toThrowError(
+        "You must provide a plain Object type for the options argument. Array provided."
+      )
+    })
+  })
 
   // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("generate") block,
   // otherwise the rest of the test suites won't work!

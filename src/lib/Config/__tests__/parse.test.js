@@ -1,5 +1,3 @@
-// @flow
-
 import path from "path"
 
 import parseConfig from "../parse"
@@ -202,6 +200,28 @@ describe("given that the user provided a custom templates path", () => {
     expect(parseConfig(userConfig)).toHaveProperty(
       "paths.templates",
       path.resolve(process.cwd(), "src", "templates")
+    )
+  })
+})
+
+describe("given that the user provided an invalid config argument", () => {
+  it("should throw an error", () => {
+    expect.assertions(1)
+    const userConfig = []
+    expect(() => {
+      parseConfig(userConfig)
+    }).toThrowError()
+  })
+  it("should throw an error with correct error type and message", () => {
+    expect.assertions(2)
+    const userConfig = []
+    expect(() => {
+      parseConfig(userConfig)
+    }).toThrowError(TypeError)
+    expect(() => {
+      parseConfig(userConfig)
+    }).toThrowError(
+      "You must provide a plain object type as the configuration argument. Array provided."
     )
   })
 })

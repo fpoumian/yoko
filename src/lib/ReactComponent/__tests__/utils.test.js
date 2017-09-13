@@ -2,7 +2,11 @@ import path from "path"
 import fs from "fs"
 import mock from "mock-fs"
 
-import { getFilesTemplatesPaths, reduceComponentPaths } from "../utils"
+import {
+  getFilesTemplatesPaths,
+  reduceComponentPaths,
+  getComponentNameInfo
+} from "../utils"
 import * as constants from "../constants"
 
 describe("reduceComponentPaths", () => {
@@ -165,6 +169,52 @@ describe("getFilesTemplatesPaths", () => {
 
     afterEach(() => {
       mock.restore()
+    })
+  })
+})
+
+describe("getComponentNameInfo", () => {
+  describe("given a name with nested directories", () => {
+    it("should get name info from the given path", () => {
+      expect.assertions(1)
+      expect(getComponentNameInfo("Parent/SubParent/ComponentName")).toEqual({
+        rootName: "ComponentName",
+        parentDirs: ["Parent", "SubParent"]
+      })
+    })
+    it("should be able to remove trailing slash", () => {
+      expect.assertions(1)
+      expect(getComponentNameInfo("Parent/SubParent/ComponentName/")).toEqual({
+        rootName: "ComponentName",
+        parentDirs: ["Parent", "SubParent"]
+      })
+    })
+    it("should be able to remove initial slash", () => {
+      expect.assertions(1)
+      expect(getComponentNameInfo("/Parent/SubParent/ComponentName")).toEqual({
+        rootName: "ComponentName",
+        parentDirs: ["", "Parent", "SubParent"]
+      })
+    })
+  })
+  describe("given a name without nested directories", () => {
+    const name = "ComponentName"
+    it("should get name info from the given path", () => {
+      expect.assertions(1)
+      expect(getComponentNameInfo(name)).toEqual({
+        rootName: "ComponentName",
+        parentDirs: []
+      })
+    })
+  })
+  describe("given a name with invalid filename/dirnames", () => {
+    const name = "Parent?/<SubParent>/Component:Name*"
+    it("should get name info from the given path", () => {
+      expect.assertions(1)
+      expect(getComponentNameInfo(name)).toEqual({
+        rootName: "ComponentName",
+        parentDirs: ["Parent", "SubParent"]
+      })
     })
   })
 })

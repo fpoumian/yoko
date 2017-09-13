@@ -1,17 +1,16 @@
 // @flow
 
 import path from "path"
-import { get, merge, mapValues } from "lodash"
+import { get, merge, mapValues, isPlainObject } from "lodash"
 
 import type { Config } from "./types"
 import defaultConfig from "./default"
 
 function normalizePath(originalPath: string): string {
-  if (originalPath === "") return ""
-  const newPath = path.isAbsolute(originalPath)
+  if (!originalPath) return ""
+  return path.isAbsolute(originalPath)
     ? originalPath
     : path.resolve(...originalPath.trim().split(path.sep))
-  return newPath
 }
 
 function normalizePaths(originalPaths: Object): Object {
@@ -55,6 +54,13 @@ function normalizeConfig(config) {
 }
 
 export default function(config: Object): Config {
+  if (!isPlainObject(config)) {
+    throw new TypeError(
+      `You must provide a plain object type as the configuration argument. ${config
+        .constructor.name} provided.`
+    )
+  }
+
   if (Object.keys(config).length === 0) {
     return merge({}, defaultConfig, config)
   }

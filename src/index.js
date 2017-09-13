@@ -1,6 +1,8 @@
 // @flow
 import path from "path"
 import EventEmitter from "events"
+import { isPlainObject } from "lodash"
+import { ArgumentError } from "common-errors"
 
 import makeCreateReactComponent from "./lib/ReactComponent/factory"
 import makeCreateFileList from "./lib/FileList/factory"
@@ -15,14 +17,23 @@ import parseConfig from "./lib/Config/parse"
 import type { Config } from "./lib/Config/types"
 import makeGenerateReactComponent from "./lib/ReactComponent/generate"
 import writeFile from "./lib/File/write"
-import { getFilesTemplatesPaths } from "./lib/ReactComponent/utils"
+import {
+  getFilesTemplatesPaths,
+  getComponentNameInfo
+} from "./lib/ReactComponent/utils"
 import type { IFile } from "./lib/File/interfaces"
 
 /**
  *  Create a generator
  */
 export default function(customConfig: Object = {}) {
-  const config: Config = parseConfig(customConfig)
+  let config: Config
+
+  try {
+    config = parseConfig(customConfig)
+  } catch (e) {
+    throw e
+  }
 
   /**
    * Generate a React component
@@ -31,25 +42,49 @@ export default function(customConfig: Object = {}) {
     componentName: string,
     options: ReactComponentOptions = {}
   ): EventEmitter {
-    const splitName: Array<string> = componentName.split(path.sep)
+    // Input error handling
+    if (typeof componentName !== "string") {
+      throw new TypeError(
+        `You must provide a String type for the componentName argument. ${componentName
+          .constructor.name} provided.`
+      )
+    }
+
+    if (componentName === "") {
+      throw new ArgumentError(
+        `The componentName argument cannot be an empty string.`
+      )
+    }
+
+    if (!isPlainObject(options)) {
+      throw new TypeError(
+        `You must provide a plain Object type for the options argument. ${options
+          .constructor.name} provided.`
+      )
+    }
+
+    // Prepare component props
+    const { rootName, parentDirs } = getComponentNameInfo(componentName)
     const componentHome: string = options.container
       ? config.paths.containers
       : config.paths.components
 
     const props: ReactComponentProps = {
-      name: splitName[splitName.length - 1],
-      path: path.resolve(componentHome, ...splitName),
+      name: rootName,
+      path: path.resolve(componentHome, ...parentDirs, rootName),
       type: options.type || "sfc",
       index: options.index || false,
       stylesheet: options.stylesheet || false,
       tests: options.tests || false
     }
 
+    // Get template paths
     const templatePaths: ReactComponentFileTemplatePaths = getFilesTemplatesPaths(
       config,
       props
     )
 
+    // Create file list
     const createFileList = makeCreateFileList(createComponentFile)
     const fileList: Map<string, IFile> = createFileList(
       props,
@@ -57,13 +92,18 @@ export default function(customConfig: Object = {}) {
       templatePaths
     )
 
+    // Inject EventEmitter dependency
     const emitter: EventEmitter = new EventEmitter()
     const createReactComponent = makeCreateReactComponent(emitter)
-    const component: IReactComponent = createReactComponent(props, fileList)
 
+    // Inject writeFile dependency
     const generateReactComponent = makeGenerateReactComponent(writeFile)
+
+    // Create component in memory
+    const component: IReactComponent = createReactComponent(props, fileList)
     const componentEmitter: EventEmitter = component.getEmitter()
 
+    // Event handlers
     componentEmitter.once("start", () => {
       generateReactComponent(component)
         .then(paths => component.getEmitter().emit("done", paths))
@@ -77,14 +117,10 @@ export default function(customConfig: Object = {}) {
         }
       }
       console.error(error)
-      process.exit(1)
+      // process.exit(1)
     })
 
-    process.on("uncaughtException", err => {
-      console.error(err)
-      process.exit(1)
-    })
-
+    // Start generating on the next tick
     process.nextTick(() => {
       componentEmitter.emit("start")
     })

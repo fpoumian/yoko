@@ -2,6 +2,8 @@
 import path from "path"
 import fs from "fs"
 import { get, keys } from "lodash"
+import slashes from "remove-trailing-slash"
+import sanitize from "sanitize-filename"
 
 import type { IReactComponent } from "./interfaces"
 import type { Config } from "../Config/types"
@@ -60,7 +62,7 @@ export function getFilesTemplatesPaths(
     return defaultPaths
   }
 
-  const paths: Object = keys(fileNames).reduce((newPaths, key) => {
+  return keys(fileNames).reduce((newPaths, key) => {
     const temp = {
       [key]: fs.existsSync(path.resolve(customTemplatesDirPath, fileNames[key]))
         ? path.resolve(customTemplatesDirPath, fileNames[key])
@@ -69,6 +71,15 @@ export function getFilesTemplatesPaths(
 
     return { ...temp, ...newPaths }
   }, {})
+}
 
-  return paths
+export function getComponentNameInfo(value: string): Object {
+  const normalized = slashes(path.normalize(value))
+  const splitName: Array<string> = normalized.split(path.sep)
+  return {
+    rootName: sanitize(splitName[splitName.length - 1]),
+    parentDirs: splitName
+      .slice(0, splitName.length - 1)
+      .map(dir => sanitize(dir))
+  }
 }
