@@ -1,4 +1,4 @@
-const templateString = `export { default } from "./{{ componentName }}"
+const templateString = `export { default } from "./{{ componentName }}";
 
 `
 
