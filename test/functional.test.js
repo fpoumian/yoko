@@ -4,7 +4,7 @@ import path from "path"
 import eventToPromise from "event-to-promise"
 import { ArgumentError } from "common-errors"
 
-import reactCG from "../src"
+import tulpa from "../src"
 import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
@@ -14,7 +14,7 @@ import {
 } from "../src/lib/ReactComponent/validation"
 import * as constants from "../src/lib/ReactComponent/constants"
 
-function getDirContents(path: string) {
+function getDirContents(path) {
   return fs.readdirSync(path)
 }
 
@@ -89,13 +89,13 @@ describe("generate", () => {
       }
     }
 
-    const rcg = reactCG(config)
+    const generator = tulpa(config)
 
     describe("given no additional component options were provided", () => {
       it("should create one directory inside of components Home directory", done => {
         expect.assertions(1)
 
-        rcg.generate("TestComponent").on("done", paths => {
+        generator.generate("TestComponent").on("done", paths => {
           expect(resolveInComponents("TestComponent")).toEqual(paths.root)
           done()
         })
@@ -104,7 +104,7 @@ describe("generate", () => {
       it("should return a path object with only root and main properties", done => {
         expect.assertions(1)
 
-        rcg.generate("TestComponent").on("done", paths => {
+        generator.generate("TestComponent").on("done", paths => {
           expect(paths).toEqual({
             root: resolveInComponents("TestComponent"),
             main: resolveInComponents("TestComponent", "TestComponent.js")
@@ -117,11 +117,11 @@ describe("generate", () => {
         expect.assertions(1)
 
         const promises = [
-          eventToPromise(rcg.generate("ComponentOne"), "done"),
-          eventToPromise(rcg.generate("ComponentTwo"), "done"),
-          eventToPromise(rcg.generate("ComponentThree"), "done"),
-          eventToPromise(rcg.generate("ComponentFour"), "done"),
-          eventToPromise(rcg.generate("ComponenFive"), "done")
+          eventToPromise(generator.generate("ComponentOne"), "done"),
+          eventToPromise(generator.generate("ComponentTwo"), "done"),
+          eventToPromise(generator.generate("ComponentThree"), "done"),
+          eventToPromise(generator.generate("ComponentFour"), "done"),
+          eventToPromise(generator.generate("ComponenFive"), "done")
         ]
 
         return Promise.all(promises).then(() => {
@@ -132,7 +132,7 @@ describe("generate", () => {
       it("should emit a mainFileWritten event", done => {
         expect.assertions(1)
 
-        rcg.generate("TestComponent").on("mainFileWritten", path => {
+        generator.generate("TestComponent").on("mainFileWritten", path => {
           expect(path).toEqual(
             resolveInComponents("TestComponent", "TestComponent.js")
           )
@@ -142,21 +142,29 @@ describe("generate", () => {
 
       it("should create components directories with a recursive path", done => {
         expect.assertions(1)
-        rcg.generate("ParentDirectory/TestComponent").on("done", paths => {
-          expect(paths).toHaveProperty(
-            "root",
-            resolveInComponents("ParentDirectory", "TestComponent")
-          )
-          done()
-        })
+        generator
+          .generate("ParentDirectory/TestComponent")
+          .on("done", paths => {
+            expect(paths).toHaveProperty(
+              "root",
+              resolveInComponents("ParentDirectory", "TestComponent")
+            )
+            done()
+          })
       })
 
       it("should create component inside existing directory if it already exists", () => {
         expect.assertions(1)
 
         const promises = [
-          eventToPromise(rcg.generate("ParentDirectory/ComponentOne"), "done"),
-          eventToPromise(rcg.generate("ParentDirectory/ComponentTwo"), "done")
+          eventToPromise(
+            generator.generate("ParentDirectory/ComponentOne"),
+            "done"
+          ),
+          eventToPromise(
+            generator.generate("ParentDirectory/ComponentTwo"),
+            "done"
+          )
         ]
 
         return Promise.all(promises).then(() => {
@@ -168,7 +176,7 @@ describe("generate", () => {
 
       it("should create a main JS file for the component", done => {
         expect.assertions(1)
-        rcg.generate("TestComponent").on("done", paths => {
+        generator.generate("TestComponent").on("done", paths => {
           expect(getDirContents(paths.root)).toContain("TestComponent.js")
           done()
         })
@@ -178,8 +186,14 @@ describe("generate", () => {
         expect.assertions(2)
 
         const promises = [
-          eventToPromise(rcg.generate("ParentDirectory/ComponentOne"), "done"),
-          eventToPromise(rcg.generate("ParentDirectory/ComponentTwo"), "done")
+          eventToPromise(
+            generator.generate("ParentDirectory/ComponentOne"),
+            "done"
+          ),
+          eventToPromise(
+            generator.generate("ParentDirectory/ComponentTwo"),
+            "done"
+          )
         ]
 
         return Promise.all(promises).then(() => {
@@ -198,7 +212,7 @@ describe("generate", () => {
 
       it("should create a valid React Component using the default Stateless Functional Component template", done => {
         expect.assertions(1)
-        rcg.generate("TestComponent").on("done", paths => {
+        generator.generate("TestComponent").on("done", paths => {
           const testComponent = fs.readFileSync(path.resolve(paths.main), {
             encoding: "utf8"
           })
@@ -211,25 +225,27 @@ describe("generate", () => {
 
       it("should create a valid React Component within parent directory", done => {
         expect.assertions(1)
-        rcg.generate("ParentDirectory/TestComponent").on("done", paths => {
-          const testComponent: string = fs.readFileSync(
-            path.resolve(paths.main),
-            {
+        generator
+          .generate("ParentDirectory/TestComponent")
+          .on("done", paths => {
+            const testComponent = fs.readFileSync(path.resolve(paths.main), {
               encoding: "utf8"
-            }
-          )
-          expect(
-            validateStatelessFunctionalComponent(testComponent, "TestComponent")
-          ).toBe(true)
-          done()
-        })
+            })
+            expect(
+              validateStatelessFunctionalComponent(
+                testComponent,
+                "TestComponent"
+              )
+            ).toBe(true)
+            done()
+          })
       })
     })
 
     describe("given that the index option is set to true", () => {
       it("should return a path object with root, index and main properties", done => {
         expect.assertions(1)
-        rcg
+        generator
           .generate("TestComponent", {
             index: true
           })
@@ -245,21 +261,25 @@ describe("generate", () => {
 
       it("should create a index JS file for the component", done => {
         expect.assertions(1)
-        rcg.generate("TestComponent", { index: true }).on("done", paths => {
-          expect(getDirContents(paths.root)).toContain("index.js")
-          done()
-        })
+        generator
+          .generate("TestComponent", { index: true })
+          .on("done", paths => {
+            expect(getDirContents(paths.root)).toContain("index.js")
+            done()
+          })
       })
 
       it("should create a valid index.js file", done => {
         expect.assertions(1)
-        rcg.generate("TestComponent", { index: true }).on("done", paths => {
-          const indexFile: string = fs.readFileSync(path.resolve(paths.index), {
-            encoding: "utf8"
+        generator
+          .generate("TestComponent", { index: true })
+          .on("done", paths => {
+            const indexFile = fs.readFileSync(path.resolve(paths.index), {
+              encoding: "utf8"
+            })
+            expect(validateIndexFile(indexFile, "TestComponent")).toBe(true)
+            done()
           })
-          expect(validateIndexFile(indexFile, "TestComponent")).toBe(true)
-          done()
-        })
       })
 
       it("should create index.js files for first two components, but not the third one", () => {
@@ -267,14 +287,17 @@ describe("generate", () => {
 
         const promises = [
           eventToPromise(
-            rcg.generate("ParentDirectory/ComponentOne", { index: true }),
+            generator.generate("ParentDirectory/ComponentOne", { index: true }),
             "done"
           ),
           eventToPromise(
-            rcg.generate("ParentDirectory/ComponentTwo", { index: true }),
+            generator.generate("ParentDirectory/ComponentTwo", { index: true }),
             "done"
           ),
-          eventToPromise(rcg.generate("ParentDirectory/ComponentThree"), "done")
+          eventToPromise(
+            generator.generate("ParentDirectory/ComponentThree"),
+            "done"
+          )
         ]
 
         return Promise.all(promises).then(() => {
@@ -299,7 +322,7 @@ describe("generate", () => {
       it("should emit a indexFileWritten event", done => {
         expect.assertions(1)
 
-        rcg
+        generator
           .generate("TestComponent", { index: true })
           .on("indexFileWritten", path => {
             expect(path).toEqual(
@@ -313,7 +336,7 @@ describe("generate", () => {
     describe("given that the stylesheet option is set to true", () => {
       it("should return a path object with root, stylesheet and main properties", done => {
         expect.assertions(1)
-        rcg
+        generator
           .generate("TestComponent", {
             stylesheet: true
           })
@@ -329,7 +352,7 @@ describe("generate", () => {
 
       it("should create a stylesheet file for the component", done => {
         expect.assertions(1)
-        rcg
+        generator
           .generate("TestComponent", { stylesheet: true })
           .on("done", paths => {
             expect(getDirContents(paths.root)).toContain("styles.css")
@@ -340,7 +363,7 @@ describe("generate", () => {
       it("should emit a stylesheetFileWritten event", done => {
         expect.assertions(1)
 
-        rcg
+        generator
           .generate("TestComponent", { stylesheet: true })
           .on("stylesheetFileWritten", path => {
             expect(path).toEqual(
@@ -352,15 +375,12 @@ describe("generate", () => {
 
       it("should create an empty stylesheet file", done => {
         expect.assertions(1)
-        rcg
+        generator
           .generate("TestComponent", { stylesheet: true })
           .on("done", paths => {
-            const stylesheet: string = fs.readFileSync(
-              path.resolve(paths.stylesheet),
-              {
-                encoding: "utf8"
-              }
-            )
+            const stylesheet = fs.readFileSync(path.resolve(paths.stylesheet), {
+              encoding: "utf8"
+            })
             expect(stylesheet.trim()).toBe("")
             done()
           })
@@ -370,7 +390,7 @@ describe("generate", () => {
     describe("given that the test option is set to true", () => {
       it("should return a path object with root, tests and main properties", done => {
         expect.assertions(1)
-        rcg
+        generator
           .generate("TestComponent", {
             tests: true
           })
@@ -389,28 +409,32 @@ describe("generate", () => {
       })
       it("should create a test file for the component", done => {
         expect.assertions(1)
-        rcg.generate("TestComponent", { tests: true }).on("done", paths => {
-          expect(
-            getDirContents(path.resolve(paths.root, "__tests__"))
-          ).toContain("TestComponent.test.js")
-          done()
-        })
+        generator
+          .generate("TestComponent", { tests: true })
+          .on("done", paths => {
+            expect(
+              getDirContents(path.resolve(paths.root, "__tests__"))
+            ).toContain("TestComponent.test.js")
+            done()
+          })
       })
       it("should create a valid test file", done => {
         expect.assertions(1)
-        rcg.generate("TestComponent", { tests: true }).on("done", paths => {
-          const testsFile: string = fs.readFileSync(path.resolve(paths.tests), {
-            encoding: "utf8"
+        generator
+          .generate("TestComponent", { tests: true })
+          .on("done", paths => {
+            const testsFile = fs.readFileSync(path.resolve(paths.tests), {
+              encoding: "utf8"
+            })
+            expect(validateTestsFile(testsFile, "TestComponent")).toBe(true)
+            done()
           })
-          expect(validateTestsFile(testsFile, "TestComponent")).toBe(true)
-          done()
-        })
       })
 
       it("should emit a testsFileWritten event", done => {
         expect.assertions(1)
 
-        rcg
+        generator
           .generate("TestComponent", { tests: true })
           .on("testsFileWritten", path => {
             expect(path).toEqual(
@@ -428,17 +452,14 @@ describe("generate", () => {
     describe("given that the ES6 Class option is set to true", () => {
       it("should create a valid React Component using the ES6 class template inside the default components home dir", done => {
         expect.assertions(1)
-        rcg
+        generator
           .generate("TestComponent", {
             type: "es6class"
           })
           .on("done", paths => {
-            const testComponent: string = fs.readFileSync(
-              path.resolve(paths.main),
-              {
-                encoding: "utf8"
-              }
-            )
+            const testComponent = fs.readFileSync(path.resolve(paths.main), {
+              encoding: "utf8"
+            })
             expect(
               validateES6ClassComponent(testComponent, "TestComponent")
             ).toBe(true)
@@ -450,7 +471,7 @@ describe("generate", () => {
     describe("given that the container option is set to true", () => {
       it("should return a path object with the Containers dir as home of component", done => {
         expect.assertions(2)
-        rcg
+        generator
           .generate("TestComponent", {
             container: true
           })
@@ -468,18 +489,15 @@ describe("generate", () => {
       describe("given that the ES6 Class option is set to true", () => {
         it("should create a valid React Component using the ES6 class template inside the Containers home dir", done => {
           expect.assertions(2)
-          rcg
+          generator
             .generate("TestComponent", {
               container: true,
               type: "es6class"
             })
             .on("done", paths => {
-              const testComponent: string = fs.readFileSync(
-                path.resolve(paths.main),
-                {
-                  encoding: "utf8"
-                }
-              )
+              const testComponent = fs.readFileSync(path.resolve(paths.main), {
+                encoding: "utf8"
+              })
               expect(paths.root).toEqual(
                 path.resolve(containersDir, "TestComponent")
               )
@@ -514,17 +532,14 @@ describe("generate", () => {
           "TestComponent.js"
         )
 
-        rcg
+        generator
           .generate("TestComponent", {
             type: "es6class"
           })
           .on("done", paths => {
-            const testComponent: string = fs.readFileSync(
-              path.resolve(paths.main),
-              {
-                encoding: "utf8"
-              }
-            )
+            const testComponent = fs.readFileSync(path.resolve(paths.main), {
+              encoding: "utf8"
+            })
             expect(
               validateES6ClassComponent(testComponent, "TestComponent")
             ).toBe(true)
@@ -543,7 +558,7 @@ describe("generate", () => {
         expect(getDirContents(resolveInComponents("TestComponent"))).toContain(
           "TestComponent.js"
         )
-        rcg.generate("TestComponent").on("done", () => {
+        generator.generate("TestComponent").on("done", () => {
           expect(
             getDirContents(resolveInComponents("TestComponent"))
           ).not.toContain("index.js")
@@ -574,17 +589,14 @@ describe("generate", () => {
             getDirContents(resolveInComponents("ParentDir", "TestComponent"))
           ).toContain("TestComponent.js")
 
-          rcg
+          generator
             .generate("ParentDir/TestComponent", {
               type: "es6class"
             })
             .on("done", paths => {
-              const testComponent: string = fs.readFileSync(
-                path.resolve(paths.main),
-                {
-                  encoding: "utf8"
-                }
-              )
+              const testComponent = fs.readFileSync(path.resolve(paths.main), {
+                encoding: "utf8"
+              })
               expect(
                 validateES6ClassComponent(testComponent, "TestComponent")
               ).toBe(true)
@@ -627,11 +639,11 @@ describe("generate", () => {
       }
     }
 
-    const rcg = reactCG(config)
+    const generator = tulpa(config)
 
     it("should create a Main Component file with custom JSX extension", done => {
       expect.assertions(1)
-      rcg.generate("TestComponent").on("done", paths => {
+      generator.generate("TestComponent").on("done", paths => {
         expect(getDirContents(paths.root)).toContain("TestComponent.jsx")
         done()
       })
@@ -639,7 +651,7 @@ describe("generate", () => {
 
     it("should create a index JS file with default JS extension", done => {
       expect.assertions(1)
-      rcg.generate("TestComponent", { index: true }).on("done", paths => {
+      generator.generate("TestComponent", { index: true }).on("done", paths => {
         expect(getDirContents(paths.root)).toContain("index.js")
         done()
       })
@@ -647,10 +659,12 @@ describe("generate", () => {
 
     it("should create a Main Stylesheet file with custom SCSS extension", done => {
       expect.assertions(1)
-      rcg.generate("TestComponent", { stylesheet: true }).on("done", paths => {
-        expect(getDirContents(paths.root)).toContain("styles.scss")
-        done()
-      })
+      generator
+        .generate("TestComponent", { stylesheet: true })
+        .on("done", paths => {
+          expect(getDirContents(paths.root)).toContain("styles.scss")
+          done()
+        })
     })
   })
 
@@ -660,7 +674,7 @@ describe("generate", () => {
       containersDir = path.resolve(process.cwd(), "containers")
     })
 
-    const rcg = reactCG()
+    const rcg = tulpa()
 
     it("should create one directory inside the default components home directory", done => {
       expect.assertions(1)
@@ -698,17 +712,14 @@ describe("generate", () => {
         }
       }
 
-      const rcg = reactCG(config)
+      const rcg = tulpa(config)
 
       it("should generate a valid React component using the custom template provided in config", done => {
         expect.assertions(2)
         rcg.generate("TestComponent").on("done", paths => {
-          const testComponent: string = fs.readFileSync(
-            path.resolve(paths.main),
-            {
-              encoding: "utf8"
-            }
-          )
+          const testComponent = fs.readFileSync(path.resolve(paths.main), {
+            encoding: "utf8"
+          })
           expect(
             validateStatelessFunctionalComponent(testComponent, "TestComponent")
           ).toBe(true)
@@ -722,37 +733,37 @@ describe("generate", () => {
   )
 
   describe("given an invalid argument type for the componentName and options arguments", () => {
-    const rcg = reactCG()
+    const generator = tulpa()
     it("should throw an Error", () => {
       expect(() => {
-        rcg.generate([1, 2, 3])
+        generator.generate([1, 2, 3])
       }).toThrowError()
       expect(() => {
-        rcg.generate("C", [1, 2])
+        generator.generate("C", [1, 2])
       }).toThrowError()
     })
     it("should throw an Error with correct type", () => {
       expect(() => {
-        rcg.generate([1, 2, 3], {})
+        generator.generate([1, 2, 3], {})
       }).toThrowError(TypeError)
       expect(() => {
-        rcg.generate("", {})
+        generator.generate("", {})
       }).toThrowError(ArgumentError)
       expect(() => {
-        rcg.generate("C", [1, 2, 3])
+        generator.generate("C", [1, 2, 3])
       }).toThrowError(TypeError)
     })
     it("should throw an Error with message", () => {
       expect(() => {
-        rcg.generate([1, 2, 3], {})
+        generator.generate([1, 2, 3], {})
       }).toThrowError(
         "You must provide a String type for the componentName argument. Array provided."
       )
       expect(() => {
-        rcg.generate("", {})
+        generator.generate("", {})
       }).toThrowError("The componentName argument cannot be an empty string.")
       expect(() => {
-        rcg.generate("C", [1, 2, 3])
+        generator.generate("C", [1, 2, 3])
       }).toThrowError(
         "You must provide a plain Object type for the options argument. Array provided."
       )
