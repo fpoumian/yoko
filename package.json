@@ -1,7 +1,7 @@
 {
-  "name": "react-cg",
+  "name": "tulpa",
   "version": "0.0.1",
-  "description": "React Component Generator",
+  "description": "React Component Generator/Scaffolder",
   "license": "MIT",
   "repository": "fpoumian/react-cg",
   "main": "index.js",
