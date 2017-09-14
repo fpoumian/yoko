@@ -4,7 +4,7 @@ import mkdirp from "mkdirp-promise"
 import fse from "fs-extra"
 
 import type { IReactComponent } from "./interfaces"
-import writeComponentFiles from "./write"
+import makeWriteComponentFiles from "./write"
 import { reduceComponentPaths } from "./utils"
 
 function removeComponentDir(
@@ -25,13 +25,15 @@ function createComponentDir(
   })
 }
 
-export default (writeFile: Function) => (component: IReactComponent) =>
-  removeComponentDir(component)
+export default (writeFile: Function) => (component: IReactComponent) => {
+  const writeComponentFiles = makeWriteComponentFiles(writeFile)
+  return removeComponentDir(component)
     .then(createComponentDir)
-    .then(writeComponentFiles(writeFile))
+    .then(writeComponentFiles)
     .then((componentFilesPaths: Array<Object>) =>
       reduceComponentPaths(component, componentFilesPaths)
     )
     .catch(err => {
       throw err
     })
+}
