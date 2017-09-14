@@ -4,7 +4,7 @@ import path from "path"
 import eventToPromise from "event-to-promise"
 import { ArgumentError } from "common-errors"
 
-import tulpa from "../src"
+import reactPresto from "../src"
 import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
@@ -89,7 +89,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = tulpa(config)
+    const generator = reactPresto(config)
 
     describe("given no additional component options were provided", () => {
       it("should create one directory inside of components Home directory", done => {
@@ -639,7 +639,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = tulpa(config)
+    const generator = reactPresto(config)
 
     it("should create a Main Component file with custom JSX extension", done => {
       expect.assertions(1)
@@ -674,7 +674,7 @@ describe("generate", () => {
       containersDir = path.resolve(process.cwd(), "containers")
     })
 
-    const rcg = tulpa()
+    const rcg = reactPresto()
 
     it("should create one directory inside the default components home directory", done => {
       expect.assertions(1)
@@ -712,7 +712,7 @@ describe("generate", () => {
         }
       }
 
-      const rcg = tulpa(config)
+      const rcg = reactPresto(config)
 
       it("should generate a valid React component using the custom template provided in config", done => {
         expect.assertions(2)
@@ -733,7 +733,7 @@ describe("generate", () => {
   )
 
   describe("given an invalid argument type for the componentName and options arguments", () => {
-    const generator = tulpa()
+    const generator = reactPresto()
     it("should throw an Error", () => {
       expect(() => {
         generator.generate([1, 2, 3])

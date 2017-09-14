@@ -1,9 +1,9 @@
 {
-  "name": "tulpa",
+  "name": "react-presto",
   "version": "0.0.1",
-  "description": "React Component Generator/Scaffolding Tool",
+  "description": "React Presto is Component Generator/Scaffolding Tool for React.",
   "license": "MIT",
-  "repository": "fpoumian/react-cg",
+  "repository": "fpoumian/react-presto",
   "main": "index.js",
   "author": {
     "name": "Fernando Poumián",
