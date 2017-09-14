@@ -74,7 +74,7 @@ export function getFilesTemplatesPaths(
 }
 
 export function getComponentNameInfo(value: string): Object {
-  const normalized = slashes(path.normalize(value))
+  const normalized = (path.normalize(slashes(value)))
   const splitName: Array<string> = normalized.split(path.sep)
   return {
     rootName: sanitize(splitName[splitName.length - 1]),

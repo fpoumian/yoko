@@ -3,6 +3,7 @@ node_modules
 coverage
 dist
 .idea
+.vscode
 .temp
 *.log
 profiling
