@@ -25,6 +25,7 @@ import type { IFile } from "./lib/ComponentFile/interfaces"
 
 /**
  *  Create a generator
+ *  @param {Object} [customConfig] - The global configuration object.
  */
 export default function(customConfig: Object = {}) {
   let config: Config
@@ -37,6 +38,8 @@ export default function(customConfig: Object = {}) {
 
   /**
    * Generate a React component
+   * @param {string} componentName - The name of the component you wish to generate.
+   * @param {Object} options - The set of options you wish to use to generate this component.
    */
   const generate = function generate(
     componentName: string,
