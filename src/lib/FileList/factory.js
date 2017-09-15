@@ -10,8 +10,9 @@ import type {
 import type { Config } from "../Config/types"
 import defaultConfig from "../Config/default"
 import createTemplate from "../Template/factory"
+import type { FileProps } from "../ComponentFile/types"
 
-export default (createComponentFile: Function) => (
+export default (createComponentFile: (props: FileProps) => IFile) => (
   props: ReactComponentProps,
   config: Config,
   templatePaths: ReactComponentFileTemplatePaths
@@ -28,7 +29,6 @@ export default (createComponentFile: Function) => (
       ),
       dir: props.path,
       role: "main",
-      // templatePath: templatePaths.main,
       template: createTemplate({ path: templatePaths.main, name: "main" })
     })
   )
@@ -45,7 +45,6 @@ export default (createComponentFile: Function) => (
         ),
         dir: props.path,
         role: "index",
-        // templatePath: templatePaths.index,
         template: createTemplate({ path: templatePaths.index, name: "index" })
       })
     )
@@ -63,7 +62,6 @@ export default (createComponentFile: Function) => (
         ),
         dir: props.path,
         role: "stylesheet",
-        // templatePath: null,
         template: null
       })
     )
@@ -81,7 +79,6 @@ export default (createComponentFile: Function) => (
         ),
         dir: path.resolve(props.path, "__tests__"),
         role: "tests",
-        // templatePath: templatePaths.tests,
         template: createTemplate({ path: templatePaths.tests, name: "tests" })
       })
     )

@@ -6,6 +6,7 @@ import fse from "fs-extra"
 import type { IReactComponent } from "./interfaces"
 import makeWriteComponentFiles from "./write"
 import { reduceComponentPaths } from "./utils"
+import type { IFile } from "../ComponentFile/interfaces"
 
 function removeComponentDir(
   component: IReactComponent
@@ -25,7 +26,9 @@ function createComponentDir(
   })
 }
 
-export default (writeFile: Function) => (component: IReactComponent) => {
+export default (writeFile: (file: IFile, data: string) => Promise<string>) => (
+  component: IReactComponent
+) => {
   const writeComponentFiles = makeWriteComponentFiles(writeFile)
   return removeComponentDir(component)
     .then(createComponentDir)

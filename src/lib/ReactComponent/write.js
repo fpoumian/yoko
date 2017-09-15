@@ -27,7 +27,7 @@ function renderCompiledTemplate(
   return compiledTemplate.render(context)
 }
 
-export default (writeFile: Function) => (
+export default (writeFile: (file: IFile, data: string) => Promise<string>) => (
   component: IReactComponent
 ): Promise<any> => {
   const componentFiles: Map<string, IFile> = component.getFiles()
