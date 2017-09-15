@@ -1,4 +1,9 @@
 // @flow
+/**
+ * React Presto
+ * @module react-presto
+ */
+
 import path from "path"
 import EventEmitter from "events"
 import { isPlainObject } from "lodash"
@@ -24,10 +29,10 @@ import {
 import type { IFile } from "./lib/ComponentFile/interfaces"
 
 /**
- *  Create a generator
+ *  Create a generator.
  *  @param {Object} [customConfig] - The global configuration object.
  */
-export default function(customConfig: Object = {}) {
+export default function init(customConfig: Object = {}) {
   let config: Config
 
   try {
@@ -39,7 +44,7 @@ export default function(customConfig: Object = {}) {
   /**
    * Generate a React component
    * @param {string} componentName - The name of the component you wish to generate.
-   * @param {Object} options - The set of options you wish to use to generate this component.
+   * @param {Object} [options] - The set of options you wish to use to generate this component.
    */
   const generate = function generate(
     componentName: string,
