@@ -1,4 +1,8 @@
 // @flow
+import type { IReactComponent } from "./interfaces"
+import type { IReadable } from "../Readable/interfaces"
+
+export type ReactComponent = IReactComponent & IReadable
 
 export type ReactComponentProps = {
   name: string,

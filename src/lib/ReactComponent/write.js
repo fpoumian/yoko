@@ -4,11 +4,13 @@
 
 import nunjucks from "nunjucks"
 
-import type { IReactComponent, IRenderable } from "./interfaces"
+import type { IRenderable } from "./interfaces"
 import type { IFile } from "../ComponentFile/interfaces"
-import type { ITemplate } from "../Template/interfaces"
+import type { ReactComponent } from "./types"
+import type { IReadable } from "../Readable/interfaces"
+import type { writeFile } from "../ComponentFile/types"
 
-function getTemplateString(template: ITemplate | null): Promise<string> {
+function getTemplateString(template: IReadable | null): Promise<string> {
   if (!template) {
     return Promise.resolve("")
   }
@@ -27,8 +29,8 @@ function renderCompiledTemplate(
   return compiledTemplate.render(context)
 }
 
-export default (writeFile: (file: IFile, data: string) => Promise<string>) => (
-  component: IReactComponent
+export default (writeFile: writeFile) => (
+  component: ReactComponent
 ): Promise<any> => {
   const componentFiles: Map<string, IFile> = component.getFiles()
   const roles: Array<string> = Array.from(componentFiles.keys())

@@ -1,19 +1,18 @@
 // @flow
 import EventEmitter from "events"
 
-import type { ReactComponentProps } from "./types"
-import type { IReactComponent } from "./interfaces"
+import type { ReactComponent, ReactComponentProps } from "./types"
 import type { IFile } from "../ComponentFile/interfaces"
 import createReadable from "../Readable/factory"
 
 export default (emitter: EventEmitter) => (
   props: ReactComponentProps,
   fileList: Map<string, IFile>
-): IReactComponent => {
+): ReactComponent => {
   const { name, path } = props
 
   // Public API
-  const reactComponent: IReactComponent = {
+  const reactComponent: ReactComponent = {
     ...createReadable({
       name,
       path

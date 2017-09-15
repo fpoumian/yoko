@@ -3,20 +3,20 @@
 import mkdirp from "mkdirp-promise"
 import fse from "fs-extra"
 
-import type { IReactComponent } from "./interfaces"
 import makeWriteComponentFiles from "./write"
 import { reduceComponentPaths } from "./utils"
-import type { IFile } from "../ComponentFile/interfaces"
+import type { ReactComponent } from "./types"
+import type { writeFile } from "../ComponentFile/types"
 
 function removeComponentDir(
-  component: IReactComponent
-): Promise<IReactComponent> {
+  component: ReactComponent
+): Promise<ReactComponent> {
   return fse.remove(component.getPath()).then(() => component)
 }
 
 function createComponentDir(
-  component: IReactComponent
-): Promise<IReactComponent> {
+  component: ReactComponent
+): Promise<ReactComponent> {
   return mkdirp(component.getPath()).then(() => {
     component.getEmitter().emit("componentDirCreated", {
       name: component.getName(),
@@ -26,9 +26,7 @@ function createComponentDir(
   })
 }
 
-export default (writeFile: (file: IFile, data: string) => Promise<string>) => (
-  component: IReactComponent
-) => {
+export default (writeFile: writeFile) => (component: ReactComponent) => {
   const writeComponentFiles = makeWriteComponentFiles(writeFile)
   return removeComponentDir(component)
     .then(createComponentDir)

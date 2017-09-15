@@ -5,16 +5,16 @@ import { get, keys } from "lodash"
 import slashes from "remove-trailing-slash"
 import sanitize from "sanitize-filename"
 
-import type { IReactComponent } from "./interfaces"
 import type { Config } from "../Config/types"
 import type {
+  ReactComponent,
   ReactComponentFileTemplatePaths,
   ReactComponentProps
 } from "./types"
 import * as constants from "../Template/constants"
 
 export function reduceComponentPaths(
-  component: IReactComponent,
+  component: ReactComponent,
   paths: Array<Object>
 ) {
   return paths.reduce(
@@ -74,7 +74,7 @@ export function getFilesTemplatesPaths(
 }
 
 export function getComponentNameInfo(value: string): Object {
-  const normalized = (path.normalize(slashes(value)))
+  const normalized = path.normalize(slashes(value))
   const splitName: Array<string> = normalized.split(path.sep)
   return {
     rootName: sanitize(splitName[splitName.length - 1]),

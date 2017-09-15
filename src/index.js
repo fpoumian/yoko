@@ -10,9 +10,9 @@ import createComponentFile from "./lib/ComponentFile/factory"
 import type {
   ReactComponentProps,
   ReactComponentOptions,
-  ReactComponentFileTemplatePaths
+  ReactComponentFileTemplatePaths,
+  ReactComponent
 } from "./lib/ReactComponent/types"
-import type { IReactComponent } from "./lib/ReactComponent/interfaces"
 import parseConfig from "./lib/Config/parse"
 import type { Config } from "./lib/Config/types"
 import makeGenerateReactComponent from "./lib/ReactComponent/generate"
@@ -100,7 +100,7 @@ export default function(customConfig: Object = {}) {
     const generateReactComponent = makeGenerateReactComponent(writeFile)
 
     // Create component in memory
-    const component: IReactComponent = createReactComponent(props, fileList)
+    const component: ReactComponent = createReactComponent(props, fileList)
     const componentEmitter: EventEmitter = component.getEmitter()
 
     // Event handlers
