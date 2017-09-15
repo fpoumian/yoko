@@ -32,7 +32,7 @@ export function getFilesTemplatesPaths(
   config: Config,
   options: ReactComponentProps
 ): ReactComponentFileTemplatePaths {
-  const defaultTemplatesDirPath = path.resolve(__dirname, "templates")
+  const defaultTemplatesDirPath = constants.TEMPLATES_HOME
   const customTemplatesDirPath = get(config, "paths.templates", "")
 
   const mainTemplateFileName =

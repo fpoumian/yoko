@@ -29,10 +29,19 @@ import {
 import type { IFile } from "./lib/ComponentFile/interfaces"
 
 /**
- *  Create a generator.
- *  @param {Object} [customConfig] - The global configuration object.
+ * @typedef {Object} PublicAPI
+ * @property {Function} generate Generates a new React component.
  */
-export default function init(customConfig: Object = {}) {
+export interface IPublic {
+  generate(name: string, options: ReactComponentOptions): EventEmitter
+}
+
+/**
+ *  Initialize React Presto.
+ *  @param {Object} [customConfig] - Global configuration object.
+ *  @return {PublicAPI}
+ */
+export default function init(customConfig: Object = {}): IPublic {
   let config: Config
 
   try {

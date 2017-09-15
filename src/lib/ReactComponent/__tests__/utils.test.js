@@ -39,7 +39,13 @@ describe("reduceComponentPaths", () => {
 })
 
 describe("getFilesTemplatesPaths", () => {
-  const defaultTemplatesDir = path.resolve(__dirname, "..", "templates")
+  const defaultTemplatesDir = path.resolve(
+    __dirname,
+    "..",
+    "..",
+    "Template",
+    "templates"
+  )
   describe("given a config object with no templates path specified", () => {
     const config = {}
 

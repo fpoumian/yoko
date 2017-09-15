@@ -21,11 +21,11 @@ function getDirContents(path) {
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-const defaultTemplatesDirRelativePath = "../src/lib/ReactComponent/templates/"
+const defaultTemplatesDirRelativePath = `${constants.TEMPLATES_HOME}/`
 
 const mockDefaultTemplatePaths = {
   lib: {
-    ReactComponent: {
+    Template: {
       templates: {
         [constants.SFC_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
           constants.SFC_TEMPLATE_FILE_NAME).default,
