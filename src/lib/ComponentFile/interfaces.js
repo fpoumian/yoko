@@ -1,10 +1,11 @@
 // @flow
-import type { ITemplate } from "../Template/interfaces"
+
+import type { Template } from "../Template/types"
 
 export interface IFile {
   getName(): string,
   getExtension(): string,
   getPath(): string,
-  getTemplate(): ITemplate | null,
+  getTemplate(): Template | null,
   getRole(): string
 }

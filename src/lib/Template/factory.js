@@ -1,10 +1,9 @@
 // @flow
 
-import type { ITemplate } from "./interfaces"
 import createReadable from "../Readable/factory"
-import type { TemplateProps } from "./types"
+import type { Template, TemplateProps } from "./types"
 
-export default function(props: TemplateProps): ITemplate {
+export default function(props: TemplateProps): Template {
   const { path, name } = props
   return {
     ...createReadable({ path, name })
