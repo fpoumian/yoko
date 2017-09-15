@@ -1,23 +1,22 @@
 // @flow
 import path from "path"
 
-import type { FileProps } from "../File/types"
-import type { IFile } from "../File/interfaces"
+import type { FileProps } from "./types"
+import type { IFile } from "./interfaces"
+import createReadable from "../Readable/factory"
 
 export default function(props: FileProps): IFile {
   // Public API
   const componentFile: IFile = {
-    getName() {
-      return props.name
-    },
+    ...createReadable({
+      path: path.resolve(props.dir, `${props.name}.${props.extension}`),
+      name: props.name
+    }),
     getExtension() {
       return props.extension
     },
-    getPath() {
-      return path.resolve(props.dir, `${props.name}.${props.extension}`)
-    },
-    getTemplatePath() {
-      return props.templatePath
+    getTemplate() {
+      return props.template
     },
     getRole() {
       return props.role

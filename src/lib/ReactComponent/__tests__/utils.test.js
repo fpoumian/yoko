@@ -7,7 +7,7 @@ import {
   reduceComponentPaths,
   getComponentNameInfo
 } from "../utils"
-import * as constants from "../constants"
+import * as constants from "../../Template/constants"
 
 describe("reduceComponentPaths", () => {
   const component = {

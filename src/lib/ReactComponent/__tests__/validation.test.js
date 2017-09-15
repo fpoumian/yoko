@@ -9,7 +9,7 @@ import {
   validateJSXIdentifier,
   validateTestsFile
 } from "../validation"
-import * as constants from "../constants"
+import * as constants from "../../Template/constants"
 
 const sfComponent = path.resolve(
   __dirname,

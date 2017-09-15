@@ -3,7 +3,8 @@ import EventEmitter from "events"
 
 import type { ReactComponentProps } from "./types"
 import type { IReactComponent } from "./interfaces"
-import type { IFile } from "../File/interfaces"
+import type { IFile } from "../ComponentFile/interfaces"
+import createReadable from "../Readable/factory"
 
 export default (emitter: EventEmitter) => (
   props: ReactComponentProps,
@@ -13,12 +14,10 @@ export default (emitter: EventEmitter) => (
 
   // Public API
   const reactComponent: IReactComponent = {
-    getName() {
-      return name
-    },
-    getPath() {
-      return path
-    },
+    ...createReadable({
+      name,
+      path
+    }),
     getFiles() {
       return fileList
     },

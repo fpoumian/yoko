@@ -5,14 +5,15 @@
 import nunjucks from "nunjucks"
 
 import type { IReactComponent, IRenderable } from "./interfaces"
-import type { IFile } from "../File/interfaces"
+import type { IFile } from "../ComponentFile/interfaces"
+import type { ITemplate } from "../Template/interfaces"
 
-function getTemplateString(templatePath: string | null): Promise<string> {
-  if (!templatePath) {
+function getTemplateString(template: ITemplate | null): Promise<string> {
+  if (!template) {
     return Promise.resolve("")
   }
-  const template = require(templatePath).default
-  return Promise.resolve(template)
+  const templateString = require(template.getPath()).default
+  return Promise.resolve(templateString)
 }
 
 function compileTemplateString(templateString: string): IRenderable {
@@ -43,7 +44,7 @@ export default (writeFile: Function) => (
       ...temp
     }
 
-    return getTemplateString(file.getTemplatePath())
+    return getTemplateString(file.getTemplate())
       .then(compileTemplateString)
       .then(compiledTemplate =>
         renderCompiledTemplate(compiledTemplate, {

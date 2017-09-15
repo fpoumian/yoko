@@ -16,12 +16,12 @@ import type { IReactComponent } from "./lib/ReactComponent/interfaces"
 import parseConfig from "./lib/Config/parse"
 import type { Config } from "./lib/Config/types"
 import makeGenerateReactComponent from "./lib/ReactComponent/generate"
-import writeFile from "./lib/File/write"
+import writeFile from "./lib/ComponentFile/write"
 import {
   getFilesTemplatesPaths,
   getComponentNameInfo
 } from "./lib/ReactComponent/utils"
-import type { IFile } from "./lib/File/interfaces"
+import type { IFile } from "./lib/ComponentFile/interfaces"
 
 /**
  *  Create a generator

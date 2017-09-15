@@ -11,7 +11,7 @@ import type {
   ReactComponentFileTemplatePaths,
   ReactComponentProps
 } from "./types"
-import * as constants from "./constants"
+import * as constants from "../Template/constants"
 
 export function reduceComponentPaths(
   component: IReactComponent,

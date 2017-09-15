@@ -1,9 +1,11 @@
 // @flow
 
+import type { ITemplate } from "../Template/interfaces"
+
 export type FileProps = {
   name: string,
   extension: string,
   dir: string,
-  templatePath: string | null,
+  template: ITemplate,
   role: string
 }

@@ -12,7 +12,7 @@ import {
   validateJSXIdentifier,
   validateTestsFile
 } from "../src/lib/ReactComponent/validation"
-import * as constants from "../src/lib/ReactComponent/constants"
+import * as constants from "../src/lib/Template/constants"
 
 function getDirContents(path) {
   return fs.readdirSync(path)

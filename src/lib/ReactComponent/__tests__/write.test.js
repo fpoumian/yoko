@@ -21,7 +21,7 @@ describe("write", () => {
       file = {
         getName: jest.fn(),
         getPath: jest.fn(),
-        getTemplatePath: jest.fn(),
+        getTemplate: jest.fn(),
         getExtension: jest.fn(),
         getRole
       }
@@ -103,10 +103,10 @@ describe("write", () => {
       })
     })
 
-    it("should call the file getTemplatePath() method as many times as files in the list", () => {
+    it("should call the file getTemplate() method as many times as files in the list", () => {
       expect.assertions(1)
       return writeComponentFiles(component).then(() => {
-        expect(file.getTemplatePath).toHaveBeenCalledTimes(fileList.size)
+        expect(file.getTemplate).toHaveBeenCalledTimes(fileList.size)
       })
     })
 

@@ -2,13 +2,14 @@
 import { get } from "lodash"
 import path from "path"
 
-import type { IFile } from "../File/interfaces"
+import type { IFile } from "../ComponentFile/interfaces"
 import type {
   ReactComponentFileTemplatePaths,
   ReactComponentProps
 } from "../ReactComponent/types"
 import type { Config } from "../Config/types"
 import defaultConfig from "../Config/default"
+import createTemplate from "../Template/factory"
 
 export default (createComponentFile: Function) => (
   props: ReactComponentProps,
@@ -27,7 +28,8 @@ export default (createComponentFile: Function) => (
       ),
       dir: props.path,
       role: "main",
-      templatePath: templatePaths.main
+      // templatePath: templatePaths.main,
+      template: createTemplate({ path: templatePaths.main, name: "main" })
     })
   )
 
@@ -43,7 +45,8 @@ export default (createComponentFile: Function) => (
         ),
         dir: props.path,
         role: "index",
-        templatePath: templatePaths.index
+        // templatePath: templatePaths.index,
+        template: createTemplate({ path: templatePaths.index, name: "index" })
       })
     )
   }
@@ -60,7 +63,8 @@ export default (createComponentFile: Function) => (
         ),
         dir: props.path,
         role: "stylesheet",
-        templatePath: null
+        // templatePath: null,
+        template: null
       })
     )
   }
@@ -77,7 +81,8 @@ export default (createComponentFile: Function) => (
         ),
         dir: path.resolve(props.path, "__tests__"),
         role: "tests",
-        templatePath: templatePaths.tests
+        // templatePath: templatePaths.tests,
+        template: createTemplate({ path: templatePaths.tests, name: "tests" })
       })
     )
   }
