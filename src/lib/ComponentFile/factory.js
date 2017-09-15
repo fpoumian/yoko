@@ -6,20 +6,22 @@ import type { IFile } from "./interfaces"
 import createReadable from "../Readable/factory"
 
 export default function(props: FileProps): IFile {
+  const { name, extension, template, role } = props
+
   // Public API
   const componentFile: IFile = {
     ...createReadable({
       path: path.resolve(props.dir, `${props.name}.${props.extension}`),
-      name: props.name
+      name
     }),
     getExtension() {
-      return props.extension
+      return extension
     },
     getTemplate() {
-      return props.template
+      return template
     },
     getRole() {
-      return props.role
+      return role
     }
   }
 
