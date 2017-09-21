@@ -1,6 +1,7 @@
-import makeLoadPlugins from "../load"
 import { find } from "lodash"
 import path from "path"
+
+import makeLoadPlugins from "../load"
 
 describe("load", () => {
   let loadPlugins

@@ -1,6 +1,7 @@
 // @flow
 
 import path from "path"
+import { has } from "lodash"
 
 import type { Config } from "../Config/types"
 
@@ -10,7 +11,7 @@ export default (resolverFn: string => boolean) =>
     defaultDir: string,
     config: Config
   ): string {
-    if (!config.paths.templates) return defaultDir
+    if (!has(config, "paths.templates")) return defaultDir
 
     const customTemplatesDir = config.paths.templates
 

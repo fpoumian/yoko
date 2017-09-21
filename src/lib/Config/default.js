@@ -13,7 +13,7 @@ const config: Config = {
     js: {
       main: "js",
       index: "js",
-      tests: "js"
+      tests: "test.js"
     },
     stylesheet: {
       main: "css"

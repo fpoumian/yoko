@@ -1,6 +1,7 @@
-import makeResolvePlugins from "../resolve"
 import { find } from "lodash"
 import path from "path"
+
+import makeResolvePlugins from "../resolve"
 
 describe("load", () => {
   let resolvePlugins

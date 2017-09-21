@@ -1,8 +1,8 @@
-import mock from "mock-fs"
 import fs from "fs"
 import path from "path"
 import eventToPromise from "event-to-promise"
 import { ArgumentError } from "common-errors"
+import mock from "mock-fs"
 
 import reactPresto from "../src"
 import {
@@ -12,8 +12,9 @@ import {
   validateJSXIdentifier,
   validateTestsFile
 } from "../src/lib/ReactComponent/validation"
-import * as constants from "../src/lib/Template/constants"
-import mockFs from "./mockFs"
+import mockFileSystem from "./utils/mockFs"
+
+const mockedFileSystem = mockFileSystem()
 
 function getDirContents(path) {
   return fs.readdirSync(path)
@@ -21,25 +22,6 @@ function getDirContents(path) {
 
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
-
-const defaultTemplatesDirRelativePath = `${constants.TEMPLATES_HOME}/`
-
-const mockDefaultTemplatePaths = {
-  lib: {
-    Template: {
-      templates: {
-        [constants.SFC_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.SFC_TEMPLATE_FILE_NAME).default,
-        [constants.ES6_CLASS_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.ES6_CLASS_TEMPLATE_FILE_NAME).default,
-        [constants.INDEX_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.INDEX_TEMPLATE_FILE_NAME).default,
-        [constants.TESTS_FILE_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.TESTS_FILE_TEMPLATE_FILE_NAME).default
-      }
-    }
-  }
-}
 
 describe("generate", () => {
   let srcDir
@@ -49,7 +31,9 @@ describe("generate", () => {
   let resolveInContainers
 
   beforeEach(() => {
-    mockFs()
+    mock({
+      ...mockedFileSystem
+    })
     resolveInComponents = (...items) => path.resolve(componentsDir, ...items)
     resolveInContainers = (...items) => path.resolve(containersDir, ...items)
   })
@@ -366,65 +350,81 @@ describe("generate", () => {
       })
     })
 
-    describe("given that the test option is set to true", () => {
-      it("should return a path object with root, tests and main properties", done => {
-        expect.assertions(1)
-        generator
-          .generate("TestComponent", {
-            tests: true
-          })
-          .on("done", paths => {
-            expect(paths).toEqual({
-              root: resolveInComponents("TestComponent"),
-              main: resolveInComponents("TestComponent", "TestComponent.js"),
-              tests: resolveInComponents(
-                "TestComponent",
-                "__tests__",
-                "TestComponent.test.js"
-              )
-            })
-            done()
-          })
-      })
-      it("should create a test file for the component", done => {
-        expect.assertions(1)
-        generator
-          .generate("TestComponent", { tests: true })
-          .on("done", paths => {
-            expect(
-              getDirContents(path.resolve(paths.root, "__tests__"))
-            ).toContain("TestComponent.test.js")
-            done()
-          })
-      })
-      it("should create a valid test file", done => {
-        expect.assertions(1)
-        generator
-          .generate("TestComponent", { tests: true })
-          .on("done", paths => {
-            const testsFile = fs.readFileSync(path.resolve(paths.tests), {
-              encoding: "utf8"
-            })
-            expect(validateTestsFile(testsFile, "TestComponent")).toBe(true)
-            done()
-          })
-      })
+    describe("given a config with the tests-file plugin and a custom test extension set", () => {
+      const config = {
+        paths: {
+          components: "./src/components",
+          containers: "./src/containers"
+        },
+        extensions: {
+          js: {
+            tests: "spec.js"
+          }
+        },
+        plugins: ["tests-file"]
+      }
 
-      it("should emit a testsFileWritten event", done => {
-        expect.assertions(1)
+      const generator = reactPresto(config)
+      describe("given that the test option is set to true", () => {
+        it("should return a path object with root, tests and main properties", done => {
+          expect.assertions(1)
+          generator
+            .generate("TestComponent", {
+              tests: true
+            })
+            .on("done", paths => {
+              expect(paths).toEqual({
+                root: resolveInComponents("TestComponent"),
+                main: resolveInComponents("TestComponent", "TestComponent.js"),
+                tests: resolveInComponents(
+                  "TestComponent",
+                  "__tests__",
+                  "TestComponent.spec.js"
+                )
+              })
+              done()
+            })
+        })
+        it("should create a test file for the component", done => {
+          expect.assertions(1)
+          generator
+            .generate("TestComponent", { tests: true })
+            .on("done", paths => {
+              expect(
+                getDirContents(path.resolve(paths.root, "__tests__"))
+              ).toContain("TestComponent.spec.js")
+              done()
+            })
+        })
+        it("should create a valid test file", done => {
+          expect.assertions(1)
+          generator
+            .generate("TestComponent", { tests: true })
+            .on("done", paths => {
+              const testsFile = fs.readFileSync(path.resolve(paths.tests), {
+                encoding: "utf8"
+              })
+              expect(validateTestsFile(testsFile, "TestComponent")).toBe(true)
+              done()
+            })
+        })
 
-        generator
-          .generate("TestComponent", { tests: true })
-          .on("testsFileWritten", path => {
-            expect(path).toEqual(
-              resolveInComponents(
-                "TestComponent",
-                "__tests__",
-                "TestComponent.test.js"
+        it("should emit a testsFileWritten event", done => {
+          expect.assertions(1)
+
+          generator
+            .generate("TestComponent", { tests: true })
+            .on("testsFileWritten", path => {
+              expect(path).toEqual(
+                resolveInComponents(
+                  "TestComponent",
+                  "__tests__",
+                  "TestComponent.spec.js"
+                )
               )
-            )
-            done()
-          })
+              done()
+            })
+        })
       })
     })
 
@@ -489,9 +489,10 @@ describe("generate", () => {
       })
     })
 
-    xdescribe("given that a component path already exists", () => {
+    describe("given that a component path already exists", () => {
       beforeEach(() => {
         mock({
+          ...mockedFileSystem,
           src: {
             components: {
               TestComponent: {
@@ -499,8 +500,7 @@ describe("generate", () => {
                 "index.js": "",
                 "styles.css": ""
               }
-            },
-            ...mockDefaultTemplatePaths
+            }
           }
         })
       })
@@ -532,10 +532,16 @@ describe("generate", () => {
           })
       })
 
-      it("should remove unneeded files", done => {
-        expect.assertions(3)
+      it("should remove needless files", done => {
+        expect.assertions(5)
         expect(getDirContents(resolveInComponents("TestComponent"))).toContain(
           "TestComponent.js"
+        )
+        expect(getDirContents(resolveInComponents("TestComponent"))).toContain(
+          "index.js"
+        )
+        expect(getDirContents(resolveInComponents("TestComponent"))).toContain(
+          "styles.css"
         )
         generator.generate("TestComponent").on("done", () => {
           expect(
@@ -548,8 +554,9 @@ describe("generate", () => {
         })
       })
       describe("given a component name with nested path", () => {
-        it("should overwrite files and remove unneeded ones", done => {
+        beforeEach(() => {
           mock({
+            ...mockedFileSystem,
             src: {
               components: {
                 ParentDir: {
@@ -559,10 +566,12 @@ describe("generate", () => {
                     "styles.css": ""
                   }
                 }
-              },
-              ...mockDefaultTemplatePaths
+              }
             }
           })
+        })
+
+        it("should overwrite files and remove needless ones", done => {
           expect.assertions(5)
           expect(
             getDirContents(resolveInComponents("ParentDir", "TestComponent"))
@@ -687,7 +696,8 @@ describe("generate", () => {
     () => {
       const config = {
         paths: {
-          templates: "./client/app/templates/"
+          // templates: "./client/app/templates/",
+          templates: path.resolve(process.cwd(), "app", "templates")
         }
       }
 

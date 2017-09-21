@@ -16,7 +16,7 @@ describe("given that the user did not provide any custom configuration", () => {
         js: {
           main: "js",
           index: "js",
-          tests: "js"
+          tests: "test.js"
         },
         stylesheet: {
           main: "css"
@@ -105,7 +105,7 @@ describe("given that the user provided a custom JS extensions", () => {
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
       main: "jsx",
       index: "js",
-      tests: "js"
+      tests: "test.js"
     })
   })
 
@@ -121,7 +121,7 @@ describe("given that the user provided a custom JS extensions", () => {
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
       main: "js",
       index: "ts",
-      tests: "js"
+      tests: "test.js"
     })
   })
 
@@ -137,7 +137,7 @@ describe("given that the user provided a custom JS extensions", () => {
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
       main: "js",
       index: "ts",
-      tests: "js"
+      tests: "test.js"
     })
   })
 
@@ -153,7 +153,7 @@ describe("given that the user provided a custom JS extensions", () => {
     expect(parseConfig(userConfig)).toHaveProperty("extensions.js.index", "ts")
   })
 
-  it("should be able to normalize extensions with extra dots", () => {
+  it("should be able to normalize extensions with extra initial dots", () => {
     const userConfig = {
       extensions: {
         js: {
@@ -168,6 +168,23 @@ describe("given that the user provided a custom JS extensions", () => {
       main: "tsx",
       index: "ts",
       tests: "js"
+    })
+  })
+  it("should be able to distinguish initial dots from latter ones", () => {
+    const userConfig = {
+      extensions: {
+        js: {
+          main: ".tsx",
+          index: ".ts",
+          tests: "spec.js"
+        }
+      }
+    }
+
+    expect(parseConfig(userConfig)).toHaveProperty("extensions.js", {
+      main: "tsx",
+      index: "ts",
+      tests: "spec.js"
     })
   })
 })

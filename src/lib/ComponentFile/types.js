@@ -1,6 +1,5 @@
 // @flow
 
-import type { Template } from "../Template/types"
 import type { IComponentFile, IFile } from "./interfaces"
 import type { IReadable } from "../Readable/interfaces"
 

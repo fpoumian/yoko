@@ -6,10 +6,10 @@ import nunjucks from "nunjucks"
 
 import type { IRenderable } from "./interfaces"
 import type { ReactComponent } from "./types"
-import type { IReadable } from "../Readable/interfaces"
 import type { ComponentFile, writeFile } from "../ComponentFile/types"
+import type { Template } from "../Template/types"
 
-function getTemplateString(template: IReadable | null): Promise<string> {
+function getTemplateString(template: Template | null): Promise<string> {
   if (!template) {
     return Promise.resolve("")
   }

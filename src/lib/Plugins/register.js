@@ -7,7 +7,7 @@ export default function registerPlugins(config: Config): Array<string> {
     "main-file",
     "index-file",
     "stylesheet-file",
-    "tests-file",
+    // "tests-file",
     ...(config.plugins || [])
   ]
 }

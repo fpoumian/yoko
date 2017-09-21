@@ -19,7 +19,7 @@ function normalizePaths(originalPaths: Object): Object {
 
 function normalizeExtension(originalExt: string): string {
   if (!originalExt || typeof originalExt === "undefined") return ""
-  return originalExt.trim().replace(".", "")
+  return originalExt.trim().replace(/^(\.)/, "")
 }
 
 function normalizeExtensions(originalExtensions: Object): Object {

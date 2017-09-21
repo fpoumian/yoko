@@ -1,7 +1,5 @@
 // @flow
 
-import type { IReadable } from "../Readable/interfaces"
-
 interface ITemplate {
   getDir(): string,
   getPath(): string

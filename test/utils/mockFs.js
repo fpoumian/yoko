@@ -1,48 +1,17 @@
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-import mock from "mock-fs"
 import fs from "fs"
 import path from "path"
 
-import * as constants from "../src/lib/Template/constants"
-
-const defaultTemplatesDirRelativePath = `${constants.TEMPLATES_HOME}/`
-
-const mockDefaultTemplatePaths = {
-  lib: {
-    Template: {
-      templates: {
-        [constants.SFC_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.SFC_TEMPLATE_FILE_NAME).default,
-        [constants.ES6_CLASS_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.ES6_CLASS_TEMPLATE_FILE_NAME).default,
-        [constants.INDEX_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.INDEX_TEMPLATE_FILE_NAME).default,
-        [constants.TESTS_FILE_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-          constants.TESTS_FILE_TEMPLATE_FILE_NAME).default
-      }
-    }
-  }
-}
-
-const CUSTOM_SFC_TEMPLATE_FILE_NAME = "mainFileCustomJSX.js"
-
-const mockCustomTemplatesPaths = {
-  app: {
-    templates: {
-      [constants.SFC_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-        CUSTOM_SFC_TEMPLATE_FILE_NAME).default
-    }
-  }
-}
+import * as constants from "../../src/lib/Template/constants"
 
 const mainFilePluginPath = require.resolve("react-presto-main-file")
 const indexFilePluginPath = require.resolve("react-presto-index-file")
 const testsFilePluginPath = require.resolve("react-presto-tests-file")
 
 export default function mockFileSystem() {
-  mock({
+  return {
     node_modules: {
       "react-presto-main-file": {
         "index.js": fs.readFileSync(mainFilePluginPath, "utf8"),
@@ -100,11 +69,13 @@ export default function mockFileSystem() {
         )
       }
     },
-    src: {
-      ...mockDefaultTemplatePaths
-    },
-    client: {
-      ...mockCustomTemplatesPaths
+    app: {
+      templates: {
+        [constants.SFC_TEMPLATE_FILE_NAME]: fs.readFileSync(
+          path.resolve(__dirname, "..", "templates", "mainFileCustomJSX.js"),
+          "utf8"
+        )
+      }
     }
-  })
+  }
 }

@@ -8,7 +8,6 @@ import path from "path"
 import EventEmitter from "events"
 import { isPlainObject } from "lodash"
 import { ArgumentError } from "common-errors"
-import assert from "assert"
 
 import makeCreateReactComponent from "./lib/ReactComponent/factory"
 import type {
