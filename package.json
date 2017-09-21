@@ -59,11 +59,14 @@
     "common-errors": "^1.0.4",
     "fs-extra": "^4.0.1",
     "grasp-squery": "^0.4.0",
+    "load-plugin": "^2.2.1",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mkdirp-promise": "^5.0.1",
     "nunjucks": "^3.0.1",
     "remove-trailing-slash": "^0.1.0",
+    "react-presto-main-file": "1.0.0",
+    "require-all": "^2.2.0",
     "sanitize-filename": "^1.6.1"
   },
   "devDependencies": {

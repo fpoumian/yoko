@@ -1,9 +1,9 @@
 // @flow
 
 import fse from "fs-extra"
-import type { IFile } from "./interfaces"
+import type { IReadable } from "../Readable/interfaces"
 
-export default function(file: IFile, data: string): Promise<string> {
+export default function(file: IReadable, data: string): Promise<string> {
   return fse
     .ensureFile(file.getPath())
     .then(() => fse.writeFile(file.getPath(), data, "utf8"))

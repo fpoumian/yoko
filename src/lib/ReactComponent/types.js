@@ -14,6 +14,7 @@ export type ReactComponentProps = {
 export type ReactComponentOptions = {
   container?: boolean,
   type?: string,
+  main?: boolean,
   index?: boolean,
   stylesheet?: boolean,
   tests?: boolean

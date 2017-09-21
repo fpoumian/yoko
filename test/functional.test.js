@@ -13,6 +13,7 @@ import {
   validateTestsFile
 } from "../src/lib/ReactComponent/validation"
 import * as constants from "../src/lib/Template/constants"
+import mockFs from "./mockFs"
 
 function getDirContents(path) {
   return fs.readdirSync(path)
@@ -40,28 +41,6 @@ const mockDefaultTemplatePaths = {
   }
 }
 
-const CUSTOM_SFC_TEMPLATE_FILE_NAME = "mainFileCustomJSX.js"
-
-const mockCustomTemplatesPaths = {
-  app: {
-    templates: {
-      [constants.SFC_TEMPLATE_FILE_NAME]: require(defaultTemplatesDirRelativePath +
-        CUSTOM_SFC_TEMPLATE_FILE_NAME).default
-    }
-  }
-}
-
-function mockFileSystem() {
-  mock({
-    src: {
-      ...mockDefaultTemplatePaths
-    },
-    client: {
-      ...mockCustomTemplatesPaths
-    }
-  })
-}
-
 describe("generate", () => {
   let srcDir
   let componentsDir
@@ -70,7 +49,7 @@ describe("generate", () => {
   let resolveInContainers
 
   beforeEach(() => {
-    mockFileSystem()
+    mockFs()
     resolveInComponents = (...items) => path.resolve(componentsDir, ...items)
     resolveInContainers = (...items) => path.resolve(containersDir, ...items)
   })
@@ -510,7 +489,7 @@ describe("generate", () => {
       })
     })
 
-    describe("given that a component path already exists", () => {
+    xdescribe("given that a component path already exists", () => {
       beforeEach(() => {
         mock({
           src: {

@@ -1,15 +1,19 @@
 // @flow
 import path from "path"
 
-import type { FileProps } from "./types"
-import type { IFile } from "./interfaces"
+import type { ComponentFile, FileProps } from "./types"
 import createReadable from "../Readable/factory"
+import createTemplate from "../Template/factory"
+import type { Config } from "../Config/types"
 
-export default function(props: FileProps): IFile {
-  const { name, extension, template, role } = props
+export default function(props: FileProps, config: Config): ComponentFile {
+  const { name, extension, role } = props
+  const template = props.template
+    ? createTemplate(props.template, config)
+    : null
 
   // Public API
-  const componentFile: IFile = {
+  const componentFile: ComponentFile = {
     ...createReadable({
       path: path.resolve(props.dir, `${props.name}.${props.extension}`),
       name

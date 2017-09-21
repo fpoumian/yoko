@@ -1,14 +1,19 @@
 // @flow
 
 import type { Template } from "../Template/types"
-import type { IFile } from "./interfaces"
+import type { IComponentFile, IFile } from "./interfaces"
+import type { IReadable } from "../Readable/interfaces"
+
+export type ComponentFile = IFile & IReadable & IComponentFile
 
 export type FileProps = {
   name: string,
   extension: string,
   dir: string,
-  template: Template | null,
+  template: Object | null,
   role: string
 }
 
-export type writeFile = (file: IFile, data: string) => Promise<string>
+export type createComponentFile = (props: FileProps) => ComponentFile
+
+export type writeFile = (file: IReadable, data: string) => Promise<string>

@@ -2,10 +2,11 @@
 
 import type { Template } from "../Template/types"
 
-export interface IFile {
-  getName(): string,
-  getExtension(): string,
-  getPath(): string,
+export interface IComponentFile {
   getTemplate(): Template | null,
   getRole(): string
+}
+
+export interface IFile {
+  getExtension(): string
 }

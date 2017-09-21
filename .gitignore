@@ -7,3 +7,4 @@ dist
 .temp
 *.log
 profiling
+!/src/lib/Plugins/node_modules/

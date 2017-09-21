@@ -8,25 +8,26 @@ import path from "path"
 import EventEmitter from "events"
 import { isPlainObject } from "lodash"
 import { ArgumentError } from "common-errors"
+import assert from "assert"
 
 import makeCreateReactComponent from "./lib/ReactComponent/factory"
-import makeCreateFileList from "./lib/FileList/factory"
-import createComponentFile from "./lib/ComponentFile/factory"
 import type {
   ReactComponentProps,
   ReactComponentOptions,
-  ReactComponentFileTemplatePaths,
   ReactComponent
 } from "./lib/ReactComponent/types"
 import parseConfig from "./lib/Config/parse"
 import type { Config } from "./lib/Config/types"
 import makeGenerateReactComponent from "./lib/ReactComponent/generate"
+import makeResolvePlugins from "./lib/Plugins/resolve"
+import makeLoadPlugins from "./lib/Plugins/load"
+import makeInitPlugins from "./lib/Plugins/init"
+import registerPlugins from "./lib/Plugins/register"
 import writeFile from "./lib/ComponentFile/write"
-import {
-  getFilesTemplatesPaths,
-  getComponentNameInfo
-} from "./lib/ReactComponent/utils"
-import type { IFile } from "./lib/ComponentFile/interfaces"
+import { getComponentNameInfo } from "./lib/ReactComponent/utils"
+import type { ComponentFile } from "./lib/ComponentFile/types"
+import mapPluginsToFiles from "./lib/Plugins/mapToFiles"
+import type { LoadedPlugin, Object, ResolvedPlugin } from "./lib/Plugins/types"
 
 /**
  * @typedef {Object} PublicAPI
@@ -59,7 +60,7 @@ export default function init(customConfig: Object = {}): IPublic {
     componentName: string,
     options: ReactComponentOptions = {}
   ): EventEmitter {
-    // Input error handling
+    // Error handling
     if (typeof componentName !== "string") {
       throw new TypeError(
         `You must provide a String type for the componentName argument. ${componentName
@@ -90,51 +91,61 @@ export default function init(customConfig: Object = {}): IPublic {
       name: rootName,
       path: path.resolve(componentHome, ...parentDirs, rootName),
       type: options.type || "sfc",
+      main: options.main || true,
       index: options.index || false,
       stylesheet: options.stylesheet || false,
       tests: options.tests || false
     }
 
-    // Get template paths
-    const templatePaths: ReactComponentFileTemplatePaths = getFilesTemplatesPaths(
-      config,
-      props
-    )
-
-    // Create file list
-    const createFileList = makeCreateFileList(createComponentFile)
-    const fileList: Map<string, IFile> = createFileList(
-      props,
-      config,
-      templatePaths
-    )
-
-    // Inject EventEmitter dependency
     const emitter: EventEmitter = new EventEmitter()
-    const createReactComponent = makeCreateReactComponent(emitter)
-
-    // Inject writeFile dependency
-    const generateReactComponent = makeGenerateReactComponent(writeFile)
-
-    // Create component in memory
-    const component: ReactComponent = createReactComponent(props, fileList)
-    const componentEmitter: EventEmitter = component.getEmitter()
-
-    // Event handlers
-    componentEmitter.once("start", () => {
-      generateReactComponent(component)
-        .then(paths => component.getEmitter().emit("done", paths))
-        .catch(error => component.getEmitter().emit("error", error))
-    })
-
-    componentEmitter.on("error", error => {
+    emitter.on("error", error => {
       if (process.env.NODE_ENV === "test") {
         if (error.code === "EBADF") {
           return
         }
       }
       console.error(error)
-      // process.exit(1)
+    })
+
+    // Register plugins
+    const registeredPlugins = registerPlugins({ ...config })
+
+    // Resolve plugins
+    const resolvePlugins = makeResolvePlugins(
+      { resolve: require.resolve },
+      emitter
+    )
+    const resolvedPlugins: Array<ResolvedPlugin> = resolvePlugins([
+      ...registeredPlugins
+    ])
+
+    // Load plugins
+    const loadPlugins = makeLoadPlugins({ require }, emitter)
+    const plugins: Array<LoadedPlugin> = loadPlugins(resolvedPlugins)
+
+    // Initialize plugins
+    const initPlugins = makeInitPlugins(emitter)
+    const initializedPlugins = initPlugins(plugins, { ...props }, { ...config })
+
+    // Map plugins to files
+    const files: Array<ComponentFile> = mapPluginsToFiles(
+      initializedPlugins,
+      config
+    )
+
+    // Create component
+    const createReactComponent = makeCreateReactComponent(emitter)
+    const component: ReactComponent = createReactComponent(props, files)
+
+    const componentEmitter: EventEmitter = component.getEmitter()
+
+    const generateReactComponent = makeGenerateReactComponent(writeFile)
+
+    // Event handlers
+    componentEmitter.once("start", () => {
+      generateReactComponent(component)
+        .then(paths => component.getEmitter().emit("done", paths))
+        .catch(error => component.getEmitter().emit("error", error))
     })
 
     // Start generating on the next tick

@@ -2,14 +2,22 @@
 import EventEmitter from "events"
 
 import type { ReactComponent, ReactComponentProps } from "./types"
-import type { IFile } from "../ComponentFile/interfaces"
 import createReadable from "../Readable/factory"
+import type { ComponentFile } from "../ComponentFile/types"
 
 export default (emitter: EventEmitter) => (
   props: ReactComponentProps,
-  fileList: Map<string, IFile>
+  files: Array<ComponentFile>
 ): ReactComponent => {
   const { name, path } = props
+  const filesMap: Map<string, ComponentFile> = new Map()
+
+  // Add file if requested on props
+  files.forEach(file => {
+    if (props[file.getRole()]) {
+      filesMap.set(file.getRole(), file)
+    }
+  })
 
   // Public API
   const reactComponent: ReactComponent = {
@@ -18,7 +26,10 @@ export default (emitter: EventEmitter) => (
       path
     }),
     getFiles() {
-      return fileList
+      return filesMap
+    },
+    addFile(file: ComponentFile) {
+      filesMap.set(file.getRole(), file)
     },
     getEmitter() {
       return emitter

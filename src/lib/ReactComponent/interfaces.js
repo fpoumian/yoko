@@ -1,10 +1,11 @@
 // @flow
 import EventEmitter from "events"
 
-import type { IFile } from "../ComponentFile/interfaces"
+import type { ComponentFile } from "../ComponentFile/types"
 
 export interface IReactComponent {
-  getFiles(): Map<string, IFile>,
+  getFiles(): Map<string, ComponentFile>,
+  addFile(file: ComponentFile): void,
   getEmitter(): EventEmitter
 }
 

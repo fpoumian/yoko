@@ -15,5 +15,6 @@ export type Config = {
     stylesheet: {
       main: string
     }
-  }
+  },
+  plugins?: Array<string>
 }

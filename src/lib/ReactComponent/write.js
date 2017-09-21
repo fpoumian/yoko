@@ -5,10 +5,9 @@
 import nunjucks from "nunjucks"
 
 import type { IRenderable } from "./interfaces"
-import type { IFile } from "../ComponentFile/interfaces"
 import type { ReactComponent } from "./types"
 import type { IReadable } from "../Readable/interfaces"
-import type { writeFile } from "../ComponentFile/types"
+import type { ComponentFile, writeFile } from "../ComponentFile/types"
 
 function getTemplateString(template: IReadable | null): Promise<string> {
   if (!template) {
@@ -32,18 +31,14 @@ function renderCompiledTemplate(
 export default (writeFile: writeFile) => (
   component: ReactComponent
 ): Promise<any> => {
-  const componentFiles: Map<string, IFile> = component.getFiles()
+  const componentFiles: Map<string, ComponentFile> = component.getFiles()
   const roles: Array<string> = Array.from(componentFiles.keys())
 
   const filePromises: Array<Promise<any>> = roles.map((role: string) => {
-    const temp = componentFiles.get(role)
+    const file = componentFiles.get(role)
 
-    if (typeof temp === "undefined") {
+    if (typeof file === "undefined") {
       throw new Error()
-    }
-
-    const file: IFile = {
-      ...temp
     }
 
     return getTemplateString(file.getTemplate())
