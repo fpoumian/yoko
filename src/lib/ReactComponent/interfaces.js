@@ -5,7 +5,6 @@ import type { ComponentFile } from "../ComponentFile/types"
 
 export interface IReactComponent {
   getFiles(): Map<string, ComponentFile>,
-  addFile(file: ComponentFile): void,
   getEmitter(): EventEmitter
 }
 
