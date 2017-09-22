@@ -8,7 +8,9 @@ export type ReactComponentProps = {
   name: string,
   path: string,
   type: string,
-  index: boolean
+  main: boolean,
+  index: boolean,
+  stylesheet: boolean
 }
 
 export type ReactComponentOptions = {

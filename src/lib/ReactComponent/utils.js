@@ -28,6 +28,43 @@ export function reduceComponentPaths(
   )
 }
 
+function getComponentName(splitName: Array<string>) {
+  return splitName[splitName.length - 1]
+}
+
+function getComponentRootDir(splitName: Array<string>, config: Config | null) {
+  if (!config || config.rules["component-name-root-dir"]) {
+    return splitName[splitName.length - 1]
+  }
+
+  return splitName[splitName.length - 2]
+}
+
+function getComponentRootDirParents(
+  splitName: Array<string>,
+  config: Config | null
+) {
+  if (!config || config.rules["component-name-root-dir"]) {
+    return splitName.slice(0, splitName.length - 1).map(dir => sanitize(dir))
+  }
+
+  return splitName.slice(0, splitName.length - 2).map(dir => sanitize(dir))
+}
+
+export function getComponentNameInfo(
+  value: string,
+  config: Config | null
+): Object {
+  const normalized = path.normalize(slashes(value))
+  const splitName: Array<string> = normalized.split(path.sep)
+  return {
+    rootName: sanitize(getComponentRootDir(splitName, config)),
+    parentDirs: getComponentRootDirParents(splitName, config),
+    componentName: sanitize(getComponentName(splitName))
+  }
+}
+
+/*
 export function getFilesTemplatesPaths(
   config: Config,
   options: ReactComponentProps
@@ -72,14 +109,4 @@ export function getFilesTemplatesPaths(
     return { ...temp, ...newPaths }
   }, {})
 }
-
-export function getComponentNameInfo(value: string): Object {
-  const normalized = path.normalize(slashes(value))
-  const splitName: Array<string> = normalized.split(path.sep)
-  return {
-    rootName: sanitize(splitName[splitName.length - 1]),
-    parentDirs: splitName
-      .slice(0, splitName.length - 1)
-      .map(dir => sanitize(dir))
-  }
-}
+*/

@@ -52,22 +52,22 @@ export default function init(customConfig: Object = {}): IPublic {
 
   /**
    * Generate a React component
-   * @param {string} componentName - The name of the component you wish to generate.
+   * @param {string} componentPath - The path of the component you wish to generate.
    * @param {Object} [options] - The set of options you wish to use to generate this component.
    */
   const generate = function generate(
-    componentName: string,
+    componentPath: string,
     options: ReactComponentOptions = {}
   ): EventEmitter {
     // Error handling
-    if (typeof componentName !== "string") {
+    if (typeof componentPath !== "string") {
       throw new TypeError(
-        `You must provide a String type for the componentName argument. ${componentName
+        `You must provide a String type for the componentName argument. ${componentPath
           .constructor.name} provided.`
       )
     }
 
-    if (componentName === "") {
+    if (componentPath === "") {
       throw new ArgumentError(
         `The componentName argument cannot be an empty string.`
       )
@@ -81,13 +81,18 @@ export default function init(customConfig: Object = {}): IPublic {
     }
 
     // Prepare component props
-    const { rootName, parentDirs } = getComponentNameInfo(componentName)
+    const { rootName, parentDirs, componentName } = getComponentNameInfo(
+      componentPath,
+      config
+    )
     const componentHome: string = options.container
       ? config.paths.containers
       : config.paths.components
 
+    // const { type, main, index, stylesheet, tests } = options
+
     const props: ReactComponentProps = {
-      name: rootName,
+      name: componentName,
       path: path.resolve(componentHome, ...parentDirs, rootName),
       type: options.type || "sfc",
       main: options.main || true,

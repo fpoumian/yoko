@@ -21,6 +21,9 @@ describe("given that the user did not provide any custom configuration", () => {
         stylesheet: {
           main: "css"
         }
+      },
+      rules: {
+        "component-name-root-dir": true
       }
     })
   })

@@ -54,7 +54,7 @@ describe("generate", () => {
 
     const generator = reactPresto(config)
 
-    describe("given no additional component options were provided", () => {
+    describe("given no component options were provided", () => {
       it("should create one directory inside of components Home directory", done => {
         expect.assertions(1)
 
@@ -76,7 +76,7 @@ describe("generate", () => {
         })
       })
 
-      it("should create five directories inside of components Home directory", () => {
+      it("should be able create multiple directories inside of components home directory", () => {
         expect.assertions(1)
 
         const promises = [
@@ -103,7 +103,7 @@ describe("generate", () => {
         })
       })
 
-      it("should create components directories with a recursive path", done => {
+      it("should create components directories with a nested path", done => {
         expect.assertions(1)
         generator
           .generate("ParentDirectory/TestComponent")
@@ -184,24 +184,6 @@ describe("generate", () => {
           ).toBe(true)
           done()
         })
-      })
-
-      it("should create a valid React Component within parent directory", done => {
-        expect.assertions(1)
-        generator
-          .generate("ParentDirectory/TestComponent")
-          .on("done", paths => {
-            const testComponent = fs.readFileSync(path.resolve(paths.main), {
-              encoding: "utf8"
-            })
-            expect(
-              validateStatelessFunctionalComponent(
-                testComponent,
-                "TestComponent"
-              )
-            ).toBe(true)
-            done()
-          })
       })
     })
 
@@ -651,6 +633,46 @@ describe("generate", () => {
         .generate("TestComponent", { stylesheet: true })
         .on("done", paths => {
           expect(getDirContents(paths.root)).toContain("styles.scss")
+          done()
+        })
+    })
+  })
+
+  describe("given a global configuration with component-name-root-dir rule set to false", () => {
+    beforeEach(() => {
+      componentsDir = path.resolve(process.cwd(), "components")
+    })
+
+    const config = {
+      rules: {
+        "component-name-root-dir": false
+      }
+    }
+
+    const generator = reactPresto(config)
+
+    it("should create a component that does not use the component name to create a root dir", done => {
+      expect.assertions(1)
+      generator
+        .generate("ComponentRootDirName/TestComponent")
+        .on("done", paths => {
+          console.log(paths)
+          expect(paths).toHaveProperty(
+            "root",
+            resolveInComponents("ComponentRootDirName")
+          )
+          done()
+        })
+    })
+    it("should create a component whose main file has the name of the component", done => {
+      expect.assertions(1)
+      generator
+        .generate("ComponentRootDirName/TestComponent")
+        .on("done", paths => {
+          expect(paths).toHaveProperty(
+            "main",
+            resolveInComponents("ComponentRootDirName/TestComponent.js")
+          )
           done()
         })
     })

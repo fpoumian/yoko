@@ -18,6 +18,9 @@ const config: Config = {
     stylesheet: {
       main: "css"
     }
+  },
+  rules: {
+    "component-name-root-dir": true
   }
 }
 
