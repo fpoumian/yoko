@@ -4,6 +4,7 @@
 
 import EventEmitter from "events"
 import type { ResolvedPlugin, Resolver } from "./types"
+import constants from "./constants"
 
 export default (resolver: Resolver, emitter: EventEmitter) =>
   function resolvePlugins(pluginsNames: Array<string>): Array<ResolvedPlugin> {
@@ -12,7 +13,7 @@ export default (resolver: Resolver, emitter: EventEmitter) =>
         let plugin
         try {
           plugin = {
-            path: resolver.resolve(`react-presto-${pluginName}`),
+            path: resolver.resolve(`${constants.PLUGIN_PREFIX}-${pluginName}`),
             name: pluginName
           }
           return [...pluginsAcc, plugin]

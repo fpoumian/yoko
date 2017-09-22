@@ -5,15 +5,21 @@ import fs from "fs"
 import path from "path"
 
 import * as constants from "../../src/lib/Template/constants"
+import pluginConstants from "../../src/lib/Plugins/constants"
 
-const mainFilePluginPath = require.resolve("react-presto-main-file")
-const indexFilePluginPath = require.resolve("react-presto-index-file")
-const testsFilePluginPath = require.resolve("react-presto-tests-file")
+const mainPluginName = `${pluginConstants.PLUGIN_PREFIX}-main-file`
+const indexPluginName = `${pluginConstants.PLUGIN_PREFIX}-index-file`
+const stylesheetPluginName = `${pluginConstants.PLUGIN_PREFIX}-stylesheet-file`
+const testsPluginName = `${pluginConstants.PLUGIN_PREFIX}-tests-file`
+
+const mainFilePluginPath = require.resolve(mainPluginName)
+const indexFilePluginPath = require.resolve(indexPluginName)
+const testsFilePluginPath = require.resolve(testsPluginName)
 
 export default function mockFileSystem() {
   return {
     node_modules: {
-      "react-presto-main-file": {
+      [mainPluginName]: {
         "index.js": fs.readFileSync(mainFilePluginPath, "utf8"),
         templates: {
           [constants.SFC_TEMPLATE_FILE_NAME]: fs.readFileSync(
@@ -32,11 +38,8 @@ export default function mockFileSystem() {
           )
         }
       },
-      "react-presto-index-file": {
-        "index.js": fs.readFileSync(
-          require.resolve("react-presto-index-file"),
-          "utf8"
-        ),
+      [indexPluginName]: {
+        "index.js": fs.readFileSync(require.resolve(indexPluginName), "utf8"),
         templates: {
           [constants.INDEX_TEMPLATE_FILE_NAME]: fs.readFileSync(
             path.resolve(
@@ -47,11 +50,8 @@ export default function mockFileSystem() {
           )
         }
       },
-      "react-presto-tests-file": {
-        "index.js": fs.readFileSync(
-          require.resolve("react-presto-tests-file"),
-          "utf8"
-        ),
+      [testsPluginName]: {
+        "index.js": fs.readFileSync(require.resolve(testsPluginName), "utf8"),
         templates: {
           [constants.TESTS_FILE_TEMPLATE_FILE_NAME]: fs.readFileSync(
             path.resolve(
@@ -62,9 +62,9 @@ export default function mockFileSystem() {
           )
         }
       },
-      "react-presto-stylesheet-file": {
+      [stylesheetPluginName]: {
         "index.js": fs.readFileSync(
-          require.resolve("react-presto-stylesheet-file"),
+          require.resolve(stylesheetPluginName),
           "utf8"
         )
       }

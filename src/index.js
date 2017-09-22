@@ -1,13 +1,12 @@
 // @flow
 /**
- * React Presto
- * @module react-presto
+ * Scully Component Generator
+ * @module scully-component-generator
  */
 
 import path from "path"
 import EventEmitter from "events"
 import { isPlainObject } from "lodash"
-import { ArgumentError } from "common-errors"
 
 import makeCreateReactComponent from "./lib/ReactComponent/factory"
 import type {
@@ -67,20 +66,18 @@ export default function init(customConfig: Object = {}): IPublic {
       )
     }
 
-    if (componentPath === "") {
-      throw new ArgumentError(
-        `The componentName argument cannot be an empty string.`
-      )
+    if (componentPath.trim() === "") {
+      throw new Error(`The componentName argument cannot be an empty string.`)
     }
 
     if (!isPlainObject(options)) {
       throw new TypeError(
-        `You must provide a plain Object type for the options argument. ${options
+        `You must provide a plain Object type as the options argument. ${options
           .constructor.name} provided.`
       )
     }
 
-    // Prepare component props
+    // Parse component path and assign to props
     const {
       rootName,
       parentDirs,

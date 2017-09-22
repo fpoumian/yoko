@@ -1,10 +1,9 @@
 import fs from "fs"
 import path from "path"
 import eventToPromise from "event-to-promise"
-import { ArgumentError } from "common-errors"
 import mock from "mock-fs"
 
-import reactPresto from "../src"
+import scully from "../src"
 import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
@@ -52,7 +51,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = reactPresto(config)
+    const generator = scully(config)
 
     describe("given no component options were provided", () => {
       it("should create one directory inside of components Home directory", done => {
@@ -346,7 +345,7 @@ describe("generate", () => {
         plugins: ["tests-file"]
       }
 
-      const generator = reactPresto(config)
+      const generator = scully(config)
       describe("given that the test option is set to true", () => {
         it("should return a path object with root, tests and main properties", done => {
           expect.assertions(1)
@@ -609,7 +608,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = reactPresto(config)
+    const generator = scully(config)
 
     it("should create a Main Component file with custom JSX extension", done => {
       expect.assertions(1)
@@ -649,7 +648,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = reactPresto(config)
+    const generator = scully(config)
 
     it("should create a component that does not use the component name to create a root dir", done => {
       expect.assertions(1)
@@ -705,7 +704,7 @@ describe("generate", () => {
       containersDir = path.resolve(process.cwd(), "containers")
     })
 
-    const rcg = reactPresto()
+    const rcg = scully()
 
     it("should create one directory inside the default components home directory", done => {
       expect.assertions(1)
@@ -744,7 +743,7 @@ describe("generate", () => {
         }
       }
 
-      const rcg = reactPresto(config)
+      const rcg = scully(config)
 
       it("should generate a valid React component using the custom template provided in config", done => {
         expect.assertions(2)
@@ -765,7 +764,7 @@ describe("generate", () => {
   )
 
   describe("given an invalid argument type for the componentName and options arguments", () => {
-    const generator = reactPresto()
+    const generator = scully()
     it("should throw an Error", () => {
       expect(() => {
         generator.generate([1, 2, 3])
@@ -780,7 +779,7 @@ describe("generate", () => {
       }).toThrowError(TypeError)
       expect(() => {
         generator.generate("", {})
-      }).toThrowError(ArgumentError)
+      }).toThrowError(Error)
       expect(() => {
         generator.generate("C", [1, 2, 3])
       }).toThrowError(TypeError)
@@ -792,12 +791,12 @@ describe("generate", () => {
         "You must provide a String type for the componentName argument. Array provided."
       )
       expect(() => {
-        generator.generate("", {})
+        generator.generate(" ", {})
       }).toThrowError("The componentName argument cannot be an empty string.")
       expect(() => {
         generator.generate("C", [1, 2, 3])
       }).toThrowError(
-        "You must provide a plain Object type for the options argument. Array provided."
+        "You must provide a plain Object type as the options argument. Array provided."
       )
     })
   })
