@@ -17,7 +17,7 @@ export default (resolver: Resolver, emitter: EventEmitter) =>
           }
           return [...pluginsAcc, plugin]
         } catch (e) {
-          emitter.emit("error", `Unable to find plugin ${pluginName}`)
+          emitter.emit("error", `Cannot find plugin ${pluginName}.`)
         }
         return pluginsAcc
       },

@@ -65,7 +65,7 @@ describe("load", () => {
       resolvePlugins(names)
       expect(emitter.emit).toHaveBeenCalledWith(
         "error",
-        "Unable to find plugin index-file"
+        "Cannot find plugin index-file."
       )
     })
   })
