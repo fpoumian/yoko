@@ -674,6 +674,17 @@ describe("generate", () => {
       })
     })
 
+    it("should be able manage components with no nested paths and needless file extension", done => {
+      expect.assertions(1)
+      generator.generate("TestComponent.jsx").on("done", paths => {
+        expect(paths).toHaveProperty(
+          "main",
+          resolveInComponents("TestComponent.js")
+        )
+        done()
+      })
+    })
+
     it("should create a component whose main file has the name of the component", done => {
       expect.assertions(1)
       generator
