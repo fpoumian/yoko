@@ -656,7 +656,6 @@ describe("generate", () => {
       generator
         .generate("ComponentRootDirName/TestComponent")
         .on("done", paths => {
-          console.log(paths)
           expect(paths).toHaveProperty(
             "root",
             resolveInComponents("ComponentRootDirName")
@@ -664,6 +663,17 @@ describe("generate", () => {
           done()
         })
     })
+    it("should be able manage components with no nested paths", done => {
+      expect.assertions(1)
+      generator.generate("TestComponent").on("done", paths => {
+        expect(paths).toHaveProperty(
+          "main",
+          resolveInComponents("TestComponent.js")
+        )
+        done()
+      })
+    })
+
     it("should create a component whose main file has the name of the component", done => {
       expect.assertions(1)
       generator

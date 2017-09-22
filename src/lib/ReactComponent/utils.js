@@ -1,17 +1,6 @@
 // @flow
-import path from "path"
-import fs from "fs"
-import { get, keys } from "lodash"
-import slashes from "remove-trailing-slash"
-import sanitize from "sanitize-filename"
-
-import type { Config } from "../Config/types"
-import type {
-  ReactComponent,
-  ReactComponentFileTemplatePaths,
-  ReactComponentProps
-} from "./types"
-import * as constants from "../Template/constants"
+/* eslint import/prefer-default-export: off  */
+import type { ReactComponent } from "./types"
 
 export function reduceComponentPaths(
   component: ReactComponent,
@@ -27,86 +16,3 @@ export function reduceComponentPaths(
     }
   )
 }
-
-function getComponentName(splitName: Array<string>) {
-  return splitName[splitName.length - 1]
-}
-
-function getComponentRootDir(splitName: Array<string>, config: Config | null) {
-  if (!config || config.rules["component-name-root-dir"]) {
-    return splitName[splitName.length - 1]
-  }
-
-  return splitName[splitName.length - 2]
-}
-
-function getComponentRootDirParents(
-  splitName: Array<string>,
-  config: Config | null
-) {
-  if (!config || config.rules["component-name-root-dir"]) {
-    return splitName.slice(0, splitName.length - 1).map(dir => sanitize(dir))
-  }
-
-  return splitName.slice(0, splitName.length - 2).map(dir => sanitize(dir))
-}
-
-export function getComponentNameInfo(
-  value: string,
-  config: Config | null
-): Object {
-  const normalized = path.normalize(slashes(value))
-  const splitName: Array<string> = normalized.split(path.sep)
-  return {
-    rootName: sanitize(getComponentRootDir(splitName, config)),
-    parentDirs: getComponentRootDirParents(splitName, config),
-    componentName: sanitize(getComponentName(splitName))
-  }
-}
-
-/*
-export function getFilesTemplatesPaths(
-  config: Config,
-  options: ReactComponentProps
-): ReactComponentFileTemplatePaths {
-  const defaultTemplatesDirPath = constants.TEMPLATES_HOME
-  const customTemplatesDirPath = get(config, "paths.templates", "")
-
-  const mainTemplateFileName =
-    options.type === "es6class"
-      ? constants.ES6_CLASS_TEMPLATE_FILE_NAME
-      : constants.SFC_TEMPLATE_FILE_NAME
-
-  const fileNames = {
-    main: mainTemplateFileName,
-    index: constants.INDEX_TEMPLATE_FILE_NAME,
-    tests: constants.TESTS_FILE_TEMPLATE_FILE_NAME
-  }
-
-  const defaultPaths = {
-    main: path.resolve(defaultTemplatesDirPath, mainTemplateFileName),
-    index: path.resolve(
-      defaultTemplatesDirPath,
-      constants.INDEX_TEMPLATE_FILE_NAME
-    ),
-    tests: path.resolve(
-      defaultTemplatesDirPath,
-      constants.TESTS_FILE_TEMPLATE_FILE_NAME
-    )
-  }
-
-  if (!customTemplatesDirPath) {
-    return defaultPaths
-  }
-
-  return keys(fileNames).reduce((newPaths, key) => {
-    const temp = {
-      [key]: fs.existsSync(path.resolve(customTemplatesDirPath, fileNames[key]))
-        ? path.resolve(customTemplatesDirPath, fileNames[key])
-        : path.resolve(defaultTemplatesDirPath, fileNames[key])
-    }
-
-    return { ...temp, ...newPaths }
-  }, {})
-}
-*/

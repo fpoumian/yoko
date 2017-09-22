@@ -23,7 +23,7 @@ import makeLoadPlugins from "./lib/Plugins/load"
 import makeInitPlugins from "./lib/Plugins/init"
 import registerPlugins from "./lib/Plugins/register"
 import writeFile from "./lib/ComponentFile/write"
-import { getComponentNameInfo } from "./lib/ReactComponent/utils"
+import parseComponentPath from "./lib/ReactComponent/parsePath"
 import type { ComponentFile } from "./lib/ComponentFile/types"
 import mapPluginsToFiles from "./lib/Plugins/mapToFiles"
 import type { LoadedPlugin, Object, ResolvedPlugin } from "./lib/Plugins/types"
@@ -81,15 +81,14 @@ export default function init(customConfig: Object = {}): IPublic {
     }
 
     // Prepare component props
-    const { rootName, parentDirs, componentName } = getComponentNameInfo(
-      componentPath,
-      config
-    )
+    const {
+      rootName,
+      parentDirs,
+      componentName
+    } = parseComponentPath(componentPath, { ...config })
     const componentHome: string = options.container
       ? config.paths.containers
       : config.paths.components
-
-    // const { type, main, index, stylesheet, tests } = options
 
     const props: ReactComponentProps = {
       name: componentName,
