@@ -1,6 +1,6 @@
 {
   "name": "scully-component-generator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Scully is a Component Generator/Scaffolding Tool for React.",
   "license": "MIT",
   "repository": "fpoumian/scully-component-generator",
