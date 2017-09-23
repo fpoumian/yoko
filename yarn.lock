@@ -1329,10 +1329,6 @@ commander@^2.8.1:
   dependencies:
     graceful-readlink ">= 1.0.0"
 
-common-errors@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/common-errors/-/common-errors-1.0.4.tgz#6724b011ccee1125fca136b30c439b4f97a36a04"
-
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -3107,13 +3103,6 @@ load-json-file@^2.0.0:
     pify "^2.0.0"
     strip-bom "^3.0.0"
 
-load-plugin@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/load-plugin/-/load-plugin-2.2.1.tgz#384def2b47be6edd65db0f18f368fd749b463edd"
-  dependencies:
-    npm-prefix "^1.2.0"
-    resolve-from "^2.0.0"
-
 locate-path@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
@@ -3522,14 +3511,6 @@ normalize-uri@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/normalize-uri/-/normalize-uri-1.1.0.tgz#01fb440c7fd059b9d9be8645aac14341efd059dd"
 
-npm-prefix@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/npm-prefix/-/npm-prefix-1.2.0.tgz#e619455f7074ba54cc66d6d0d37dd9f1be6bcbc0"
-  dependencies:
-    rc "^1.1.0"
-    shellsubstitute "^1.1.0"
-    untildify "^2.1.0"
-
 npm-watch@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/npm-watch/-/npm-watch-0.2.0.tgz#eb62b2f46f5fb71b6b9723700d8a2dc80946a335"
@@ -3920,7 +3901,7 @@ raw-body@~1.1.0:
     bytes "1"
     string_decoder "0.10"
 
-rc@^1.0.1, rc@^1.1.0, rc@^1.1.7:
+rc@^1.0.1, rc@^1.1.7:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.1.tgz#2e03e8e42ee450b8cb3dce65be1bf8974e1dfd95"
   dependencies:
@@ -4224,10 +4205,6 @@ request@^2.79.0, request@^2.81.0:
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
-require-all@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/require-all/-/require-all-2.2.0.tgz#b4420c233ac0282d0ff49b277fb880a8b5de0894"
-
 require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
@@ -4246,10 +4223,6 @@ require-uncached@^1.0.3:
 resolve-from@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-1.0.1.tgz#26cbfe935d1aeeeabb29bc3fe5aeb01e93d44226"
-
-resolve-from@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-2.0.0.tgz#9480ab20e94ffa1d9e80a804c7ea147611966b57"
 
 resolve@1.1.7:
   version "1.1.7"
@@ -4326,6 +4299,22 @@ sax@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.2.tgz#fd8631a23bc7826bef5d871bdb87378c95647828"
 
+scully-plugin-index-file@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/scully-plugin-index-file/-/scully-plugin-index-file-0.1.1.tgz#c9e42e20b2048a5c26fb4ab8785578d522e85a0f"
+
+scully-plugin-main-file@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/scully-plugin-main-file/-/scully-plugin-main-file-0.1.0.tgz#6f9331ab35cb230a9f98f123178003c08fe83104"
+
+scully-plugin-stylesheet-file@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/scully-plugin-stylesheet-file/-/scully-plugin-stylesheet-file-0.1.1.tgz#a947da13966f8cef70bcfdf838ff09dd53521aa8"
+
+scully-plugin-tests-file@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/scully-plugin-tests-file/-/scully-plugin-tests-file-0.1.0.tgz#08757fe350a5d27800e43b44b217761cfd6d3e11"
+
 semver-diff@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/semver-diff/-/semver-diff-2.1.0.tgz#4bbb8437c8d37e4b0cf1a68fd726ec6d645d6d36"
@@ -4361,10 +4350,6 @@ shelljs@^0.7.5:
     glob "^7.0.0"
     interpret "^1.0.0"
     rechoir "^0.6.2"
-
-shellsubstitute@^1.1.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/shellsubstitute/-/shellsubstitute-1.2.0.tgz#e4f702a50c518b0f6fe98451890d705af29b6b70"
 
 shellwords@^0.1.0:
   version "0.1.0"
@@ -4885,12 +4870,6 @@ unist-util-visit@^1.0.0, unist-util-visit@^1.0.1, unist-util-visit@^1.1.0:
 universalify@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
-
-untildify@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/untildify/-/untildify-2.1.0.tgz#17eb2807987f76952e9c0485fc311d06a826a2e0"
-  dependencies:
-    os-homedir "^1.0.0"
 
 update-notifier@0.5.0:
   version "0.5.0"

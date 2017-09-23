@@ -13,7 +13,7 @@ function getTemplateString(template: Template | null): Promise<string> {
   if (!template) {
     return Promise.resolve("")
   }
-  const templateString = require(template.getPath()).default
+  const templateString = require(template.getPath())
   return Promise.resolve(templateString)
 }
 

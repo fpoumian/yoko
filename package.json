@@ -63,8 +63,11 @@
     "mkdirp-promise": "^5.0.1",
     "nunjucks": "^3.0.1",
     "remove-trailing-slash": "^0.1.0",
-    "react-presto-main-file": "1.0.0",
-    "sanitize-filename": "^1.6.1"
+    "sanitize-filename": "^1.6.1",
+    "scully-plugin-index-file": "^0.1.1",
+    "scully-plugin-main-file": "^0.1.0",
+    "scully-plugin-stylesheet-file": "^0.1.1",
+    "scully-plugin-tests-file": "^0.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

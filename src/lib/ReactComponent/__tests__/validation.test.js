@@ -15,29 +15,19 @@ const sfComponent = path.resolve(
   __dirname,
   "..",
   "__mocks__",
-  constants.SFC_TEMPLATE_FILE_NAME
+  "StatelessFunctionalComponent.js"
 )
 
 const es6ClassComponent = path.resolve(
   __dirname,
   "..",
   "__mocks__",
-  constants.ES6_CLASS_TEMPLATE_FILE_NAME
+  "ES6ClassComponent.js"
 )
 
-const indexFile = path.resolve(
-  __dirname,
-  "..",
-  "__mocks__",
-  constants.INDEX_TEMPLATE_FILE_NAME
-)
+const indexFile = path.resolve(__dirname, "..", "__mocks__", "IndexFile.js")
 
-const testsFile = path.resolve(
-  __dirname,
-  "..",
-  "__mocks__",
-  constants.TESTS_FILE_TEMPLATE_FILE_NAME
-)
+const testsFile = path.resolve(__dirname, "..", "__mocks__", "TestsFile.js")
 
 describe("validateStatelessFunctionalComponent", () => {
   it("should validate a correct React Stateless Functional Component file", done => {
