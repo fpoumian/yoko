@@ -1,9 +1,9 @@
 {
-  "name": "scully-component-generator",
+  "name": "judex-component-generator",
   "version": "0.1.0",
-  "description": "Scully is a Component Generator/Scaffolding Tool for React.",
+  "description": "Judex is a Component Generator/Scaffolding Library.",
   "license": "MIT",
-  "repository": "fpoumian/scully-component-generator",
+  "repository": "fpoumian/judex-component-generator",
   "main": "index.js",
   "author": {
     "name": "Fernando Poumián",
@@ -64,10 +64,10 @@
     "nunjucks": "^3.0.1",
     "remove-trailing-slash": "^0.1.0",
     "sanitize-filename": "^1.6.1",
-    "scully-plugin-index-file": "^0.1.1",
-    "scully-plugin-main-file": "^0.1.0",
-    "scully-plugin-stylesheet-file": "^0.1.1",
-    "scully-plugin-tests-file": "^0.1.0"
+    "judex-plugin-index-file": "^0.1.0",
+    "judex-plugin-main-file": "^0.1.0",
+    "judex-plugin-stylesheet-file": "^0.1.0",
+    "judex-plugin-tests-file": "^0.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

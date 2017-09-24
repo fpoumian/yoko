@@ -3,7 +3,7 @@ import path from "path"
 import eventToPromise from "event-to-promise"
 import mock from "mock-fs"
 
-import scully from "../src"
+import judex from "../src"
 import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
@@ -51,7 +51,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = scully(config)
+    const generator = judex(config)
 
     describe("given no component options were provided", () => {
       it("should create one directory inside of components Home directory", done => {
@@ -345,7 +345,7 @@ describe("generate", () => {
         plugins: ["tests-file"]
       }
 
-      const generator = scully(config)
+      const generator = judex(config)
       describe("given that the test option is set to true", () => {
         it("should return a path object with root, tests and main properties", done => {
           expect.assertions(1)
@@ -608,7 +608,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = scully(config)
+    const generator = judex(config)
 
     it("should create a Main Component file with custom JSX extension", done => {
       expect.assertions(1)
@@ -648,7 +648,7 @@ describe("generate", () => {
       }
     }
 
-    const generator = scully(config)
+    const generator = judex(config)
 
     it("should create a component that does not use the component name to create a root dir", done => {
       expect.assertions(1)
@@ -704,7 +704,7 @@ describe("generate", () => {
       containersDir = path.resolve(process.cwd(), "containers")
     })
 
-    const rcg = scully()
+    const rcg = judex()
 
     it("should create one directory inside the default components home directory", done => {
       expect.assertions(1)
@@ -743,7 +743,7 @@ describe("generate", () => {
         }
       }
 
-      const rcg = scully(config)
+      const rcg = judex(config)
 
       it("should generate a valid React component using the custom template provided in config", done => {
         expect.assertions(2)
@@ -764,7 +764,7 @@ describe("generate", () => {
   )
 
   describe("given an invalid argument type for the componentName and options arguments", () => {
-    const generator = scully()
+    const generator = judex()
     it("should throw an Error", () => {
       expect(() => {
         generator.generate([1, 2, 3])

@@ -3037,6 +3037,22 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.3.6"
 
+judex-plugin-index-file@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/judex-plugin-index-file/-/judex-plugin-index-file-0.1.0.tgz#e57c2eed454191e2714c6c2b77197c2478af06d3"
+
+judex-plugin-main-file@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/judex-plugin-main-file/-/judex-plugin-main-file-0.1.0.tgz#dc82a366e010f637379e2b4c2ed190f6633bb866"
+
+judex-plugin-stylesheet-file@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/judex-plugin-stylesheet-file/-/judex-plugin-stylesheet-file-0.1.1.tgz#ae3ae42ee04101467a2a9dcfd9fc55aed70cd46a"
+
+judex-plugin-tests-file@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/judex-plugin-tests-file/-/judex-plugin-tests-file-0.1.0.tgz#eb64e1595bdae022e03611cbe318c246a0cb0055"
+
 kebab-case@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/kebab-case/-/kebab-case-1.0.0.tgz#3f9e4990adcad0c686c0e701f7645868f75f91eb"
@@ -4298,22 +4314,6 @@ sanitize-filename@^1.6.1:
 sax@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.2.tgz#fd8631a23bc7826bef5d871bdb87378c95647828"
-
-scully-plugin-index-file@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/scully-plugin-index-file/-/scully-plugin-index-file-0.1.1.tgz#c9e42e20b2048a5c26fb4ab8785578d522e85a0f"
-
-scully-plugin-main-file@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/scully-plugin-main-file/-/scully-plugin-main-file-0.1.0.tgz#6f9331ab35cb230a9f98f123178003c08fe83104"
-
-scully-plugin-stylesheet-file@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/scully-plugin-stylesheet-file/-/scully-plugin-stylesheet-file-0.1.1.tgz#a947da13966f8cef70bcfdf838ff09dd53521aa8"
-
-scully-plugin-tests-file@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/scully-plugin-tests-file/-/scully-plugin-tests-file-0.1.0.tgz#08757fe350a5d27800e43b44b217761cfd6d3e11"
 
 semver-diff@^2.0.0:
   version "2.1.0"

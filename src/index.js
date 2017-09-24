@@ -1,7 +1,7 @@
 // @flow
 /**
- * Scully Component Generator
- * @module scully-component-generator
+ * Judex Component Generator
+ * @module judex-component-generator
  */
 
 import path from "path"
@@ -36,7 +36,7 @@ export interface IPublic {
 }
 
 /**
- *  Initialize React Presto.
+ *  Initialize Generator.
  *  @param {Object} [customConfig] - Global configuration object.
  *  @return {PublicAPI}
  */
