@@ -696,6 +696,28 @@ describe("generate", () => {
           done()
         })
     })
+
+    it("should be able to delete needless files in overwritten components", done => {
+      expect.assertions(2)
+      const emitter = generator
+        .generate("ComponentRootDirName/TestComponent", { index: true })
+        .on("done", () => {
+          expect(
+            getDirContents(resolveInComponents("ComponentRootDirName"))
+          ).toContain("index.js")
+        })
+
+      emitter.on("done", () => {
+        generator
+          .generate("ComponentRootDirName/TestComponent", { index: false })
+          .on("done", () => {
+            expect(
+              getDirContents(resolveInComponents("ComponentRootDirName"))
+            ).not.toContain("index.js")
+            done()
+          })
+      })
+    })
   })
 
   describe("given no global configuration object", () => {

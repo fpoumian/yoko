@@ -8,17 +8,17 @@ import { reduceComponentPaths } from "./utils"
 import type { ReactComponent } from "./types"
 import type { writeFile } from "../ComponentFile/types"
 
-function removeComponentDir(
+function removeComponentRootDir(
   component: ReactComponent
 ): Promise<ReactComponent> {
   return fse.remove(component.getPath()).then(() => component)
 }
 
-function createComponentDir(
+function createComponentRootDir(
   component: ReactComponent
 ): Promise<ReactComponent> {
   return mkdirp(component.getPath()).then(() => {
-    component.getEmitter().emit("componentDirCreated", {
+    component.getEmitter().emit("componentRootDirCreated", {
       name: component.getName(),
       path: component.getPath()
     })
@@ -28,8 +28,8 @@ function createComponentDir(
 
 export default (writeFile: writeFile) => (component: ReactComponent) => {
   const writeComponentFiles = makeWriteComponentFiles(writeFile)
-  return removeComponentDir(component)
-    .then(createComponentDir)
+  return removeComponentRootDir(component)
+    .then(createComponentRootDir)
     .then(writeComponentFiles)
     .then((componentFilesPaths: Array<Object>) =>
       reduceComponentPaths(component, componentFilesPaths)
