@@ -1,3 +1,3 @@
-# React Presto
+# Judex Component Generator
 
 WIP
