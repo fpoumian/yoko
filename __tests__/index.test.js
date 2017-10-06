@@ -22,7 +22,7 @@ function getDirContents(path) {
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-describe("generate", () => {
+describe("judex-component-generator", () => {
   let srcDir
   let componentsDir
   let containersDir
@@ -30,17 +30,22 @@ describe("generate", () => {
   let resolveInContainers
 
   beforeEach(() => {
+    // Mock the FileSystem using fs-mock
     mock({
       ...mockedFileSystem
     })
+    // Resolve in the Components Home dir (i.e. where all the components should be generated)
     resolveInComponents = (...items) => path.resolve(componentsDir, ...items)
+    // Resolve in the Containers Home dir (i.e. where all the containers should be generated)
     resolveInContainers = (...items) => path.resolve(containersDir, ...items)
   })
 
   describe("given a global configuration with custom relative paths for components and containers", () => {
     beforeEach(() => {
       srcDir = path.resolve(process.cwd(), "src")
+      // Components Home
       componentsDir = path.resolve(srcDir, "components")
+      // Containers Home
       containersDir = path.resolve(srcDir, "containers")
     })
 
@@ -53,7 +58,7 @@ describe("generate", () => {
 
     const generator = judex(config)
 
-    describe("given no component options were provided", () => {
+    describe("when no component options are provided", () => {
       it("should create one directory inside of components Home directory", done => {
         expect.assertions(1)
 
@@ -144,7 +149,7 @@ describe("generate", () => {
         })
       })
 
-      it("should create main JS files for multiple components inside existing directories", () => {
+      it("should create main component JS files for multiple components inside existing directories", () => {
         expect.assertions(2)
 
         const promises = [
@@ -186,7 +191,7 @@ describe("generate", () => {
       })
     })
 
-    describe("given that the index option is set to true", () => {
+    describe("when the index option is set to true in component options", () => {
       it("should return a path object with root, index and main properties", done => {
         expect.assertions(1)
         generator
@@ -277,7 +282,7 @@ describe("generate", () => {
       })
     })
 
-    describe("given that the stylesheet option is set to true", () => {
+    describe("when the stylesheet option is set to true in component options", () => {
       it("should return a path object with root, stylesheet and main properties", done => {
         expect.assertions(1)
         generator
@@ -331,85 +336,7 @@ describe("generate", () => {
       })
     })
 
-    describe("given a config with the tests-file plugin and a custom test extension set", () => {
-      const config = {
-        paths: {
-          components: "./src/components",
-          containers: "./src/containers"
-        },
-        extensions: {
-          js: {
-            tests: "spec.js"
-          }
-        },
-        plugins: ["tests-file"]
-      }
-
-      const generator = judex(config)
-      describe("given that the test option is set to true", () => {
-        it("should return a path object with root, tests and main properties", done => {
-          expect.assertions(1)
-          generator
-            .generate("TestComponent", {
-              tests: true
-            })
-            .on("done", paths => {
-              expect(paths).toEqual({
-                root: resolveInComponents("TestComponent"),
-                main: resolveInComponents("TestComponent", "TestComponent.js"),
-                tests: resolveInComponents(
-                  "TestComponent",
-                  "__tests__",
-                  "TestComponent.spec.js"
-                )
-              })
-              done()
-            })
-        })
-        it("should create a test file for the component", done => {
-          expect.assertions(1)
-          generator
-            .generate("TestComponent", { tests: true })
-            .on("done", paths => {
-              expect(
-                getDirContents(path.resolve(paths.root, "__tests__"))
-              ).toContain("TestComponent.spec.js")
-              done()
-            })
-        })
-        it("should create a valid test file", done => {
-          expect.assertions(1)
-          generator
-            .generate("TestComponent", { tests: true })
-            .on("done", paths => {
-              const testsFile = fs.readFileSync(path.resolve(paths.tests), {
-                encoding: "utf8"
-              })
-              expect(validateTestsFile(testsFile, "TestComponent")).toBe(true)
-              done()
-            })
-        })
-
-        it("should emit a testsFileWritten event", done => {
-          expect.assertions(1)
-
-          generator
-            .generate("TestComponent", { tests: true })
-            .on("testsFileWritten", path => {
-              expect(path).toEqual(
-                resolveInComponents(
-                  "TestComponent",
-                  "__tests__",
-                  "TestComponent.spec.js"
-                )
-              )
-              done()
-            })
-        })
-      })
-    })
-
-    describe("given that the ES6 Class option is set to true", () => {
+    describe("when the ES6 Class option is set to true", () => {
       it("should create a valid React Component using the ES6 class template inside the default components home dir", done => {
         expect.assertions(1)
         generator
@@ -428,7 +355,7 @@ describe("generate", () => {
       })
     })
 
-    describe("given that the container option is set to true", () => {
+    describe("when the container option is set to true", () => {
       it("should return a path object with the Containers dir as home of component", done => {
         expect.assertions(2)
         generator
@@ -470,7 +397,7 @@ describe("generate", () => {
       })
     })
 
-    describe("given that a component path already exists", () => {
+    describe("when a component path already exists", () => {
       beforeEach(() => {
         mock({
           ...mockedFileSystem,
@@ -662,7 +589,7 @@ describe("generate", () => {
           done()
         })
     })
-    it("should be able manage components with no nested paths", done => {
+    it("should be able to create components that use the components Home dir as the component root dir", done => {
       expect.assertions(1)
       generator.generate("TestComponent").on("done", paths => {
         expect(paths).toHaveProperty(
@@ -673,7 +600,7 @@ describe("generate", () => {
       })
     })
 
-    it("should be able manage components with no nested paths and needless file extension", done => {
+    it("should be able to handle components with no nested paths and needless file extension", done => {
       expect.assertions(1)
       generator.generate("TestComponent.jsx").on("done", paths => {
         expect(paths).toHaveProperty(
@@ -726,11 +653,11 @@ describe("generate", () => {
       containersDir = path.resolve(process.cwd(), "containers")
     })
 
-    const rcg = judex()
+    const generator = judex()
 
     it("should create one directory inside the default components home directory", done => {
       expect.assertions(1)
-      rcg.generate("TestComponent").on("done", componentPaths => {
+      generator.generate("TestComponent").on("done", componentPaths => {
         expect(resolveInComponents("TestComponent")).toEqual(
           componentPaths.root
         )
@@ -738,10 +665,10 @@ describe("generate", () => {
       })
     })
 
-    describe("given the container option is set to true", () => {
+    describe("when the container option is set to true", () => {
       it("should create one directory inside the default containers home directory", done => {
         expect.assertions(1)
-        rcg
+        generator
           .generate("TestComponent", {
             container: true
           })
@@ -755,35 +682,91 @@ describe("generate", () => {
     })
   })
 
-  xdescribe(
-    "given a global configuration with custom paths for templates",
-    () => {
-      const config = {
-        paths: {
-          // templates: "./client/app/templates/",
-          templates: path.resolve(process.cwd(), "app", "templates")
+  describe("given a config with the tests-file plugin and a custom test extension set", () => {
+    beforeEach(() => {
+      srcDir = path.resolve(process.cwd(), "src")
+      // Components Home
+      componentsDir = path.resolve(srcDir, "components")
+      // Containers Home
+      containersDir = path.resolve(srcDir, "containers")
+    })
+
+    const config = {
+      paths: {
+        components: "./src/components",
+        containers: "./src/containers"
+      },
+      extensions: {
+        js: {
+          tests: "spec.js"
         }
-      }
-
-      const rcg = judex(config)
-
-      it("should generate a valid React component using the custom template provided in config", done => {
-        expect.assertions(2)
-        rcg.generate("TestComponent").on("done", paths => {
-          const testComponent = fs.readFileSync(path.resolve(paths.main), {
-            encoding: "utf8"
-          })
-          expect(
-            validateStatelessFunctionalComponent(testComponent, "TestComponent")
-          ).toBe(true)
-          expect(validateJSXIdentifier(testComponent, "CustomComponent")).toBe(
-            true
-          )
-          done()
-        })
-      })
+      },
+      plugins: ["tests-file"]
     }
-  )
+
+    const generator = judex(config)
+    describe("when the test option is set to true", () => {
+      it("should return a path object with root, tests and main properties", done => {
+        expect.assertions(1)
+        generator
+          .generate("TestComponent", {
+            tests: true
+          })
+          .on("done", paths => {
+            expect(paths).toEqual({
+              root: resolveInComponents("TestComponent"),
+              main: resolveInComponents("TestComponent", "TestComponent.js"),
+              tests: resolveInComponents(
+                "TestComponent",
+                "__tests__",
+                "TestComponent.spec.js"
+              )
+            })
+            done()
+          })
+      })
+      it("should create a test file for the component", done => {
+        expect.assertions(1)
+        generator
+          .generate("TestComponent", { tests: true })
+          .on("done", paths => {
+            expect(
+              getDirContents(path.resolve(paths.root, "__tests__"))
+            ).toContain("TestComponent.spec.js")
+            done()
+          })
+      })
+      it("should create a valid test file for the component", done => {
+        expect.assertions(1)
+        generator
+          .generate("TestComponent", { tests: true })
+          .on("done", paths => {
+            const testsFile = fs.readFileSync(path.resolve(paths.tests), {
+              encoding: "utf8"
+            })
+            expect(validateTestsFile(testsFile, "TestComponent")).toBe(true)
+            done()
+          })
+      })
+
+      it("should emit a testsFileWritten event", done => {
+        expect.assertions(1)
+
+        generator
+          .generate("TestComponent", { tests: true })
+          .on("testsFileWritten", path => {
+            expect(path).toEqual(
+              resolveInComponents(
+                "TestComponent",
+                "__tests__",
+                "TestComponent.spec.js"
+              )
+            )
+            done()
+          })
+      })
+    })
+  })
 
   describe("given an invalid argument type for the componentName and options arguments", () => {
     const generator = judex()
@@ -823,7 +806,36 @@ describe("generate", () => {
     })
   })
 
-  // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("generate") block,
+  xdescribe(
+    "given a global configuration with custom paths for templates",
+    () => {
+      const config = {
+        paths: {
+          templates: path.resolve(process.cwd(), "app", "templates")
+        }
+      }
+
+      const rcg = judex(config)
+
+      it("should generate a valid React component using the custom template provided in config", done => {
+        expect.assertions(2)
+        rcg.generate("TestComponent").on("done", paths => {
+          const testComponent = fs.readFileSync(path.resolve(paths.main), {
+            encoding: "utf8"
+          })
+          expect(
+            validateStatelessFunctionalComponent(testComponent, "TestComponent")
+          ).toBe(true)
+          expect(validateJSXIdentifier(testComponent, "CustomComponent")).toBe(
+            true
+          )
+          done()
+        })
+      })
+    }
+  )
+
+  // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("judex-component-generator") block,
   // otherwise the rest of the test suites won't work!
   afterEach(() => {
     mock.restore()

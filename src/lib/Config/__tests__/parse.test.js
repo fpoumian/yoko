@@ -81,7 +81,7 @@ describe("given that the user provided a custom absolute components path", () =>
 })
 
 describe("given that the user provided a custom containers path", () => {
-  it("should be able to return a configuration object includes a custom containers path", () => {
+  it("should be able to return a configuration object that includes a custom containers path", () => {
     const userConfig = {
       paths: {
         containers: "../src/containers"
@@ -95,7 +95,7 @@ describe("given that the user provided a custom containers path", () => {
   })
 })
 
-describe("given that the user provided a custom JS extensions", () => {
+describe("given that the user provided a custom JS extension", () => {
   it("should be able to return a configuration object includes a custom JS main extension", () => {
     const userConfig = {
       extensions: {
