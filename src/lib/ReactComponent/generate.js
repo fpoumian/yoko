@@ -7,6 +7,7 @@ import makeWriteComponentFiles from "./write"
 import { reduceComponentPaths } from "./utils"
 import type { ReactComponent } from "./types"
 import type { writeFile } from "../ComponentFile/types"
+import type {IFileSystem} from "../FileSystem/interfaces";
 
 function removeComponentRootDir(
   component: ReactComponent
@@ -26,8 +27,8 @@ function createComponentRootDir(
   })
 }
 
-export default (writeFile: writeFile) => (component: ReactComponent) => {
-  const writeComponentFiles = makeWriteComponentFiles(writeFile)
+export default (fs: IFileSystem) => (component: ReactComponent) => {
+  const writeComponentFiles = makeWriteComponentFiles(fs)
   return removeComponentRootDir(component)
     .then(createComponentRootDir)
     .then(writeComponentFiles)

@@ -7,8 +7,11 @@
 import path from "path"
 import EventEmitter from "events"
 import { isPlainObject } from "lodash"
+import fs from "fs-extra"
 
 import makeCreateReactComponent from "./lib/ReactComponent/factory"
+import makeWriteComponentFiles from "./lib/ComponentFile/write"
+
 import type {
   ReactComponentProps,
   ReactComponentOptions,
@@ -139,7 +142,9 @@ export default function init(customConfig: Object = {}): IPublic {
 
     const componentEmitter: EventEmitter = component.getEmitter()
 
-    const generateReactComponent = makeGenerateReactComponent(writeFile)
+    const generateReactComponent = makeGenerateReactComponent(fs)
+
+    // const writeComponentFiles = makeWriteComponentFiles()
 
     // Event handlers
     componentEmitter.once("start", () => {
