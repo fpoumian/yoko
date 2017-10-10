@@ -39,7 +39,7 @@ describe("load", () => {
       expect(indexFile.path).toEqual(path.resolve(__dirname))
     })
   })
-  describe("given that one plugin is not found", () => {
+  xdescribe("given that one plugin is not found", () => {
     beforeEach(() => {
       loader = {
         resolve: jest
@@ -54,13 +54,13 @@ describe("load", () => {
       resolvePlugins = makeResolvePlugins(loader, emitter)
     })
 
-    it("should return an array that excludes not found plugins", () => {
+    xit("should return an array that excludes not found plugins", () => {
       const names = ["main-file", "index-file"]
       const plugins = resolvePlugins(names)
       expect(plugins).toHaveLength(1)
     })
 
-    it("should call the emitter.emit method with an error argument", () => {
+    xit("should call the emitter.emit method with an error argument", () => {
       const names = ["main-file", "index-file"]
       resolvePlugins(names)
       expect(emitter.emit).toHaveBeenCalledWith(

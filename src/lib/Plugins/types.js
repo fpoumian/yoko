@@ -15,11 +15,13 @@ export type LoadedPlugin = {
   name: string
 }
 
-export type Object = {
-  path: string,
-  fileProps: FileProps,
-  name: string
-}
+export type ResolvePluginsFn = (
+  pluginsNames: Array<string>
+) => Array<ResolvedPlugin>
+
+export type LoadPluginsFn = (
+  plugins: Array<ResolvedPlugin>
+) => Array<LoadedPlugin>
 
 export type Loader = {
   require: (path: string) => Object

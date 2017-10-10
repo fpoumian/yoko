@@ -2,10 +2,13 @@
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-import EventEmitter from "events"
-import type { Loader, LoadedPlugin, ResolvedPlugin } from "./types"
+import type { LoadedPlugin, ResolvedPlugin } from "./types"
 
-export default (loader: Loader, emitter: EventEmitter) =>
+interface ILoader {
+  require(string): any
+}
+
+export default (loader: ILoader) =>
   function loadPlugins(plugins: Array<ResolvedPlugin>): Array<LoadedPlugin> {
     return plugins.reduce(
       (loadedPluginsAcc: Array<LoadedPlugin>, plugin: ResolvedPlugin) => {
@@ -14,10 +17,8 @@ export default (loader: Loader, emitter: EventEmitter) =>
           temp.init = loader.require(plugin.path)
           return [...loadedPluginsAcc, temp]
         } catch (e) {
-          emitter.emit("error", `Cannot load plugin ${plugin.name}.`)
+          throw e
         }
-
-        return loadedPluginsAcc
       },
       []
     )

@@ -1,12 +1,11 @@
 // @flow
 
-import EventEmitter from "events"
-import type { LoadedPlugin, Object } from "./types"
+import type { LoadedPlugin } from "./types"
 import type { ReactComponentProps } from "../ReactComponent/types"
 import type { Config } from "../Config/types"
 import validateFilePlugin from "./validation"
 
-export default (emitter: EventEmitter) =>
+export default () =>
   function initPlugins(
     plugins: Array<LoadedPlugin>,
     props: ReactComponentProps,
@@ -25,12 +24,10 @@ export default (emitter: EventEmitter) =>
             }
           ]
         } catch (e) {
-          emitter.emit("error", e)
+          throw e
         }
-        return accInitialized
       },
       []
     )
-    emitter.emit("pluginsInitialized", initialized)
     return initialized
   }
