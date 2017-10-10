@@ -6,5 +6,7 @@ export interface IFileSystem {
     string,
     string | Buffer | Uint8Array,
     ?string | Object
-  ): Promise<any>
+  ): Promise<any>,
+  ensureDir(string): Promise<any>,
+  remove(string): Promise<any>
 }

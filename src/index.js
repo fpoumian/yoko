@@ -24,7 +24,6 @@ import makeResolvePlugins from "./lib/Plugins/resolve"
 import makeLoadPlugins from "./lib/Plugins/load"
 import makeInitPlugins from "./lib/Plugins/init"
 import registerPlugins from "./lib/Plugins/register"
-import writeFile from "./lib/ComponentFile/write"
 import parseComponentPath from "./lib/ReactComponent/parsePath"
 import type { ComponentFile } from "./lib/ComponentFile/types"
 import mapPluginsToFiles from "./lib/Plugins/mapToFiles"
@@ -137,28 +136,24 @@ export default function init(customConfig: Object = {}): IPublic {
     )
 
     // Create component
-    const createReactComponent = makeCreateReactComponent(emitter)
+    const createReactComponent = makeCreateReactComponent()
     const component: ReactComponent = createReactComponent(props, files)
 
-    const componentEmitter: EventEmitter = component.getEmitter()
-
-    const generateReactComponent = makeGenerateReactComponent(fs)
-
-    // const writeComponentFiles = makeWriteComponentFiles()
+    const generateReactComponent = makeGenerateReactComponent(fs, emitter)
 
     // Event handlers
-    componentEmitter.once("start", () => {
+    emitter.once("start", () => {
       generateReactComponent(component)
-        .then(paths => component.getEmitter().emit("done", paths))
-        .catch(error => component.getEmitter().emit("error", error))
+        .then(paths => emitter.emit("done", paths))
+        .catch(error => emitter.emit("error", error))
     })
 
     // Start generating on the next tick
     process.nextTick(() => {
-      componentEmitter.emit("start")
+      emitter.emit("start")
     })
 
-    return componentEmitter
+    return emitter
   }
   return {
     generate

@@ -53,8 +53,6 @@ export default (fs: IFileSystem) =>
           const writeFile = makeWriteFile(fs)
           return writeFile(file, renderedTemplate).then(path => {
             const fileRole = file.getRole()
-            component.getEmitter().emit("fileWritten", path)
-            component.getEmitter().emit(`${fileRole}FileWritten`, path)
             return {
               [fileRole]: path
             }

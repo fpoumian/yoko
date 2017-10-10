@@ -1,11 +1,10 @@
 // @flow
-import EventEmitter from "events"
 
 import type { ReactComponent, ReactComponentProps } from "./types"
 import createReadable from "../Readable/factory"
 import type { ComponentFile } from "../ComponentFile/types"
 
-export default (emitter: EventEmitter) =>
+export default () =>
   function createReactComponent(
     props: ReactComponentProps,
     files: Array<ComponentFile>
@@ -28,9 +27,6 @@ export default (emitter: EventEmitter) =>
       }),
       getFiles() {
         return filesMap
-      },
-      getEmitter() {
-        return emitter
       }
     }
 
