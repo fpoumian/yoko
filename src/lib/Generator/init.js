@@ -13,7 +13,7 @@ import type {
   ReactComponent
 } from "../ReactComponent/types"
 import makeGenerateReactComponent from "../ReactComponent/generate"
-import makeInitPlugins from "../Plugins/init"
+import initPlugins from "../Plugins/init"
 import registerPlugins from "../Plugins/register"
 import findUnresolvedPlugins from "../Plugins/findUnresolved"
 import parseComponentPath from "../ReactComponent/parsePath"
@@ -35,7 +35,7 @@ export interface IPublic {
 }
 
 /**
- *  Inject generator dependencies.
+ *  Inject init dependencies.
  *  @param {Object} initEmitter - EventEmitter
  *  @param {Function} resolvePlugins - Function to resolve plugins
  *  @param {Function} loadPlugins - Function to load plugins
@@ -46,18 +46,20 @@ export default (
   resolvePlugins: ResolvePluginsFn,
   loadPlugins: LoadPluginsFn
 ) =>
+  /**
+   *  Init generator.
+   *  @param {Object} config - Global Configuration
+   *  @return {PublicAPI}
+   */
   function init(config: Object): IPublic {
-    // Register plugins
     const registeredPlugins = registerPlugins({ ...config })
     initEmitter.emit("pluginsRegistered", registeredPlugins)
 
-    // Resolve plugins
     const resolvedPlugins: Array<ResolvedPlugin> = resolvePlugins(
       registeredPlugins
     )
     initEmitter.emit("pluginsResolved", resolvedPlugins)
 
-    // Find unresolved plugins
     findUnresolvedPlugins(
       resolvedPlugins,
       registeredPlugins
@@ -68,7 +70,6 @@ export default (
       )
     })
 
-    // Load plugins
     const plugins: Array<LoadedPlugin> = loadPlugins(resolvedPlugins)
     initEmitter.emit("pluginsLoaded", plugins)
 
@@ -81,7 +82,6 @@ export default (
       componentPath: string,
       options: ReactComponentOptions = {}
     ): EventEmitter {
-      // Error handling
       if (typeof componentPath !== "string") {
         throw new TypeError(
           `You must provide a String type for the componentName argument. ${componentPath
@@ -132,7 +132,6 @@ export default (
       })
 
       // Initialize plugins
-      const initPlugins = makeInitPlugins()
       const initializedPlugins = initPlugins(
         plugins,
         { ...props },

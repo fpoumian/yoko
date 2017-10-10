@@ -24,7 +24,15 @@ initEmitter.on("error", error => {
   console.error(error)
 })
 
-export function addEventListener(eventName: string, listener: any => any): any {
+/**
+ *  Add Event Listeners.
+ *  @param {string} [eventName] - The name of the event.
+ *  @param {Function} [listener] - The listener function.
+ */
+export function addEventListener(
+  eventName: string,
+  listener: any => any
+): void {
   initEmitter.addListener(eventName, listener)
 }
 
@@ -39,7 +47,6 @@ export interface IPublic {
 /**
  *  Initialize Generator.
  *  @param {Object} [customConfig] - Global configuration object.
- *  @return {PublicAPI}
  */
 export default function(customConfig: Object = {}): IPublic {
   let config: Config

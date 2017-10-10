@@ -1,16 +1,14 @@
 import path from "path"
 
-import makeInitPlugins from "../init"
+import initPlugins from "../init"
 
 describe("initializePlugins", () => {
   let emitter
-  let initPlugins
 
   beforeEach(() => {
     emitter = {
       emit: jest.fn()
     }
-    initPlugins = makeInitPlugins()
   })
 
   describe("given a set of correct plugins", () => {
