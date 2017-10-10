@@ -35,8 +35,10 @@ export interface IPublic {
 }
 
 /**
- *  Initialize Generator.
- *  @param {Object} [customConfig] - Global configuration object.
+ *  Inject generator dependencies.
+ *  @param {Object} initEmitter - EventEmitter
+ *  @param {Function} resolvePlugins - Function to resolve plugins
+ *  @param {Function} loadPlugins - Function to load plugins
  *  @return {PublicAPI}
  */
 export default (
