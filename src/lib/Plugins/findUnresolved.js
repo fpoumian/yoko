@@ -7,9 +7,7 @@ export default function findUnresolvedPlugins(
   resolvedPlugins: Array<ResolvedPlugin>,
   pluginsNames: Array<string>
 ) {
-  return pluginsNames.filter(pluginName => {
-    return !find(resolvedPlugins, plugin => {
-      return plugin.name === pluginName
-    })
-  })
+  return pluginsNames.filter(
+    pluginName => !find(resolvedPlugins, plugin => plugin.name === pluginName)
+  )
 }

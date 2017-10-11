@@ -2,7 +2,6 @@
 
 import type { ComponentFile } from "../ComponentFile/types"
 import createComponentFile from "../ComponentFile/factory"
-import type { Object } from "./types"
 import type { Config } from "../Config/types"
 
 export default function mapPluginsToComponentFiles(

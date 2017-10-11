@@ -1,5 +1,4 @@
 // @flow
-import EventEmitter from "events"
 
 import type { ComponentFile } from "../ComponentFile/types"
 
