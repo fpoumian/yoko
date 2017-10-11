@@ -15,7 +15,7 @@ import type { Config } from "./lib/Config/types"
 import makeResolvePlugins from "./lib/Plugins/resolve"
 import makeLoadPlugins from "./lib/Plugins/load"
 
-// Setup event emitter
+// Setup event emitters
 const initEmitter = new EventEmitter()
 
 initEmitter.on("error", error => {
@@ -40,18 +40,18 @@ export function addEventListener(
 }
 
 /**
- * @typedef {Object} PublicAPI
- * @property {Function} generate Generates a new React component.
+ * @typedef {Object} IGenerator
+ * @property {Function} generate - Generates a new React component.
  */
-export interface IPublic {
-  generate(name: string, options: ReactComponentOptions): EventEmitter
+export interface IGenerator {
+  generate(name: string, options: ReactComponentOptions): Object
 }
 
 /**
  *  Initialize Generator.
  *  @param {Object} [customConfig] - Global configuration object.
  */
-export default function(customConfig: Object = {}): IPublic {
+export default function(customConfig: Object = {}): IGenerator {
   let config: Config
 
   try {
