@@ -5,6 +5,8 @@
  */
 
 import EventEmitter from "events"
+import fs from "fs-extra"
+
 import makeInitGenerator from "./lib/Generator/init"
 import parseConfig from "./lib/Config/parse"
 import type { ReactComponentOptions } from "./lib/ReactComponent/types"
@@ -65,5 +67,5 @@ export default function(customConfig: Object = {}): IPublic {
     resolvePlugins,
     loadPlugins
   )
-  return initGenerator(config)
+  return initGenerator(config)(fs)
 }

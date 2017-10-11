@@ -23,7 +23,7 @@ export default function initPlugins(
           }
         ]
       } catch (e) {
-        throw e
+        return accInitialized
       }
     },
     []

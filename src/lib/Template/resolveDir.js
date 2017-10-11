@@ -8,15 +8,18 @@ import type { Config } from "../Config/types"
 export default (resolverFn: string => boolean) =>
   function resolveTemplateDir(
     templateName: string,
-    defaultDir: string,
+    defaultDirPath: string,
     config: Config
   ): string {
-    if (!has(config, "paths.templates")) return defaultDir
+    // If global config object does NOT have a templates path
+    // specified then return the default directory path for
+    // that template.
+    if (!has(config, "paths.templates")) return defaultDirPath
 
-    const customTemplatesDir = config.paths.templates
+    const customTemplatesDirPath = config.paths.templates
 
     const fileExists = resolverFn(
-      path.resolve(customTemplatesDir, templateName)
+      path.resolve(customTemplatesDirPath, templateName)
     )
-    return fileExists ? customTemplatesDir : defaultDir
+    return fileExists ? customTemplatesDirPath : defaultDirPath
   }
