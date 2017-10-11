@@ -1,6 +1,6 @@
 import path from "path"
 import makeInitGenerator from "../init"
-import constants from "../../Plugins/constants"
+import constants from "../../Plugin/constants"
 
 describe("init", () => {
   let config
@@ -56,19 +56,7 @@ describe("init", () => {
       ])
     })
 
-    xit("should emit pluginsResolved event with an array of resolve plugins objects", () => {
-      initGenerator(config)
-      expect(emitter.emit).toHaveBeenCalledWith("pluginsResolved", [
-        ...resolvedPlugins
-      ])
-    })
 
-    xit("should emit error event with missing plugin as an argument", () => {
-      initGenerator(config)
-      expect(emitter.emit).toHaveBeenCalledWith(
-        "error",
-        `Unable to find plugin tests-file. Are you sure it's installed?`
-      )
-    })
+
   })
 })

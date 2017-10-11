@@ -5,7 +5,7 @@ import fs from "fs"
 import path from "path"
 
 import * as constants from "../../src/lib/Template/constants"
-import pluginConstants from "../../src/lib/Plugins/constants"
+import pluginConstants from "../../src/lib/Plugin/constants"
 
 const mainPluginName = `${pluginConstants.PLUGIN_PREFIX}-main-file`
 const indexPluginName = `${pluginConstants.PLUGIN_PREFIX}-index-file`

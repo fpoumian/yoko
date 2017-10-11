@@ -6,13 +6,13 @@ import isPlainObject from "lodash/isPlainObject"
 
 import makeCreateReactComponent from "../ReactComponent/factory"
 import makeGenerateReactComponent from "../ReactComponent/generate"
-import initPlugins from "../Plugins/init"
-import registerPlugins from "../Plugins/register"
+import initPlugins from "../Plugin/init"
+import registerPlugins from "../Plugin/register"
 import parseComponentPath from "../ReactComponent/parsePath"
-import mapPluginsToFiles from "../Plugins/mapToFiles"
+import mapPluginsToFiles from "../Plugin/mapToFiles"
 
 import type { ComponentFile } from "../ComponentFile/types"
-import type { LoadedPlugin, LoadPluginsFn } from "../Plugins/types"
+import type { LoadedPlugin, LoadPluginsFn } from "../Plugin/types"
 import type {
   ReactComponentProps,
   ReactComponentOptions,

@@ -12,7 +12,7 @@ import makeInitGenerator from "./lib/Generator/init"
 import parseConfig from "./lib/Config/parse"
 import type { ReactComponentOptions } from "./lib/ReactComponent/types"
 import type { Config } from "./lib/Config/types"
-import makeLoadPlugins from "./lib/Plugins/load"
+import makeLoadPlugins from "./lib/Plugin/load"
 
 // Setup event emitters
 const initEmitter = new EventEmitter()
