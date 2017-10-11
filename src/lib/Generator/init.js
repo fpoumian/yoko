@@ -25,6 +25,7 @@ import type {
   ResolvePluginsFn
 } from "../Plugins/types"
 import type { IFileSystem } from "../FileSystem/interfaces"
+import type { ITemplateCompiler } from "../Template/interfaces"
 
 /**
  * @typedef {Object} PublicAPI
@@ -51,7 +52,9 @@ export default (
    *  @param {Object} config - Global Configuration
    *  @return {PublicAPI}
    */
-  function init(config: Object): (fs: IFileSystem) => IPublic {
+  function init(
+    config: Object
+  ): (fs: IFileSystem, templateCompiler: ITemplateCompiler) => IPublic {
     const registeredPlugins = registerPlugins({ ...config })
     initEmitter.emit("pluginsRegistered", registeredPlugins)
 
@@ -74,7 +77,7 @@ export default (
     initEmitter.emit("pluginsLoaded", plugins)
 
     // Inject fs dependency
-    return (fs: IFileSystem) => {
+    return (fs: IFileSystem, templateCompiler: ITemplateCompiler) => {
       /**
        * Generate a React component
        * @param {string} componentPath - The path of the component you wish to generate.
@@ -154,7 +157,8 @@ export default (
 
         const generateReactComponent = makeGenerateReactComponent(
           fs,
-          componentEmitter
+          componentEmitter,
+          templateCompiler
         )
 
         // Event handlers

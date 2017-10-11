@@ -1,3 +1,4 @@
+import nunjucks from "nunjucks"
 import path from "path"
 import { find } from "lodash"
 
@@ -63,7 +64,7 @@ describe("write", () => {
         .mockReturnValue(
           Promise.resolve(path.resolve(process.cwd(), "index.js"))
         )
-      writeComponentFiles = write(fs)
+      writeComponentFiles = write(fs, nunjucks)
     })
 
     it("should call the writeFile method as many times as there are files to write", () =>

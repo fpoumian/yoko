@@ -2,14 +2,13 @@
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-import nunjucks from "nunjucks"
-
 import type { IRenderable } from "./interfaces"
 import type { ReactComponent } from "./types"
 import type { ComponentFile } from "../ComponentFile/types"
 import type { Template } from "../Template/types"
 import type { IFileSystem } from "../FileSystem/interfaces"
 import makeWriteFile from "../ComponentFile/write"
+import type { ITemplateCompiler } from "../Template/interfaces"
 
 function getTemplateString(template: Template | null): Promise<string> {
   if (!template) {
@@ -19,8 +18,11 @@ function getTemplateString(template: Template | null): Promise<string> {
   return Promise.resolve(templateString)
 }
 
-function compileTemplateString(templateString: string): IRenderable {
-  return nunjucks.compile(templateString)
+function compileTemplateString(
+  templateCompiler: ITemplateCompiler,
+  templateString: string
+): IRenderable {
+  return templateCompiler.compile(templateString)
 }
 
 function renderCompiledTemplate(
@@ -30,7 +32,7 @@ function renderCompiledTemplate(
   return compiledTemplate.render(context)
 }
 
-export default (fs: IFileSystem) =>
+export default (fs: IFileSystem, templateCompiler: ITemplateCompiler) =>
   function writeComponentFiles(component: ReactComponent): Promise<any> {
     const componentFiles: Map<string, ComponentFile> = component.getFiles()
     const roles: Array<string> = Array.from(componentFiles.keys())
@@ -43,7 +45,9 @@ export default (fs: IFileSystem) =>
       }
 
       return getTemplateString(file.getTemplate())
-        .then(compileTemplateString)
+        .then(templateString =>
+          compileTemplateString(templateCompiler, templateString)
+        )
         .then(compiledTemplate =>
           renderCompiledTemplate(compiledTemplate, {
             componentName: component.getName()
