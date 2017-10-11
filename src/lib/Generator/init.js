@@ -49,7 +49,7 @@ export default (
   /**
    *  Init generator.
    *  @param {Object} config - Global Configuration
-   *  @return {IGenerato}
+   *  @return {IGenerator}
    */
   function init(
     config: Object
