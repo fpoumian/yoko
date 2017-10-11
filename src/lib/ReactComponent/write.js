@@ -10,12 +10,11 @@ import type { IFileSystem } from "../FileSystem/interfaces"
 import makeWriteFile from "../ComponentFile/write"
 import type { ITemplateCompiler } from "../Template/interfaces"
 
-function getTemplateString(template: Template | null): Promise<string> {
+function getTemplateString(template: Template | null): string {
   if (!template) {
-    return Promise.resolve("")
+    return ""
   }
-  const templateString = require(template.getPath())
-  return Promise.resolve(templateString)
+  return require(template.getPath())
 }
 
 function compileTemplateString(
@@ -44,23 +43,23 @@ export default (fs: IFileSystem, templateCompiler: ITemplateCompiler) =>
         throw new Error()
       }
 
-      return getTemplateString(file.getTemplate())
-        .then(templateString =>
-          compileTemplateString(templateCompiler, templateString)
-        )
-        .then(compiledTemplate =>
-          renderCompiledTemplate(compiledTemplate, {
-            componentName: component.getName()
-          })
-        )
-        .then(renderedTemplate => {
-          const writeFile = makeWriteFile(fs)
-          return writeFile(file, renderedTemplate).then(path => {
-            const fileRole = file.getRole()
-            return {
-              [fileRole]: path
-            }
-          })
+      const compiledTemplate = compileTemplateString(
+        templateCompiler,
+        getTemplateString(file.getTemplate())
+      )
+
+      const renderedTemplate = renderCompiledTemplate(compiledTemplate, {
+        componentName: component.getName()
+      })
+
+      const writeFile = makeWriteFile(fs)
+
+      return writeFile(file, renderedTemplate)
+        .then(path => {
+          const fileRole = file.getRole()
+          return {
+            [fileRole]: path
+          }
         })
         .catch(e => {
           const err: Error = new Error()
