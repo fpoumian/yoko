@@ -51,7 +51,7 @@ export default (
    *  @param {Object} config - Global Configuration
    *  @return {PublicAPI}
    */
-  function init(config: Object): Function {
+  function init(config: Object): (fs: IFileSystem) => IPublic {
     const registeredPlugins = registerPlugins({ ...config })
     initEmitter.emit("pluginsRegistered", registeredPlugins)
 
