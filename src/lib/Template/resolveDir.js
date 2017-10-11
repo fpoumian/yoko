@@ -1,7 +1,7 @@
 // @flow
 
 import path from "path"
-import { has } from "lodash"
+import has from "lodash/has"
 
 import type { Config } from "../Config/types"
 

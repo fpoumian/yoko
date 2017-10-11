@@ -2,23 +2,17 @@
 
 import path from "path"
 import EventEmitter from "events"
-import { isPlainObject } from "lodash"
+import isPlainObject from "lodash/isPlainObject"
 
 import makeCreateReactComponent from "../ReactComponent/factory"
 import makeGenerateReactComponent from "../ReactComponent/generate"
 import initPlugins from "../Plugins/init"
 import registerPlugins from "../Plugins/register"
-import findUnresolvedPlugins from "../Plugins/findUnresolved"
 import parseComponentPath from "../ReactComponent/parsePath"
 import mapPluginsToFiles from "../Plugins/mapToFiles"
 
 import type { ComponentFile } from "../ComponentFile/types"
-import type {
-  LoadedPlugin,
-  LoadPluginsFn,
-  ResolvedPlugin,
-  ResolvePluginsFn
-} from "../Plugins/types"
+import type { LoadedPlugin, LoadPluginsFn } from "../Plugins/types"
 import type {
   ReactComponentProps,
   ReactComponentOptions,
@@ -37,15 +31,10 @@ import type { IEventListener } from "../EventEmitter/interfaces"
 /**
  *  Inject init dependencies.
  *  @param {Object} initEmitter - EventEmitter
- *  @param {Function} resolvePlugins - Function to resolve plugins
  *  @param {Function} loadPlugins - Function to load plugins
  *  @return {IGenerator}
  */
-export default (
-  initEmitter: EventEmitter,
-  resolvePlugins: ResolvePluginsFn,
-  loadPlugins: LoadPluginsFn
-) =>
+export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
   /**
    *  Init generator.
    *  @param {Object} config - Global Configuration
@@ -57,22 +46,7 @@ export default (
     const registeredPlugins = registerPlugins({ ...config })
     initEmitter.emit("pluginsRegistered", registeredPlugins)
 
-    const resolvedPlugins: Array<ResolvedPlugin> = resolvePlugins(
-      registeredPlugins
-    )
-    initEmitter.emit("pluginsResolved", resolvedPlugins)
-
-    findUnresolvedPlugins(
-      resolvedPlugins,
-      registeredPlugins
-    ).forEach(pluginName => {
-      initEmitter.emit(
-        "error",
-        `Unable to find plugin ${pluginName}. Are you sure it's installed?`
-      )
-    })
-
-    const plugins: Array<LoadedPlugin> = loadPlugins(resolvedPlugins)
+    const plugins: Array<LoadedPlugin> = loadPlugins(registeredPlugins)
     initEmitter.emit("pluginsLoaded", plugins)
 
     // Inject generator dependencies
@@ -163,6 +137,7 @@ export default (
             templateCompiler
           )
 
+          // Kick-off component generation
           generateReactComponent(component)
             .then(paths => emitter.emit("done", paths))
             .catch(error => emitter.emit("error", error))
@@ -170,7 +145,7 @@ export default (
 
         // Start generating on the next tick
         // so that client code can add event listeners
-        // before generate function kicks off
+        // before component generation takes place.
         process.nextTick(() => {
           emitter.emit("start")
         })

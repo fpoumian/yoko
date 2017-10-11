@@ -1,4 +1,4 @@
-import { find } from "lodash"
+import find from "lodash/find"
 import path from "path"
 
 import makeLoadPlugins from "../load"
@@ -6,6 +6,7 @@ import makeLoadPlugins from "../load"
 describe("load", () => {
   let loadPlugins
   let loader
+  let resolver
   let emitter
 
   beforeEach(() => {
@@ -14,23 +15,17 @@ describe("load", () => {
     }
   })
 
-  const plugins = [
-    {
-      name: "main-file",
-      path: path.resolve(__dirname)
-    },
-    {
-      name: "index-file",
-      path: path.resolve(__dirname)
-    }
-  ]
+  const plugins = ["main-file", "index-file"]
 
   describe("given that all the plugins exist", () => {
     beforeEach(() => {
       loader = {
         require: jest.fn().mockReturnValue(() => function() {})
       }
-      loadPlugins = makeLoadPlugins(loader, emitter)
+      resolver = {
+        resolve: jest.fn().mockReturnValue(path.resolve(__dirname))
+      }
+      loadPlugins = makeLoadPlugins(loader, resolver, emitter)
     })
 
     it("should return an array with a length equal to the amount of plugins found", () => {
@@ -62,19 +57,22 @@ describe("load", () => {
             throw new Error("mockImplementationError")
           })
       }
-      loadPlugins = makeLoadPlugins(loader, emitter)
+      resolver = {
+        resolve: jest.fn().mockReturnValue(path.resolve(__dirname))
+      }
+      loadPlugins = makeLoadPlugins(loader, resolver, emitter)
     })
 
-    xit("should return an array that excludes not loaded plugins", () => {
+    it("should return an array that excludes not loaded plugins", () => {
       const loadedPlugins = loadPlugins(plugins)
       expect(loadedPlugins).toHaveLength(1)
     })
 
-    xit("should call the emitter.emit method with an error argument", () => {
+    it("should call the emitter.emit method with an error argument", () => {
       loadPlugins(plugins)
       expect(emitter.emit).toHaveBeenCalledWith(
         "error",
-        "Cannot load plugin index-file."
+        "Cannot load plugin index-file"
       )
     })
   })

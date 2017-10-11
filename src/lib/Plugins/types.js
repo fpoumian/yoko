@@ -19,9 +19,7 @@ export type ResolvePluginsFn = (
   pluginsNames: Array<string>
 ) => Array<ResolvedPlugin>
 
-export type LoadPluginsFn = (
-  plugins: Array<ResolvedPlugin>
-) => Array<LoadedPlugin>
+export type LoadPluginsFn = (plugins: Array<string>) => Array<LoadedPlugin>
 
 export type Loader = {
   require: (path: string) => Object

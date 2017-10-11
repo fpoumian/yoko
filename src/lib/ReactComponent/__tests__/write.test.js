@@ -1,6 +1,6 @@
 import nunjucks from "nunjucks"
 import path from "path"
-import { find } from "lodash"
+import find from "lodash/find"
 
 import write from "../write"
 

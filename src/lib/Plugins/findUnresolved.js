@@ -1,5 +1,5 @@
 // @flow
-import { find } from "lodash"
+import find from "lodash/find"
 
 import type { ResolvedPlugin } from "./types"
 
