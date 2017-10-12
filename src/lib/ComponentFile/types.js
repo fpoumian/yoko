@@ -12,7 +12,3 @@ export type FileProps = {
   template: Object | null,
   role: string
 }
-
-export type createComponentFile = (props: FileProps) => ComponentFile
-
-export type writeFile = (file: IReadable, data: string) => Promise<string>

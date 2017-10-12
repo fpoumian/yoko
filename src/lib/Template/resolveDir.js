@@ -4,8 +4,9 @@ import path from "path"
 import has from "lodash/has"
 
 import type { Config } from "../Config/types"
+import type { IFileSystem } from "../FileSystem/interfaces"
 
-export default (resolverFn: string => boolean) =>
+export default (fs: IFileSystem) =>
   function resolveTemplateDir(
     templateName: string,
     defaultDirPath: string,
@@ -19,8 +20,7 @@ export default (resolverFn: string => boolean) =>
 
     const customTemplatesDirPath = config.paths.templates
 
-    const fileExists = resolverFn(
-      path.resolve(customTemplatesDirPath, templateName)
-    )
-    return fileExists ? customTemplatesDirPath : defaultDirPath
+    return fs.pathExistsSync(path.resolve(customTemplatesDirPath, templateName))
+      ? customTemplatesDirPath
+      : defaultDirPath
   }

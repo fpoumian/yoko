@@ -8,5 +8,6 @@ export interface IFileSystem {
     ?string | Object
   ): Promise<any>,
   ensureDir(string): Promise<any>,
-  remove(string): Promise<any>
+  remove(string): Promise<any>,
+  pathExistsSync(string): boolean
 }

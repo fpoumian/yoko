@@ -3,7 +3,7 @@ import path from "path"
 import makeResolveDir from "../resolveDir"
 import * as constants from "../constants"
 
-describe("resolveDir", () => {
+xdescribe("resolveDir", () => {
   let resolveDir
   let resolverFn
   let defaultDir

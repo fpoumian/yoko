@@ -9,10 +9,10 @@ import makeGenerateReactComponent from "../ReactComponent/generate"
 import makeInitPlugins from "../Plugin/init"
 import registerPlugins from "../Plugin/register"
 import parseComponentPath from "../ReactComponent/parsePath"
-import mapPluginsToFiles from "../Plugin/mapToFiles"
+import makeMapFilePluginsDataToFiles from "../Plugin/mapToFiles"
 
 import type { ComponentFile } from "../ComponentFile/types"
-import type { LoadedPlugin, LoadPluginsFn } from "../Plugin/types"
+import type { LoadPluginsFn, Plugin } from "../Plugin/types"
 import type {
   ReactComponentProps,
   ReactComponentOptions,
@@ -43,10 +43,10 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
   function init(
     config: Object
   ): (fs: IFileSystem, templateCompiler: ITemplateCompiler) => IGenerator {
-    const registeredPlugins = registerPlugins({ ...config })
+    const registeredPlugins = registerPlugins(config)
     initEmitter.emit("pluginsRegistered", registeredPlugins)
 
-    const plugins: Array<LoadedPlugin> = loadPlugins(registeredPlugins)
+    const plugins: Array<Plugin> = loadPlugins(registeredPlugins)
     initEmitter.emit("pluginsLoaded", plugins)
 
     // Inject generator dependencies
@@ -92,8 +92,8 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           console.error(error)
         })
 
+        // Kick-off component generation
         emitter.once("start", () => {
-          // Parse component path and assign to props
           const {
             rootName,
             parentDirs,
@@ -116,16 +116,17 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
 
           // Initialize plugins
           const initPlugins = makeInitPlugins(emitter)
-          const initializedPlugins = initPlugins(
+          const filePluginsData: Array<Object> = initPlugins(
             plugins,
             { ...props },
             { ...config }
           )
 
           // Map plugins to files
-          const files: Array<ComponentFile> = mapPluginsToFiles(
-            initializedPlugins,
-            config
+          const mapFilePluginsDataToFiles = makeMapFilePluginsDataToFiles(fs)
+          const files: ComponentFile[] = mapFilePluginsDataToFiles(
+            filePluginsData,
+            { ...config }
           )
 
           // Create component

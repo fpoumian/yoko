@@ -4,8 +4,9 @@
 
 import EventEmitter from "events"
 
-import type { LoadedPlugin } from "./types"
+import type { Plugin } from "./types"
 import constants from "./constants"
+import createPlugin from "./factory"
 
 interface ILoader {
   require(string): any
@@ -16,17 +17,17 @@ interface IResolver {
 }
 
 export default (loader: ILoader, resolver: IResolver, emitter: EventEmitter) =>
-  function loadPlugins(pluginNames: Array<string>): Array<LoadedPlugin> {
+  function loadPlugins(pluginNames: Array<string>): Array<Plugin> {
     return pluginNames.reduce((acc, pluginName) => {
       const pluginFullName = `${constants.PLUGIN_PREFIX}-${pluginName}`
       try {
         return [
           ...acc,
-          {
-            name: pluginName,
-            path: resolver.resolve(pluginFullName),
-            init: loader.require(pluginFullName)
-          }
+          createPlugin(
+            pluginName,
+            resolver.resolve(pluginFullName),
+            loader.require(pluginFullName)
+          )
         ]
       } catch (e) {
         emitter.emit("error", `Cannot load plugin ${pluginName}`)

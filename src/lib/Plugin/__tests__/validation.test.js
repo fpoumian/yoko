@@ -8,7 +8,7 @@ describe("validateFilePlugin", () => {
     beforeEach(() => {
       // Mock plugin
       plugin = {
-        name: "main-file",
+        getName: () => "main-file",
         init: jest.fn().mockImplementation(() => ({
           name: "index",
           extension: "js",
@@ -33,7 +33,7 @@ describe("validateFilePlugin", () => {
   describe("given a plugin object whose init property is not a function", () => {
     beforeEach(() => {
       plugin = {
-        name: "main-file",
+        getName: () => "main-file",
         init: {}
       }
     })
@@ -47,7 +47,7 @@ describe("validateFilePlugin", () => {
   })
   describe("given a plugin object whose init function returns an object with missing name property", () => {
     const plugin = {
-      name: "main-file",
+      getName: () => "main-file",
       init: jest.fn().mockReturnValue({
         extension: "js",
         dir: "",
@@ -67,7 +67,7 @@ describe("validateFilePlugin", () => {
 
   describe("given a plugin object whose init function returns an object with an empty name property", () => {
     const plugin = {
-      name: "main-file",
+      getName: () => "main-file",
       init: jest.fn().mockReturnValue({
         name: "  ",
         extension: "js",
@@ -88,7 +88,7 @@ describe("validateFilePlugin", () => {
 
   describe("given a plugin object whose init function returns an object with wrong type for name property", () => {
     const plugin = {
-      name: "main-file",
+      getName: () => "main-file",
       init: jest.fn().mockReturnValue({
         name: 2,
         extension: "js",

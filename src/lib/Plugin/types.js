@@ -1,30 +1,8 @@
 // @flow
 
-import type { FileProps } from "../ComponentFile/types"
-import type { ReactComponentProps } from "../ReactComponent/types"
-import type { Config } from "../Config/types"
+import type { IReadable } from "../Readable/interfaces"
+import type { IInitialable } from "./interfaces"
 
-export type ResolvedPlugin = {
-  path: string,
-  name: string
-}
+export type Plugin = IReadable & IInitialable
 
-export type LoadedPlugin = {
-  init: (props?: ReactComponentProps, config?: Config) => FileProps,
-  path: string,
-  name: string
-}
-
-export type ResolvePluginsFn = (
-  pluginsNames: Array<string>
-) => Array<ResolvedPlugin>
-
-export type LoadPluginsFn = (plugins: Array<string>) => Array<LoadedPlugin>
-
-export type Loader = {
-  require: (path: string) => Object
-}
-
-export type Resolver = {
-  resolve: (path: string) => string
-}
+export type LoadPluginsFn = (plugins: Array<string>) => Array<Plugin>

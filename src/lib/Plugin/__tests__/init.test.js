@@ -16,8 +16,8 @@ describe("initializePlugins", () => {
   describe("given a set of correct plugins", () => {
     const plugins = [
       {
-        name: "main-file",
-        path: path.resolve(__dirname),
+        getName: jest.fn().mockReturnValue("main-file"),
+        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: "ComponentName",
           extension: "js",
@@ -27,8 +27,8 @@ describe("initializePlugins", () => {
         }))
       },
       {
-        name: "index-file",
-        path: path.resolve(__dirname),
+        getName: jest.fn().mockReturnValue("index-file"),
+        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: "index",
           extension: "js",
@@ -67,24 +67,13 @@ describe("initializePlugins", () => {
     it("should correctly initialize all plugins by returning array of component file objects", () => {
       expect(initPlugins(plugins)).toEqual(expected)
     })
-    xit(
-      "should call the emitter emit method once with registered plugins as argument",
-      () => {
-        initPlugins(plugins)
-        expect(emitter.emit).toHaveBeenCalledTimes(1)
-        expect(emitter.emit).toHaveBeenLastCalledWith(
-          "pluginsInitialized",
-          expected
-        )
-      }
-    )
   })
 
   describe("given a set of one correct plugin and one invalid plugin (missing name prop)", () => {
     const plugins = [
       {
-        name: "main-file",
-        path: path.resolve(__dirname),
+        getName: jest.fn().mockReturnValue("main-file"),
+        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: "ComponentName",
           extension: "js",
@@ -94,8 +83,8 @@ describe("initializePlugins", () => {
         }))
       },
       {
-        name: "index-file",
-        path: path.resolve(__dirname),
+        getName: jest.fn().mockReturnValue("index-file"),
+        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           extension: "js",
           dir: path.resolve(__dirname),
@@ -121,10 +110,6 @@ describe("initializePlugins", () => {
           }
         }
       ])
-    })
-    xit("should call the emitter emit method once", () => {
-      initPlugins(plugins)
-      expect(emitter.emit).toHaveBeenCalledTimes(1)
     })
     it("should call the emitter emit method with an error argument", () => {
       initPlugins(plugins)

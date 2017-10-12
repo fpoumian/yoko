@@ -2,7 +2,7 @@
 
 import EventEmitter from "events"
 
-import type { LoadedPlugin } from "./types"
+import type { Plugin } from "./types"
 import type { ReactComponentProps } from "../ReactComponent/types"
 import type { Config } from "../Config/types"
 import validateFilePlugin from "./validation"
@@ -10,7 +10,7 @@ import constants from "./constants"
 
 export default (emitter: EventEmitter) =>
   function initPlugins(
-    plugins: Array<LoadedPlugin>,
+    plugins: Array<Plugin>,
     props: ReactComponentProps,
     config: Config
   ): Array<Object> {
@@ -21,16 +21,16 @@ export default (emitter: EventEmitter) =>
           ...acc,
           {
             fileProps,
-            name: plugin.name,
-            path: plugin.path
+            name: plugin.getName(),
+            path: plugin.getPath()
           }
         ]
       } catch (e) {
         emitter.emit(
           "error",
-          `Cannot initialize plugin ${constants.PLUGIN_PREFIX}-${plugin.name}.
-        Problem: ${e}
-        `
+          `Cannot initialize plugin ${constants.PLUGIN_PREFIX}-${plugin.getName()}.
+           Problem: ${e}
+           `
         )
         return acc
       }
