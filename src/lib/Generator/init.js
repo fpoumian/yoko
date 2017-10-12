@@ -4,9 +4,9 @@ import path from "path"
 import EventEmitter from "events"
 import isPlainObject from "lodash/isPlainObject"
 
-import makeCreateReactComponent from "../ReactComponent/factory"
+import createReactComponent from "../ReactComponent/factory"
 import makeGenerateReactComponent from "../ReactComponent/generate"
-import initPlugins from "../Plugin/init"
+import makeInitPlugins from "../Plugin/init"
 import registerPlugins from "../Plugin/register"
 import parseComponentPath from "../ReactComponent/parsePath"
 import mapPluginsToFiles from "../Plugin/mapToFiles"
@@ -115,6 +115,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           }
 
           // Initialize plugins
+          const initPlugins = makeInitPlugins(emitter)
           const initializedPlugins = initPlugins(
             plugins,
             { ...props },
@@ -128,7 +129,6 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           )
 
           // Create component
-          const createReactComponent = makeCreateReactComponent()
           const component: ReactComponent = createReactComponent(props, files)
 
           const generateReactComponent = makeGenerateReactComponent(

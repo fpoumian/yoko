@@ -1,14 +1,16 @@
 import path from "path"
 
-import initPlugins from "../init"
+import makeInitPlugins from "../init"
 
 describe("initializePlugins", () => {
   let emitter
+  let initPlugins
 
   beforeEach(() => {
     emitter = {
       emit: jest.fn()
     }
+    initPlugins = makeInitPlugins(emitter)
   })
 
   describe("given a set of correct plugins", () => {
@@ -103,7 +105,7 @@ describe("initializePlugins", () => {
       }
     ]
 
-    xit("should register the correct plugin", () => {
+    it("should register the correct plugin", () => {
       const registered = initPlugins(plugins)
       expect(registered).toHaveLength(1)
       expect(registered).toEqual([
@@ -120,13 +122,17 @@ describe("initializePlugins", () => {
         }
       ])
     })
-    xit("should call the emitter emit method twice", () => {
+    xit("should call the emitter emit method once", () => {
       initPlugins(plugins)
-      expect(emitter.emit).toHaveBeenCalledTimes(2)
+      expect(emitter.emit).toHaveBeenCalledTimes(1)
     })
-    xit("should call the emitter emit method with an error argument", () => {
+    it("should call the emitter emit method with an error argument", () => {
       initPlugins(plugins)
-      expect(emitter.emit.mock.calls[0][[1]]).toBeInstanceOf(Error)
+      expect(emitter.emit.mock.calls[0][0]).toBe("error")
+      expect(emitter.emit.mock.calls[0][1]).toContain(
+        "Cannot initialize plugin"
+      )
+      expect(emitter.emit.mock.calls[0][1]).toContain("index-file")
     })
   })
 })
