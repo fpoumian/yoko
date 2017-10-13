@@ -19,6 +19,12 @@ const testsFilePluginPath = require.resolve(testsPluginName)
 export default function mockFileSystem() {
   return {
     node_modules: {
+      // NOTE: tests will fail if this prettier file is not directly copied
+      prettier: {
+        "parser-babylon.js": fs.readFileSync(
+          path.resolve("./node_modules/prettier/parser-babylon.js")
+        )
+      },
       [mainPluginName]: {
         "index.js": fs.readFileSync(mainFilePluginPath, "utf8"),
         templates: {
@@ -71,8 +77,8 @@ export default function mockFileSystem() {
     },
     app: {
       templates: {
-        [constants.SFC_TEMPLATE_FILE_NAME]: fs.readFileSync(
-          path.resolve(__dirname, "..", "templates", "mainFileCustomJSX.js"),
+        "stateless-functional-component.js": fs.readFileSync(
+          path.resolve("./__tests__/templates/mainFileCustomJSX.js"),
           "utf8"
         )
       }

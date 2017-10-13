@@ -1,6 +1,6 @@
 /* eslint-disable*/
-
-import React from "react"
+// prettier-ignore
+import React from "react";
 
 function TestComponent() {
   return (
@@ -10,4 +10,5 @@ function TestComponent() {
   )
 }
 
-export default TestComponent
+// prettier-ignore
+export default TestComponent;

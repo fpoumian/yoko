@@ -7,6 +7,7 @@
 import EventEmitter from "events"
 import fs from "fs-extra"
 import nunjucks from "nunjucks"
+import prettier from "prettier"
 
 import makeInitGenerator from "./lib/Generator/init"
 import parseConfig from "./lib/Config/parse"
@@ -66,5 +67,5 @@ export default function(customConfig: Object = {}): IGenerator {
   )
 
   const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
-  return initGenerator(config)(fs, nunjucks)
+  return initGenerator(config)(fs, nunjucks, prettier)
 }

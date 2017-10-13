@@ -22,6 +22,7 @@ import type { IFileSystem } from "../FileSystem/interfaces"
 import type { ITemplateCompiler } from "../Template/interfaces"
 import type { IGenerator } from "./interfaces"
 import type { IEventListener } from "../EventEmitter/interfaces"
+import type { IFileFormatter } from "../ComponentFile/interfaces"
 
 /**
  * @typedef {Object} IGenerator
@@ -42,7 +43,11 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
    */
   function init(
     config: Object
-  ): (fs: IFileSystem, templateCompiler: ITemplateCompiler) => IGenerator {
+  ): (
+    fs: IFileSystem,
+    templateCompiler: ITemplateCompiler,
+    fileFormatter: IFileFormatter
+  ) => IGenerator {
     const registeredPlugins = registerPlugins(config)
     initEmitter.emit("pluginsRegistered", registeredPlugins)
 
@@ -50,7 +55,11 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
     initEmitter.emit("pluginsLoaded", plugins)
 
     // Inject generator dependencies
-    return (fs: IFileSystem, templateCompiler: ITemplateCompiler) => {
+    return (
+      fs: IFileSystem,
+      templateCompiler: ITemplateCompiler,
+      fileFormatter: IFileFormatter
+    ) => {
       /**
        * Generate a React component
        * @param {string} componentPath - The path of the component you wish to generate.
@@ -135,11 +144,12 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           const generateReactComponent = makeGenerateReactComponent(
             fs,
             emitter,
-            templateCompiler
+            templateCompiler,
+            fileFormatter
           )
 
           // Kick-off component generation
-          generateReactComponent(component)
+          generateReactComponent(component, config)
             .then(paths => emitter.emit("done", paths))
             .catch(error => emitter.emit("error", error))
         })

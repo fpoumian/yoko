@@ -58,16 +58,17 @@
     "acorn-jsx": "^4.0.1",
     "fs-extra": "^4.0.1",
     "grasp-squery": "^0.4.0",
+    "judex-plugin-index-file": "^0.1.0",
+    "judex-plugin-main-file": "^0.1.0",
+    "judex-plugin-stylesheet-file": "^0.1.0",
+    "judex-plugin-tests-file": "^0.1.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mkdirp-promise": "^5.0.1",
     "nunjucks": "^3.0.1",
+    "prettier": "1.7.4",
     "remove-trailing-slash": "^0.1.0",
-    "sanitize-filename": "^1.6.1",
-    "judex-plugin-index-file": "^0.1.0",
-    "judex-plugin-main-file": "^0.1.0",
-    "judex-plugin-stylesheet-file": "^0.1.0",
-    "judex-plugin-tests-file": "^0.1.0"
+    "sanitize-filename": "^1.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

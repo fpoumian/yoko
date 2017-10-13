@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 import eventToPromise from "event-to-promise"
 import mock from "mock-fs"
+import prettier from "prettier"
 
 import judex from "../src"
 import {
@@ -806,20 +807,67 @@ describe("judex-component-generator", () => {
     })
   })
 
+  describe("given a global configuration with no formatting option specified", () => {
+    const config = {}
+    const generator = judex(config)
+    it("should generate a component using the default Prettier configuration", done => {
+      expect.assertions(1)
+      generator.generate("TestComponent").on("done", paths => {
+        const testComponent = fs.readFileSync(path.resolve(paths.main), {
+          encoding: "utf8"
+        })
+        expect(prettier.check(testComponent)).toBe(true)
+        done()
+      })
+    })
+  })
+
+  describe("given a global configuration with custom Prettier configuration", () => {
+    const config = {
+      formatting: {
+        prettier: {
+          semi: false,
+          singleQuote: true
+        }
+      }
+    }
+    const generator = judex(config)
+    it("should generate a component using the specified prettier configuration", done => {
+      expect.assertions(1)
+      generator.generate("TestComponent").on("done", paths => {
+        const testComponent = fs.readFileSync(path.resolve(paths.main), {
+          encoding: "utf8"
+        })
+        expect(prettier.check(testComponent, config.formatting.prettier)).toBe(
+          true
+        )
+        done()
+      })
+    })
+  })
+
+  // TODO: Make this test work with mock-fs
   xdescribe(
     "given a global configuration with custom paths for templates",
     () => {
-      const config = {
-        paths: {
-          templates: path.resolve(process.cwd(), "app", "templates")
-        }
-      }
+      let config
+      let generator
 
-      const rcg = judex(config)
+      beforeEach(() => {
+        mock({
+          ...mockedFileSystem
+        })
+        config = {
+          paths: {
+            templates: path.resolve("./app/templates")
+          }
+        }
+        generator = judex(config)
+      })
 
       it("should generate a valid React component using the custom template provided in config", done => {
         expect.assertions(2)
-        rcg.generate("TestComponent").on("done", paths => {
+        generator.generate("TestComponent").on("done", paths => {
           const testComponent = fs.readFileSync(path.resolve(paths.main), {
             encoding: "utf8"
           })

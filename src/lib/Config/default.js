@@ -21,6 +21,9 @@ const config: Config = {
   },
   rules: {
     "component-name-root-dir": true
+  },
+  formatting: {
+    prettier: true
   }
 }
 

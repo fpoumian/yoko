@@ -5,9 +5,9 @@ import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
   validateES6ClassComponent,
-  validateJSXText,
   validateJSXIdentifier,
-  validateTestsFile
+  validateTestsFile,
+  validateStandardJSFormattting
 } from "../validation"
 
 const sfComponent = path.resolve(
@@ -86,11 +86,11 @@ describe("validateTestsFile", () => {
   })
 })
 
-xdescribe("validateJSXText", () => {
-  it("should validate JSX Text inside a component file", done => {
+describe("validateStandardJSFormatting", () => {
+  it("should validate StandardJS formatting inside a component file", done => {
     expect.assertions(1)
     fs.readFile(sfComponent, "utf8", (err, data) => {
-      expect(validateJSXText(data, "TestComponent")).toBe(true)
+      expect(validateStandardJSFormattting(data)).toBe(false)
       done()
     })
   })

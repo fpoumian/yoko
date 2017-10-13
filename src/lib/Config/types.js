@@ -19,5 +19,8 @@ export type Config = {
   plugins?: Array<string>,
   rules: {
     "component-name-root-dir": boolean
+  },
+  formatting: {
+    prettier: boolean | Object
   }
 }

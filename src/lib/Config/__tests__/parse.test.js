@@ -24,6 +24,9 @@ describe("given that the user did not provide any custom configuration", () => {
       },
       rules: {
         "component-name-root-dir": true
+      },
+      formatting: {
+        prettier: true
       }
     })
   })

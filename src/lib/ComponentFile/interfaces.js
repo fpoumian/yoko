@@ -10,3 +10,7 @@ export interface IComponentFile {
 export interface IFile {
   getExtension(): string
 }
+
+export interface IFileFormatter {
+  format(string, ?Object): string
+}

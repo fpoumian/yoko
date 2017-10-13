@@ -7,6 +7,8 @@ import { reduceComponentPaths } from "./utils"
 import type { ReactComponent } from "./types"
 import type { IFileSystem } from "../FileSystem/interfaces"
 import type { ITemplateCompiler } from "../Template/interfaces"
+import type { IFileFormatter } from "../ComponentFile/interfaces"
+import type { Config } from "../Config/types"
 
 const makeRemoveComponentRootDir = (fs: IFileSystem) =>
   function removeComponentRootDir(
@@ -25,16 +27,21 @@ const makeCreateComponetRootDir = (fs: IFileSystem) =>
 export default (
   fs: IFileSystem,
   emitter: EventEmitter,
-  templateCompiler: ITemplateCompiler
+  templateCompiler: ITemplateCompiler,
+  fileFormatter: IFileFormatter
 ) =>
-  function generateComponent(component: ReactComponent) {
-    const writeComponentFiles = makeWriteComponentFiles(fs, templateCompiler)
+  function generateComponent(component: ReactComponent, config: Config) {
+    const writeComponentFiles = makeWriteComponentFiles(
+      fs,
+      templateCompiler,
+      fileFormatter
+    )
     const removeComponentRootDir = makeRemoveComponentRootDir(fs)
     const createComponentRootDir = makeCreateComponetRootDir(fs)
 
     return removeComponentRootDir(component)
       .then(createComponentRootDir)
-      .then(writeComponentFiles)
+      .then(component => writeComponentFiles(component, config))
       .then((componentFilesPaths: Array<Object>) => {
         componentFilesPaths.forEach(filePath => {
           Object.keys(filePath).forEach(role => {

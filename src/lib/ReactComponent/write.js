@@ -2,6 +2,8 @@
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
+import isPlainObject from "lodash/isPlainObject"
+
 import type { IRenderable } from "./interfaces"
 import type { ReactComponent } from "./types"
 import type { ComponentFile } from "../ComponentFile/types"
@@ -9,6 +11,8 @@ import type { Template } from "../Template/types"
 import type { IFileSystem } from "../FileSystem/interfaces"
 import makeWriteFile from "../ComponentFile/write"
 import type { ITemplateCompiler } from "../Template/interfaces"
+import type { IFileFormatter } from "../ComponentFile/interfaces"
+import type { Config } from "../Config/types"
 
 function getTemplateString(template: Template | null): string {
   if (!template) {
@@ -31,8 +35,15 @@ function renderCompiledTemplate(
   return compiledTemplate.render(context)
 }
 
-export default (fs: IFileSystem, templateCompiler: ITemplateCompiler) =>
-  function writeComponentFiles(component: ReactComponent): Promise<any> {
+export default (
+  fs: IFileSystem,
+  templateCompiler: ITemplateCompiler,
+  fileFormatter: IFileFormatter
+) =>
+  function writeComponentFiles(
+    component: ReactComponent,
+    config: Config
+  ): Promise<any> {
     const componentFiles: Map<string, ComponentFile> = component.getFiles()
     const roles: Array<string> = Array.from(componentFiles.keys())
 
@@ -48,13 +59,18 @@ export default (fs: IFileSystem, templateCompiler: ITemplateCompiler) =>
         getTemplateString(file.getTemplate())
       )
 
-      const renderedTemplate = renderCompiledTemplate(compiledTemplate, {
+      const renderedFile = renderCompiledTemplate(compiledTemplate, {
         componentName: component.getName()
       })
 
+      const formattedFile = isPlainObject(config.formatting.prettier)
+        ? // $FlowFixMe
+          fileFormatter.format(renderedFile, config.formatting.prettier)
+        : fileFormatter.format(renderedFile)
+
       const writeFile = makeWriteFile(fs)
 
-      return writeFile(file, renderedTemplate)
+      return writeFile(file, formattedFile)
         .then(path => {
           const fileRole = file.getRole()
           return {

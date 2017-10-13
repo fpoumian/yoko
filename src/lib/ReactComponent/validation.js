@@ -2,6 +2,7 @@
 
 import * as acorn from "acorn-jsx"
 import * as squery from "grasp-squery"
+import endsWith from "lodash/endsWith"
 
 function parseCode(code: string) {
   let parsedCode
@@ -84,6 +85,13 @@ export function validateIndexFile(
   return validateCode(code, [
     `Program > ExportNamedDeclaration > Literal[value="./${componentName}"]`,
     `Program > ExportNamedDeclaration > ExportSpecifier > Identifier[name="default"]`
+  ])
+}
+
+export function validateStandardJSFormattting(code: string): boolean {
+  return validateCode(code, [
+    code.includes("'react'"),
+    !endsWith(code.trim(), ";")
   ])
 }
 
