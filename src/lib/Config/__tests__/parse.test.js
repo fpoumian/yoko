@@ -33,7 +33,7 @@ describe("given that the user did not provide any custom configuration", () => {
 })
 
 describe("given that the user provided a custom relative components path", () => {
-  it("should be able to return a configuration object includes a custom components path", () => {
+  it("should be able to return a configuration object that includes a custom components path as an absolute path", () => {
     const userConfig = {
       paths: {
         components: "src/components"
@@ -64,8 +64,8 @@ describe("given that the user provided a custom relative components path", () =>
   })
 })
 
-describe("given that the user provided a custom absolute components path", () => {
-  it("should be able to return a configuration object includes a custom components path", () => {
+describe("given that the user provided an absolute components path", () => {
+  it("should be able to return a configuration object that includes a custom components path", () => {
     const userConfig = {
       paths: {
         components: path.resolve(__dirname, "src", "components")
@@ -83,8 +83,8 @@ describe("given that the user provided a custom absolute components path", () =>
   })
 })
 
-describe("given that the user provided a custom containers path", () => {
-  it("should be able to return a configuration object that includes a custom containers path", () => {
+describe("given that the user provided a custom relative containers path", () => {
+  it("should be able to return a configuration object that includes a custom containers absolute path", () => {
     const userConfig = {
       paths: {
         containers: "../src/containers"

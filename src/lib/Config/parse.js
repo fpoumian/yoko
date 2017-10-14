@@ -1,10 +1,14 @@
 // @flow
 
 import path from "path"
-import { get, merge, mapValues, isPlainObject } from "lodash"
+import get from "lodash/get"
+import merge from "lodash/merge"
+import mapValues from "lodash/mapValues"
+import isPlainObject from "lodash/isPlainObject"
 
 import type { Config } from "./types"
 import defaultConfig from "./default"
+import validateConfig from "./validation"
 
 function normalizePath(originalPath: string): string {
   if (!originalPath) return ""
@@ -61,8 +65,16 @@ export default function(config: Object): Config {
     )
   }
 
+  // If no custom config was provided in argument (i.e. an empty object)
   if (Object.keys(config).length === 0) {
-    return merge({}, defaultConfig, config)
+    // return all the default config values
+    return defaultConfig
   }
-  return merge({}, defaultConfig, normalizeConfig(config))
+  // otherwise validate and normalize the custom config
+  // and then merge it with the default config
+  try {
+    return merge({}, defaultConfig, normalizeConfig(validateConfig(config)))
+  } catch (e) {
+    throw e
+  }
 }

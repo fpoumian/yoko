@@ -68,8 +68,8 @@ describe("parseComponentPath", () => {
     it("should get name info from the given path", () => {
       expect.assertions(1)
       expect(parseComponentPath(name)).toEqual({
-        rootName: "ComponentName",
-        componentName: "ComponentName",
+        rootName: name,
+        componentName: name,
         parentDirs: []
       })
     })
