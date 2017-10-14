@@ -9,13 +9,21 @@ import isBoolean from "lodash/isBoolean"
 import isNull from "lodash/isNull"
 import type { Config } from "./types"
 
-function createTypeValidator({ validateFn, messageTypeLabel }) {
-  return {
-    validateFn,
+function makeCreateTypeValidator({ validateFn, messageTypeLabel }) {
+  const errorMessageTemplate = `You must pass ${messageTypeLabel} as a value for <%= path %> in the configuration object. <%= receivedType %> received instead.`
+
+  return (value, path) => ({
+    isValid: validateFn(value),
     ErrorClass: TypeError,
-    messageTypeLabel,
-    errorMessageTemplate: `You must pass ${messageTypeLabel} as a value for <%= path %> in the configuration object. <%= receivedType %> received instead.`
-  }
+    errorMessage: template(errorMessageTemplate)({
+      path,
+      receivedType: get(
+        value,
+        "constructor.name",
+        (isNull(value) && "Null") || typeof value
+      )
+    })
+  })
 }
 
 function isStringOrPlainObject(value) {
@@ -26,18 +34,15 @@ function isBooleanOrPlainObject(value) {
   return isBoolean(value) || isPlainObject(value)
 }
 
-function validateConfigPath(config: Config, path: string, validator): void {
+function validateConfigPath(
+  config: Config,
+  path: string,
+  validatorFactory
+): void {
   const value = get(config, path)
-  const errorMessage = template(validator.errorMessageTemplate)({
-    path,
-    receivedType: get(
-      value,
-      "constructor.name",
-      (isNull(value) && "Null") || typeof value
-    )
-  })
-  if (!validator.validateFn(value)) {
-    throw new validator.ErrorClass(errorMessage)
+  const validator = validatorFactory(value, path)
+  if (!validator.isValid) {
+    throw new validator.ErrorClass(validator.errorMessage)
   }
 }
 
@@ -48,44 +53,44 @@ function validateConfigPaths(config: Config, paths: string[], validator): void {
 }
 
 function validatePlainObjectPaths(config, paths) {
-  const validator = createTypeValidator({
+  const validatorFactory = makeCreateTypeValidator({
     validateFn: isPlainObject,
     messageTypeLabel: "an object"
   })
-  validateConfigPaths(config, paths, validator)
+  validateConfigPaths(config, paths, validatorFactory)
 }
 
 function validateStringPaths(config, paths) {
-  const validator = createTypeValidator({
+  const validatorFactory = makeCreateTypeValidator({
     validateFn: isString,
     messageTypeLabel: "a string"
   })
-  validateConfigPaths(config, paths, validator)
+  validateConfigPaths(config, paths, validatorFactory)
 }
 
 function validateStringOrPlainObjectPaths(config, paths) {
-  const validator = createTypeValidator({
+  const validatorFactory = makeCreateTypeValidator({
     validateFn: isStringOrPlainObject,
     messageTypeLabel: "a string or an object"
   })
-  validateConfigPaths(config, paths, validator)
+  validateConfigPaths(config, paths, validatorFactory)
 }
 
 function validateBooleanPaths(config, paths) {
-  const validator = createTypeValidator({
+  const validatorFactory = makeCreateTypeValidator({
     validateFn: isBoolean,
     messageTypeLabel: "a boolean"
   })
 
-  validateConfigPaths(config, paths, validator)
+  validateConfigPaths(config, paths, validatorFactory)
 }
 
 function validateBooleanOrPlainObjectPaths(config, paths) {
-  const validator = createTypeValidator({
+  const validatorFactory = makeCreateTypeValidator({
     validateFn: isBooleanOrPlainObject,
     messageTypeLabel: "a boolean or an object"
   })
-  validateConfigPaths(config, paths, validator)
+  validateConfigPaths(config, paths, validatorFactory)
 }
 
 export default function(config: Config): Config {
