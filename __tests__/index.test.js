@@ -11,7 +11,7 @@ import {
   validateES6ClassComponent,
   validateJSXIdentifier,
   validateTestsFile
-} from "../src/lib/ReactComponent/validation"
+} from "../src/lib/ComponentFile/validation"
 import mockFileSystem from "./utils/mockFs"
 
 const mockedFileSystem = mockFileSystem()
@@ -778,32 +778,6 @@ describe("judex-component-generator", () => {
       expect(() => {
         generator.generate("C", [1, 2])
       }).toThrowError()
-    })
-    it("should throw an Error with correct type", () => {
-      expect(() => {
-        generator.generate([1, 2, 3], {})
-      }).toThrowError(TypeError)
-      expect(() => {
-        generator.generate("", {})
-      }).toThrowError(Error)
-      expect(() => {
-        generator.generate("C", [1, 2, 3])
-      }).toThrowError(TypeError)
-    })
-    it("should throw an Error with message", () => {
-      expect(() => {
-        generator.generate([1, 2, 3], {})
-      }).toThrowError(
-        "You must provide a String type for the componentName argument. Array provided."
-      )
-      expect(() => {
-        generator.generate(" ", {})
-      }).toThrowError("The componentName argument cannot be an empty string.")
-      expect(() => {
-        generator.generate("C", [1, 2, 3])
-      }).toThrowError(
-        "You must provide a plain Object type as the options argument. Array provided."
-      )
     })
   })
 

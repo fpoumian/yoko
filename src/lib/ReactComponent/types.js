@@ -21,9 +21,3 @@ export type ReactComponentOptions = {
   stylesheet?: boolean,
   tests?: boolean
 }
-
-export type ReactComponentFileTemplatePaths = {
-  main: string,
-  index: string,
-  tests: string
-}

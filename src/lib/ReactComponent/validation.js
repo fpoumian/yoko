@@ -1,107 +1,46 @@
 // @flow
+import isString from "lodash/isString"
+import isPlainObject from "lodash/isPlainObject"
 
-import * as acorn from "acorn-jsx"
-import * as squery from "grasp-squery"
-import endsWith from "lodash/endsWith"
+import type { ReactComponentOptions } from "./types"
+import createObjectValidator from "../Utils/validation"
 
-function parseCode(code: string) {
-  let parsedCode
-  try {
-    parsedCode = acorn.parse(code, {
-      sourceType: "module",
-      plugins: {
-        jsx: true
-      }
-    })
-  } catch (e) {
-    if (e instanceof TypeError) {
-      throw e
-    }
+const objectValidator = createObjectValidator("component options object")
+
+export function validateComponentOptions(
+  options: ReactComponentOptions
+): ReactComponentOptions {
+  if (!isPlainObject(options)) {
+    throw new TypeError(
+      `You must pass an object as the options argument. ${options.constructor
+        .name} received instead.`
+    )
   }
-  return parsedCode
-}
 
-function validateCode(code, selectors: Array<string | boolean>): boolean {
-  return selectors.every(selector => {
-    if (typeof selector === "string") {
-      const results = squery.queryParsed(
-        squery.parse(selector),
-        parseCode(code)
-      )
-      return results.length > 0
-    }
-    return selector
-  })
-}
-
-// function validateJSXText(code: string, text: string): boolean {
-//   return validateCode(code, [`Program JSXElement JSXText[value=${text}]`])
-// }
-
-export function validateJSXIdentifier(code: string, name: string): boolean {
-  return validateCode(code, [
-    `Program JSXElement JSXIdentifier[name="${name}"]`
+  objectValidator.validateBooleanPaths(options, [
+    "container",
+    "main",
+    "index",
+    "stylesheet",
+    "tests"
   ])
+
+  objectValidator.validateStringPaths(options, ["type"])
+
+  return options
 }
 
-function validateReactImport(code: string): boolean {
-  return validateCode(code, [
-    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name="React"]`
-  ])
-}
+export function validateComponentPath(componentPath: string): string {
+  if (!isString(componentPath)) {
+    throw new TypeError(
+      `You must pass a string as a value for the componentName argument. ${componentPath
+        .constructor.name} received instead.`
+    )
+  }
 
-function validateComponentImport(code: string, value: string): boolean {
-  return validateCode(code, [
-    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name=${value}]`
-  ])
-}
+  if (componentPath.trim() === "") {
+    throw new Error(`The componentName argument cannot be an empty string.`)
+  }
 
-export function validateStatelessFunctionalComponent(
-  code: string,
-  componentName: string
-): boolean {
-  return validateCode(code, [
-    validateReactImport(code),
-    `program > FunctionDeclaration > ident#${componentName}`,
-    `program > ExportDefaultDeclaration > ident#${componentName}`
-  ])
-}
-
-export function validateES6ClassComponent(
-  code: string,
-  componentName: string
-): boolean {
-  return validateCode(code, [
-    validateReactImport(code),
-    `program > ClassDeclaration > ident#${componentName}`,
-    `program > ExportDefaultDeclaration > ident#${componentName}`
-  ])
-}
-
-export function validateIndexFile(
-  code: string,
-  componentName: string
-): boolean {
-  return validateCode(code, [
-    `Program > ExportNamedDeclaration > Literal[value="./${componentName}"]`,
-    `Program > ExportNamedDeclaration > ExportSpecifier > Identifier[name="default"]`
-  ])
-}
-
-export function validateStandardJSFormattting(code: string): boolean {
-  return validateCode(code, [
-    code.includes("'react'"),
-    !endsWith(code.trim(), ";")
-  ])
-}
-
-export function validateTestsFile(
-  code: string,
-  componentName: string
-): boolean {
-  return validateCode(code, [
-    validateReactImport(code),
-    validateComponentImport(code, componentName),
-    `Program > ImportDeclaration > Literal[value="enzyme"]`
-  ])
+  return componentPath
 }

@@ -2,10 +2,13 @@
 
 import path from "path"
 import EventEmitter from "events"
-import isPlainObject from "lodash/isPlainObject"
 
 import createReactComponent from "../ReactComponent/factory"
 import makeGenerateReactComponent from "../ReactComponent/generate"
+import {
+  validateComponentOptions,
+  validateComponentPath
+} from "../ReactComponent/validation"
 import makeInitPlugins from "../Plugin/init"
 import registerPlugins from "../Plugin/register"
 import parseComponentPath from "../ReactComponent/parsePath"
@@ -70,25 +73,8 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
         options: ReactComponentOptions = {}
       ): IEventListener {
         // Handle input errors
-        if (typeof componentPath !== "string") {
-          throw new TypeError(
-            `You must provide a String type for the componentName argument. ${componentPath
-              .constructor.name} provided.`
-          )
-        }
-
-        if (componentPath.trim() === "") {
-          throw new Error(
-            `The componentName argument cannot be an empty string.`
-          )
-        }
-
-        if (!isPlainObject(options)) {
-          throw new TypeError(
-            `You must provide a plain Object type as the options argument. ${options
-              .constructor.name} provided.`
-          )
-        }
+        const validOptions = validateComponentOptions(options)
+        const validComponentPath = validateComponentPath(componentPath)
 
         // Create new emitter
         const emitter: EventEmitter = new EventEmitter()
@@ -107,20 +93,20 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
             rootName,
             parentDirs,
             componentName
-          } = parseComponentPath(componentPath, { ...config })
+          } = parseComponentPath(validComponentPath, { ...config })
 
-          const componentHome: string = options.container
+          const componentHome: string = validOptions.container
             ? config.paths.containers
             : config.paths.components
 
           const props: ReactComponentProps = {
             name: componentName,
             path: path.resolve(componentHome, ...parentDirs, rootName),
-            type: options.type || "sfc",
-            main: options.main || true,
-            index: options.index || false,
-            stylesheet: options.stylesheet || false,
-            tests: options.tests || false
+            type: validOptions.type || "sfc",
+            main: validOptions.main || true,
+            index: validOptions.index || false,
+            stylesheet: validOptions.stylesheet || false,
+            tests: validOptions.tests || false
           }
 
           // Initialize plugins
