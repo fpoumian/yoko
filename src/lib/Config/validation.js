@@ -9,20 +9,30 @@ import isBoolean from "lodash/isBoolean"
 import isNull from "lodash/isNull"
 import type { Config } from "./types"
 
+interface IValidator {
+  isValid((any) => boolean): boolean,
+  getErrorClass(): Function,
+  getErrorMessage(): string
+}
+
 function makeCreateTypeValidator({ validateFn, messageTypeLabel }) {
   const errorMessageTemplate = `You must pass ${messageTypeLabel} as a value for <%= path %> in the configuration object. <%= receivedType %> received instead.`
 
-  return (value, path) => ({
+  return (value, path): IValidator => ({
     isValid: validateFn(value),
-    ErrorClass: TypeError,
-    errorMessage: template(errorMessageTemplate)({
-      path,
-      receivedType: get(
-        value,
-        "constructor.name",
-        (isNull(value) && "Null") || typeof value
-      )
-    })
+    getErrorClass() {
+      return TypeError
+    },
+    getErrorMessage() {
+      return template(errorMessageTemplate)({
+        path,
+        receivedType: get(
+          value,
+          "constructor.name",
+          (isNull(value) && "Null") || typeof value
+        )
+      })
+    }
   })
 }
 
@@ -40,9 +50,10 @@ function validateConfigPath(
   validatorFactory
 ): void {
   const value = get(config, path)
-  const validator = validatorFactory(value, path)
+  const validator: IValidator = validatorFactory(value, path)
+  const ErrorClass = validator.getErrorClass()
   if (!validator.isValid) {
-    throw new validator.ErrorClass(validator.errorMessage)
+    throw new ErrorClass(validator.getErrorMessage())
   }
 }
 
