@@ -4,7 +4,7 @@ import EventEmitter from "events"
 
 import makeWriteComponentFiles from "./write"
 import { reduceComponentPaths } from "./utils"
-import type { ReactComponent } from "./types"
+import type { Component } from "./types"
 import type { IFileSystem } from "../FileSystem/interfaces"
 import type { ITemplateCompiler } from "../Template/interfaces"
 import type { IFileFormatter } from "../ComponentFile/interfaces"
@@ -12,15 +12,15 @@ import type { Config } from "../Config/types"
 
 const makeRemoveComponentRootDir = (fs: IFileSystem) =>
   function removeComponentRootDir(
-    component: ReactComponent
-  ): Promise<ReactComponent> {
+    component: Component
+  ): Promise<Component> {
     return fs.remove(component.getPath()).then(() => component)
   }
 
 const makeCreateComponetRootDir = (fs: IFileSystem) =>
   function createComponentRootDir(
-    component: ReactComponent
-  ): Promise<ReactComponent> {
+    component: Component
+  ): Promise<Component> {
     return fs.ensureDir(component.getPath()).then(() => component)
   }
 
@@ -30,7 +30,7 @@ export default (
   templateCompiler: ITemplateCompiler,
   fileFormatter: IFileFormatter
 ) =>
-  function generateComponent(component: ReactComponent, config: Config) {
+  function generateComponent(component: Component, config: Config) {
     const writeComponentFiles = makeWriteComponentFiles(
       fs,
       templateCompiler,

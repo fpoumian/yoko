@@ -3,15 +3,15 @@
 import path from "path"
 import EventEmitter from "events"
 
-import createReactComponent from "../ReactComponent/factory"
-import makeGenerateReactComponent from "../ReactComponent/generate"
+import createReactComponent from "../Component/factory"
+import makeGenerateReactComponent from "../Component/generate"
 import {
   validateComponentOptions,
   validateComponentPath
-} from "../ReactComponent/validation"
+} from "../Component/validation"
 import makeInitPlugins from "../Plugin/init"
 import registerPlugins from "../Plugin/register"
-import parseComponentPath from "../ReactComponent/parsePath"
+import parseComponentPath from "../Component/parsePath"
 import makeMapFilePluginsDataToFiles from "../Plugin/mapToFiles"
 
 import type { ComponentFile } from "../ComponentFile/types"
@@ -19,8 +19,8 @@ import type { LoadPluginsFn, Plugin } from "../Plugin/types"
 import type {
   ReactComponentProps,
   ReactComponentOptions,
-  ReactComponent
-} from "../ReactComponent/types"
+  Component
+} from "../Component/types"
 import type { IFileSystem } from "../FileSystem/interfaces"
 import type { ITemplateCompiler } from "../Template/interfaces"
 import type { IGenerator } from "./interfaces"
@@ -125,7 +125,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           )
 
           // Create component
-          const component: ReactComponent = createReactComponent(props, files)
+          const component: Component = createReactComponent(props, files)
 
           const generateReactComponent = makeGenerateReactComponent(
             fs,

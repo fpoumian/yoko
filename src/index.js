@@ -11,7 +11,7 @@ import prettier from "prettier"
 
 import makeInitGenerator from "./lib/Generator/init"
 import parseConfig from "./lib/Config/parse"
-import type { ReactComponentOptions } from "./lib/ReactComponent/types"
+import type { ReactComponentOptions } from "./lib/Component/types"
 import type { Config } from "./lib/Config/types"
 import makeLoadPlugins from "./lib/Plugin/load"
 

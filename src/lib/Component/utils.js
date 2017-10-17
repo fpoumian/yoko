@@ -1,9 +1,9 @@
 // @flow
 /* eslint import/prefer-default-export: off  */
-import type { ReactComponent } from "./types"
+import type { Component } from "./types"
 
 export function reduceComponentPaths(
-  component: ReactComponent,
+  component: Component,
   paths: Array<Object>
 ) {
   return paths.reduce(

@@ -1,13 +1,13 @@
 // @flow
 
-import type { ReactComponent, ReactComponentProps } from "./types"
+import type { Component, ReactComponentProps } from "./types"
 import createReadable from "../Readable/factory"
 import type { ComponentFile } from "../ComponentFile/types"
 
 export default function createReactComponent(
   props: ReactComponentProps,
   files: Array<ComponentFile>
-): ReactComponent {
+): Component {
   const { name, path } = props
   const filesMap: Map<string, ComponentFile> = new Map()
 
@@ -19,7 +19,7 @@ export default function createReactComponent(
   })
 
   // Public API
-  const reactComponent: ReactComponent = {
+  const reactComponent: Component = {
     ...createReadable({
       name,
       path

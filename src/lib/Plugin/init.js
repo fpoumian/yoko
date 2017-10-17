@@ -3,7 +3,7 @@
 import EventEmitter from "events"
 
 import type { Plugin } from "./types"
-import type { ReactComponentProps } from "../ReactComponent/types"
+import type { ReactComponentProps } from "../Component/types"
 import type { Config } from "../Config/types"
 import validateFilePlugin from "./validation"
 import constants from "./constants"

@@ -2,7 +2,7 @@
 
 import type { ComponentFile } from "../ComponentFile/types"
 
-export interface IReactComponent {
+export interface IComposable {
   getFiles(): Map<string, ComponentFile>
 }
 

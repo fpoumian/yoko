@@ -3,7 +3,7 @@ import { isFunction, has, isString } from "lodash"
 
 import type { Plugin } from "./types"
 import type { FileProps } from "../ComponentFile/types"
-import type { ReactComponentProps } from "../ReactComponent/types"
+import type { ReactComponentProps } from "../Component/types"
 import type { Config } from "../Config/types"
 
 export default function validateFilePlugin(

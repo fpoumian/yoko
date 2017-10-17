@@ -5,7 +5,7 @@
 import isPlainObject from "lodash/isPlainObject"
 
 import type { IRenderable } from "./interfaces"
-import type { ReactComponent } from "./types"
+import type { Component } from "./types"
 import type { ComponentFile } from "../ComponentFile/types"
 import type { Template } from "../Template/types"
 import type { IFileSystem } from "../FileSystem/interfaces"
@@ -41,7 +41,7 @@ export default (
   fileFormatter: IFileFormatter
 ) =>
   function writeComponentFiles(
-    component: ReactComponent,
+    component: Component,
     config: Config
   ): Promise<any> {
     const componentFiles: Map<string, ComponentFile> = component.getFiles()
