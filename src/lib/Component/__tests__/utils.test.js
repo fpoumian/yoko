@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { reduceComponentPaths } from '../utils'
+import reduceComponentPaths from '../reducePaths'
 
 describe('reduceComponentPaths', () => {
   const component = {

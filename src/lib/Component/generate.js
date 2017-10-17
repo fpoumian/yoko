@@ -3,7 +3,7 @@
 import EventEmitter from 'events'
 
 import makeWriteComponentFiles from './write'
-import { reduceComponentPaths } from './utils'
+import reduceComponentPaths from './reducePaths'
 import type { Component } from './types'
 import type { IFileSystem } from '../FileSystem/interfaces'
 import type { ITemplateCompiler } from '../Template/interfaces'
@@ -15,7 +15,7 @@ const makeRemoveComponentRootDir = (fs: IFileSystem) =>
     return fs.remove(component.getPath()).then(() => component)
   }
 
-const makeCreateComponetRootDir = (fs: IFileSystem) =>
+const makeCreateComponentRootDir = (fs: IFileSystem) =>
   function createComponentRootDir(component: Component): Promise<Component> {
     return fs.ensureDir(component.getPath()).then(() => component)
   }
@@ -33,7 +33,7 @@ export default (
       fileFormatter
     )
     const removeComponentRootDir = makeRemoveComponentRootDir(fs)
-    const createComponentRootDir = makeCreateComponetRootDir(fs)
+    const createComponentRootDir = makeCreateComponentRootDir(fs)
 
     return removeComponentRootDir(component)
       .then(createComponentRootDir)
