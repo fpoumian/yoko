@@ -30,7 +30,7 @@
     "patch": "npm version patch && npm publish",
     "minor": "npm version minor && npm publish",
     "major": "npm version major && npm publish",
-    "format-all": "prettier --trailing-comma es5 --no-semi --single-quote --write './src/**/*.js' './__tests__/**/*.js'",
+    "format-all": "prettier --config ./.prettierrc --write './src/**/*.js' './__tests__/**/*.js'",
     "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "_prepublish": "npm run lint && npm test && npm run build",
     "postpublish": "git push origin master --follow-tags"
@@ -84,7 +84,6 @@
     "babel-preset-stage-2": "^6.18.0",
     "documentation": "4.0.0-rc.1",
     "eslint": "^4.0.0",
-    "eslint-config-airbnb-base": "^11.0.1",
     "eslint-config-prettier": "^2.3.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-flowtype": "^2.29.2",
