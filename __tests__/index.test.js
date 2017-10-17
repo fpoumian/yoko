@@ -9,7 +9,6 @@ import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
   validateES6ClassComponent,
-  validateJSXIdentifier,
   validateTestsFile,
 } from '../src/lib/ComponentFile/validation'
 import mockFileSystem from './utils/mockFs'
@@ -828,40 +827,6 @@ describe('judex-component-generator', () => {
           encoding: 'utf8',
         })
         expect(prettier.check(testComponent, config.formatting.prettier)).toBe(
-          true
-        )
-        done()
-      })
-    })
-  })
-
-  // TODO: Make this test work with mock-fs
-  xdescribe('given a global configuration with custom paths for templates', () => {
-    let config
-    let generator
-
-    beforeEach(() => {
-      mock({
-        ...mockedFileSystem,
-      })
-      config = {
-        paths: {
-          templates: path.resolve('./app/templates'),
-        },
-      }
-      generator = judex(config)
-    })
-
-    it('should generate a valid React component using the custom template provided in config', done => {
-      expect.assertions(2)
-      generator.generate('TestComponent').on('done', paths => {
-        const testComponent = fs.readFileSync(path.resolve(paths.main), {
-          encoding: 'utf8',
-        })
-        expect(
-          validateStatelessFunctionalComponent(testComponent, 'TestComponent')
-        ).toBe(true)
-        expect(validateJSXIdentifier(testComponent, 'CustomComponent')).toBe(
           true
         )
         done()
