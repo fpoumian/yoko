@@ -10,10 +10,10 @@ import constants from './constants'
 
 export default (emitter: EventEmitter) =>
   function initPlugins(
-    plugins: Array<Plugin>,
+    plugins: Plugin[],
     props: ReactComponentProps,
     config: Config
-  ): Array<Object> {
+  ): Object[] {
     return plugins.reduce((acc, plugin) => {
       try {
         const fileProps = validateFilePlugin(plugin, props, config)

@@ -17,7 +17,7 @@ interface IResolver {
 }
 
 export default (loader: ILoader, resolver: IResolver, emitter: EventEmitter) =>
-  function loadPlugins(pluginNames: Array<string>): Array<Plugin> {
+  function loadPlugins(pluginNames: string[]): Plugin[] {
     return pluginNames.reduce((acc, pluginName) => {
       const pluginFullName = `${constants.PLUGIN_PREFIX}-${pluginName}`
       try {

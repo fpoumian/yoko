@@ -38,7 +38,7 @@ export default (
     return removeComponentRootDir(component)
       .then(createComponentRootDir)
       .then(component => writeComponentFiles(component, config))
-      .then((componentFilesPaths: Array<Object>) => {
+      .then((componentFilesPaths: Object[]) => {
         componentFilesPaths.forEach(filePath => {
           Object.keys(filePath).forEach(role => {
             emitter.emit('fileWritten', filePath[role])
@@ -47,7 +47,7 @@ export default (
         })
         return componentFilesPaths
       })
-      .then((componentFilesPaths: Array<Object>) =>
+      .then((componentFilesPaths: Object[]) =>
         reduceComponentPaths(component, componentFilesPaths)
       )
       .catch(err => {

@@ -45,7 +45,7 @@ export default (
     config: Config
   ): Promise<any> {
     const componentFiles: Map<string, ComponentFile> = component.getFiles()
-    const roles: Array<string> = Array.from(componentFiles.keys())
+    const roles: string[] = Array.from(componentFiles.keys())
 
     const filePromises: Array<Promise<any>> = roles.map((role: string) => {
       const file = componentFiles.get(role)

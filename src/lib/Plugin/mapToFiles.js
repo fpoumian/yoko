@@ -7,9 +7,9 @@ import type { IFileSystem } from '../FileSystem/interfaces'
 
 export default (fs: IFileSystem) =>
   function mapPluginsDataToComponentFiles(
-    pluginsData: Array<Object>,
+    pluginsData: Object[],
     config: Config
-  ): Array<ComponentFile> {
+  ): ComponentFile[] {
     const resolveComponentFileTemplate = makeResolveComponentFileTemplate(fs)
     return pluginsData.map(pluginData => {
       const fileProps: FileProps = {

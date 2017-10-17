@@ -2,7 +2,7 @@
 
 import type { Config } from '../Config/types'
 
-export default function registerPlugins(config: Config): Array<string> {
+export default function registerPlugins(config: Config): string[] {
   return [
     // register default plugins
     'main-file',

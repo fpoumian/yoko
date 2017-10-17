@@ -54,7 +54,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
     const registeredPlugins = registerPlugins(config)
     initEmitter.emit('pluginsRegistered', registeredPlugins)
 
-    const plugins: Array<Plugin> = loadPlugins(registeredPlugins)
+    const plugins: Plugin[] = loadPlugins(registeredPlugins)
     initEmitter.emit('pluginsLoaded', plugins)
 
     // Inject generator dependencies
@@ -111,7 +111,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
 
           // Initialize plugins
           const initPlugins = makeInitPlugins(emitter)
-          const filePluginsData: Array<Object> = initPlugins(
+          const filePluginsData: Object[] = initPlugins(
             plugins,
             { ...props },
             { ...config }

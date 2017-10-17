@@ -16,7 +16,7 @@ export type Config = {
       main: string,
     },
   },
-  plugins?: Array<string>,
+  plugins?: string[],
   rules: {
     'component-name-root-dir': boolean,
   },

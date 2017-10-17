@@ -5,11 +5,11 @@ import sanitize from 'sanitize-filename'
 
 import type { Config } from '../Config/types'
 
-function getComponentName(splitName: Array<string>) {
+function getComponentName(splitName: string[]) {
   return sanitize(splitName[splitName.length - 1])
 }
 
-function getComponentRootDir(splitName: Array<string>, config: Config | null) {
+function getComponentRootDir(splitName: string[], config: Config | null) {
   if (!config || config.rules['component-name-root-dir']) {
     return sanitize(splitName[splitName.length - 1])
   }
@@ -18,7 +18,7 @@ function getComponentRootDir(splitName: Array<string>, config: Config | null) {
 }
 
 function getComponentRootDirParents(
-  splitName: Array<string>,
+  splitName: string[],
   config: Config | null
 ) {
   if (!config || config.rules['component-name-root-dir']) {
@@ -37,7 +37,7 @@ export default function parseComponentPath(
   config: Config | null
 ): Object {
   const normalized = removeFileExtension(path.normalize(slashes(componentPath)))
-  const splitName: Array<string> = normalized.split(path.sep)
+  const splitName: string[] = normalized.split(path.sep)
   return {
     rootName: getComponentRootDir(splitName, config),
     parentDirs: getComponentRootDirParents(splitName, config),

@@ -5,4 +5,4 @@ import type { IInitialable } from './interfaces'
 
 export type Plugin = IReadable & IInitialable
 
-export type LoadPluginsFn = (plugins: Array<string>) => Array<Plugin>
+export type LoadPluginsFn = (plugins: string[]) => Plugin[]

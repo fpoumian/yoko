@@ -11,9 +11,9 @@ import prettier from 'prettier'
 
 import makeInitGenerator from './lib/Generator/init'
 import parseConfig from './lib/Config/parse'
-import type { ReactComponentOptions } from './lib/Component/types'
 import type { Config } from './lib/Config/types'
 import makeLoadPlugins from './lib/Plugin/load'
+import type { IGenerator } from './lib/Generator/interfaces'
 
 // Setup event emitters
 const initEmitter = new EventEmitter()
@@ -37,14 +37,6 @@ export function addEventListener(
   listener: any => any
 ): void {
   initEmitter.addListener(eventName, listener)
-}
-
-/**
- * @typedef {Object} IGenerator
- * @property {Function} generate - Generates a new React component.
- */
-export interface IGenerator {
-  generate(name: string, options: ReactComponentOptions): Object;
 }
 
 /**

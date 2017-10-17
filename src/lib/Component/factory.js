@@ -6,7 +6,7 @@ import type { ComponentFile } from '../ComponentFile/types'
 
 export default function createReactComponent(
   props: ReactComponentProps,
-  files: Array<ComponentFile>
+  files: ComponentFile[]
 ): Component {
   const { name, path } = props
   const filesMap: Map<string, ComponentFile> = new Map()
