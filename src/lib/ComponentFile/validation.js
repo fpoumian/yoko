@@ -1,17 +1,17 @@
 // @flow
 
-import * as acorn from "acorn-jsx"
-import * as squery from "grasp-squery"
-import endsWith from "lodash/endsWith"
+import * as acorn from 'acorn-jsx'
+import * as squery from 'grasp-squery'
+import endsWith from 'lodash/endsWith'
 
 function parseCode(code: string) {
   let parsedCode
   try {
     parsedCode = acorn.parse(code, {
-      sourceType: "module",
+      sourceType: 'module',
       plugins: {
-        jsx: true
-      }
+        jsx: true,
+      },
     })
   } catch (e) {
     if (e instanceof TypeError) {
@@ -23,7 +23,7 @@ function parseCode(code: string) {
 
 function validateCode(code, selectors: Array<string | boolean>): boolean {
   return selectors.every(selector => {
-    if (typeof selector === "string") {
+    if (typeof selector === 'string') {
       const results = squery.queryParsed(
         squery.parse(selector),
         parseCode(code)
@@ -40,19 +40,19 @@ function validateCode(code, selectors: Array<string | boolean>): boolean {
 
 export function validateJSXIdentifier(code: string, name: string): boolean {
   return validateCode(code, [
-    `Program JSXElement JSXIdentifier[name="${name}"]`
+    `Program JSXElement JSXIdentifier[name="${name}"]`,
   ])
 }
 
 function validateReactImport(code: string): boolean {
   return validateCode(code, [
-    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name="React"]`
+    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name="React"]`,
   ])
 }
 
 function validateComponentImport(code: string, value: string): boolean {
   return validateCode(code, [
-    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name=${value}]`
+    `Program > ImportDeclaration > ImportDefaultSpecifier > Identifier[name=${value}]`,
   ])
 }
 
@@ -63,7 +63,7 @@ export function validateStatelessFunctionalComponent(
   return validateCode(code, [
     validateReactImport(code),
     `program > FunctionDeclaration > ident#${componentName}`,
-    `program > ExportDefaultDeclaration > ident#${componentName}`
+    `program > ExportDefaultDeclaration > ident#${componentName}`,
   ])
 }
 
@@ -74,7 +74,7 @@ export function validateES6ClassComponent(
   return validateCode(code, [
     validateReactImport(code),
     `program > ClassDeclaration > ident#${componentName}`,
-    `program > ExportDefaultDeclaration > ident#${componentName}`
+    `program > ExportDefaultDeclaration > ident#${componentName}`,
   ])
 }
 
@@ -84,14 +84,14 @@ export function validateIndexFile(
 ): boolean {
   return validateCode(code, [
     `Program > ExportNamedDeclaration > Literal[value="./${componentName}"]`,
-    `Program > ExportNamedDeclaration > ExportSpecifier > Identifier[name="default"]`
+    `Program > ExportNamedDeclaration > ExportSpecifier > Identifier[name="default"]`,
   ])
 }
 
 export function validateStandardJSFormattting(code: string): boolean {
   return validateCode(code, [
     code.includes("'react'"),
-    !endsWith(code.trim(), ";")
+    !endsWith(code.trim(), ';'),
   ])
 }
 
@@ -102,6 +102,6 @@ export function validateTestsFile(
   return validateCode(code, [
     validateReactImport(code),
     validateComponentImport(code, componentName),
-    `Program > ImportDeclaration > Literal[value="enzyme"]`
+    `Program > ImportDeclaration > Literal[value="enzyme"]`,
   ])
 }

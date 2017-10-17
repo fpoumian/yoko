@@ -1,1 +1,1 @@
-export { default } from "./StatelessFunctionalComponent"
+export { default } from './StatelessFunctionalComponent'

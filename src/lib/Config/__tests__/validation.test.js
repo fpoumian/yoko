@@ -1,9 +1,9 @@
-import validateConfig from "../validation"
+import validateConfig from '../validation'
 
-describe("validateConfig", () => {
-  it("should throw TypeError when catching invalid value type for config.paths", () => {
+describe('validateConfig', () => {
+  it('should throw TypeError when catching invalid value type for config.paths', () => {
     const config = {
-      paths: []
+      paths: [],
     }
     expect.assertions(1)
     expect(() => {
@@ -13,9 +13,9 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for config.extensions", () => {
+  it('should throw TypeError when catching invalid value type for config.extensions', () => {
     const config = {
-      extensions: "js"
+      extensions: 'js',
     }
     expect.assertions(1)
     expect(() => {
@@ -25,9 +25,9 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for config.rules", () => {
+  it('should throw TypeError when catching invalid value type for config.rules', () => {
     const config = {
-      rules: false
+      rules: false,
     }
     expect.assertions(1)
     expect(() => {
@@ -37,9 +37,9 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should NOT throw TypeError for valid value type in config.formatting", () => {
+  it('should NOT throw TypeError for valid value type in config.formatting', () => {
     const config = {
-      formatting: {}
+      formatting: {},
     }
     expect.assertions(1)
     expect(() => {
@@ -47,11 +47,11 @@ describe("validateConfig", () => {
     }).not.toThrowError(TypeError)
   })
 
-  it("should throw TypeError when catching invalid value type for config.paths.components", () => {
+  it('should throw TypeError when catching invalid value type for config.paths.components', () => {
     const config = {
       paths: {
-        components: true
-      }
+        components: true,
+      },
     }
     expect.assertions(1)
     expect(() => {
@@ -61,12 +61,12 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for config.paths.containers", () => {
+  it('should throw TypeError when catching invalid value type for config.paths.containers', () => {
     const config = {
       paths: {
         // eslint-disable-next-line object-shorthand
-        containers: function() {}
-      }
+        containers: function() {},
+      },
     }
     expect.assertions(1)
     expect(() => {
@@ -76,11 +76,11 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for config.paths.templates", () => {
+  it('should throw TypeError when catching invalid value type for config.paths.templates', () => {
     const config = {
       paths: {
-        templates: undefined
-      }
+        templates: undefined,
+      },
     }
     expect.assertions(1)
     expect(() => {
@@ -90,11 +90,11 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for config.extensions.js", () => {
+  it('should throw TypeError when catching invalid value type for config.extensions.js', () => {
     const config = {
       extensions: {
-        js: null
-      }
+        js: null,
+      },
     }
     expect.assertions(1)
     expect(() => {
@@ -104,11 +104,11 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for config.extensions.stylesheet", () => {
+  it('should throw TypeError when catching invalid value type for config.extensions.stylesheet', () => {
     const config = {
       extensions: {
-        stylesheet: true
-      }
+        stylesheet: true,
+      },
     }
     expect.assertions(1)
     expect(() => {
@@ -118,11 +118,11 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for config.rules.component-name-root-dir", () => {
+  it('should throw TypeError when catching invalid value type for config.rules.component-name-root-dir', () => {
     const config = {
       rules: {
-        "component-name-root-dir": {}
-      }
+        'component-name-root-dir': {},
+      },
     }
     expect.assertions(1)
     expect(() => {
@@ -132,11 +132,11 @@ describe("validateConfig", () => {
     )
   })
 
-  it("should throw TypeError when catching invalid value type for formatting.prettier", () => {
+  it('should throw TypeError when catching invalid value type for formatting.prettier', () => {
     const config = {
       formatting: {
-        prettier: []
-      }
+        prettier: [],
+      },
     }
     expect.assertions(1)
     expect(() => {
@@ -146,28 +146,28 @@ describe("validateConfig", () => {
     )
   })
 
-  describe("when the configuration does NOT have any invalid values", () => {
+  describe('when the configuration does NOT have any invalid values', () => {
     const config = {
       paths: {
-        components: "",
-        containers: "",
-        templates: ""
+        components: '',
+        containers: '',
+        templates: '',
       },
       extensions: {
-        js: "js",
+        js: 'js',
         stylesheet: {
-          main: "css"
-        }
+          main: 'css',
+        },
       },
       rules: {
-        "component-name-root-dir": false
+        'component-name-root-dir': false,
       },
       formatting: {
-        prettier: true
-      }
+        prettier: true,
+      },
     }
 
-    it("should return the valid configuration object", () => {
+    it('should return the valid configuration object', () => {
       expect(validateConfig(config)).toEqual(config)
     })
   })

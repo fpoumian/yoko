@@ -1,6 +1,6 @@
 // @flow
-import type { IComposable } from "./interfaces"
-import type { IReadable } from "../Readable/interfaces"
+import type { IComposable } from './interfaces'
+import type { IReadable } from '../Readable/interfaces'
 
 export type Component = IComposable & IReadable
 
@@ -10,7 +10,7 @@ export type ReactComponentProps = {
   type: string,
   main: boolean,
   index: boolean,
-  stylesheet: boolean
+  stylesheet: boolean,
 }
 
 export type ReactComponentOptions = {
@@ -19,5 +19,5 @@ export type ReactComponentOptions = {
   main?: boolean,
   index?: boolean,
   stylesheet?: boolean,
-  tests?: boolean
+  tests?: boolean,
 }

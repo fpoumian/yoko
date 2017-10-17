@@ -1,6 +1,6 @@
 /* eslint-disable*/
 
-import React, { Component } from "react"
+import React, { Component } from 'react'
 
 class TestComponent extends Component() {
   render() {

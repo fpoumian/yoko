@@ -1,21 +1,21 @@
-import findUnresolved from "../findUnresolved"
+import findUnresolved from '../findUnresolved'
 
-describe("findUnresolved", () => {
+describe('findUnresolved', () => {
   const resolvedPlugins = [
     {
-      name: "index-file"
+      name: 'index-file',
     },
     {
-      name: "main-file"
-    }
+      name: 'main-file',
+    },
   ]
 
-  const pluginNames = ["index-file", "main-file", "tests-file"]
+  const pluginNames = ['index-file', 'main-file', 'tests-file']
 
-  it("should find unresolved plugins", () => {
+  it('should find unresolved plugins', () => {
     const result = findUnresolved(resolvedPlugins, pluginNames)
-    expect(result).toContain("tests-file")
-    expect(result).not.toContain("index-file")
-    expect(result).not.toContain("main-file")
+    expect(result).toContain('tests-file')
+    expect(result).not.toContain('index-file')
+    expect(result).not.toContain('main-file')
   })
 })

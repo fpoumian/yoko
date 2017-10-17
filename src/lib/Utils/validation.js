@@ -1,17 +1,17 @@
 // @flow
 
-import isPlainObject from "lodash/isPlainObject"
-import isString from "lodash/isString"
-import get from "lodash/get"
-import has from "lodash/has"
-import template from "lodash/template"
-import isBoolean from "lodash/isBoolean"
-import isNull from "lodash/isNull"
+import isPlainObject from 'lodash/isPlainObject'
+import isString from 'lodash/isString'
+import get from 'lodash/get'
+import has from 'lodash/has'
+import template from 'lodash/template'
+import isBoolean from 'lodash/isBoolean'
+import isNull from 'lodash/isNull'
 
 interface IValidator {
-  isValid((any) => boolean): boolean,
-  getErrorClass(): Function,
-  getErrorMessage(): string
+  isValid((any) => boolean): boolean;
+  getErrorClass(): Function;
+  getErrorMessage(): string;
 }
 
 export default function(context: string) {
@@ -28,11 +28,11 @@ export default function(context: string) {
           path,
           receivedType: get(
             value,
-            "constructor.name",
-            (isNull(value) && "Null") || typeof value
-          )
+            'constructor.name',
+            (isNull(value) && 'Null') || typeof value
+          ),
         })
-      }
+      },
     })
   }
 
@@ -70,7 +70,7 @@ export default function(context: string) {
   function validatePlainObjectPaths(object: Object, paths: string[]) {
     const validatorFactory = makeCreateTypeValidator({
       validateFn: isPlainObject,
-      messageTypeLabel: "an object"
+      messageTypeLabel: 'an object',
     })
     validateObjectPaths(object, paths, validatorFactory)
   }
@@ -78,7 +78,7 @@ export default function(context: string) {
   function validateStringPaths(object: Object, paths: string[]) {
     const validatorFactory = makeCreateTypeValidator({
       validateFn: isString,
-      messageTypeLabel: "a string"
+      messageTypeLabel: 'a string',
     })
     validateObjectPaths(object, paths, validatorFactory)
   }
@@ -86,7 +86,7 @@ export default function(context: string) {
   function validateStringOrPlainObjectPaths(object: Object, paths: string[]) {
     const validatorFactory = makeCreateTypeValidator({
       validateFn: isStringOrPlainObject,
-      messageTypeLabel: "a string or an object"
+      messageTypeLabel: 'a string or an object',
     })
     validateObjectPaths(object, paths, validatorFactory)
   }
@@ -94,7 +94,7 @@ export default function(context: string) {
   function validateBooleanPaths(object: Object, paths: string[]) {
     const validatorFactory = makeCreateTypeValidator({
       validateFn: isBoolean,
-      messageTypeLabel: "a boolean"
+      messageTypeLabel: 'a boolean',
     })
 
     validateObjectPaths(object, paths, validatorFactory)
@@ -103,7 +103,7 @@ export default function(context: string) {
   function validateBooleanOrPlainObjectPaths(object: Object, paths: string[]) {
     const validatorFactory = makeCreateTypeValidator({
       validateFn: isBooleanOrPlainObject,
-      messageTypeLabel: "a boolean or an object"
+      messageTypeLabel: 'a boolean or an object',
     })
     validateObjectPaths(object, paths, validatorFactory)
   }
@@ -113,6 +113,6 @@ export default function(context: string) {
     validateBooleanOrPlainObjectPaths,
     validateStringPaths,
     validateStringOrPlainObjectPaths,
-    validatePlainObjectPaths
+    validatePlainObjectPaths,
   }
 }

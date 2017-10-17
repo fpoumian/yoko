@@ -1,17 +1,17 @@
 // @flow
 
-import path from "path"
-import get from "lodash/get"
-import merge from "lodash/merge"
-import mapValues from "lodash/mapValues"
-import isPlainObject from "lodash/isPlainObject"
+import path from 'path'
+import get from 'lodash/get'
+import merge from 'lodash/merge'
+import mapValues from 'lodash/mapValues'
+import isPlainObject from 'lodash/isPlainObject'
 
-import type { Config } from "./types"
-import defaultConfig from "./default"
-import validateConfig from "./validation"
+import type { Config } from './types'
+import defaultConfig from './default'
+import validateConfig from './validation'
 
 function normalizePath(originalPath: string): string {
-  if (!originalPath) return ""
+  if (!originalPath) return ''
   return path.isAbsolute(originalPath)
     ? originalPath
     : path.resolve(...originalPath.trim().split(path.sep))
@@ -22,8 +22,8 @@ function normalizePaths(originalPaths: Object): Object {
 }
 
 function normalizeExtension(originalExt: string): string {
-  if (!originalExt || typeof originalExt === "undefined") return ""
-  return originalExt.trim().replace(/^(\.)/, "")
+  if (!originalExt || typeof originalExt === 'undefined') return ''
+  return originalExt.trim().replace(/^(\.)/, '')
 }
 
 function normalizeExtensions(originalExtensions: Object): Object {
@@ -31,29 +31,29 @@ function normalizeExtensions(originalExtensions: Object): Object {
 }
 
 function normalizeConfig(config) {
-  const normalizedPaths = normalizePaths(get(config, "paths"))
+  const normalizedPaths = normalizePaths(get(config, 'paths'))
   const normalizedJSExtensions = normalizeExtensions(
-    get(config, "extensions.js")
+    get(config, 'extensions.js')
   )
   const normalizedStylesheetExtensions = normalizeExtensions(
-    get(config, "extensions.stylesheet")
+    get(config, 'extensions.stylesheet')
   )
 
   return {
     ...config,
 
     paths: {
-      ...normalizedPaths
+      ...normalizedPaths,
     },
 
     extensions: {
       js: {
-        ...normalizedJSExtensions
+        ...normalizedJSExtensions,
       },
       stylesheet: {
-        ...normalizedStylesheetExtensions
-      }
-    }
+        ...normalizedStylesheetExtensions,
+      },
+    },
   }
 }
 

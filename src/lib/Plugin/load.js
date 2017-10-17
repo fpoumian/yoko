@@ -2,18 +2,18 @@
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-import EventEmitter from "events"
+import EventEmitter from 'events'
 
-import type { Plugin } from "./types"
-import constants from "./constants"
-import createPlugin from "./factory"
+import type { Plugin } from './types'
+import constants from './constants'
+import createPlugin from './factory'
 
 interface ILoader {
-  require(string): any
+  require(string): any;
 }
 
 interface IResolver {
-  resolve(string): string
+  resolve(string): string;
 }
 
 export default (loader: ILoader, resolver: IResolver, emitter: EventEmitter) =>
@@ -27,10 +27,10 @@ export default (loader: ILoader, resolver: IResolver, emitter: EventEmitter) =>
             pluginName,
             resolver.resolve(pluginFullName),
             loader.require(pluginFullName)
-          )
+          ),
         ]
       } catch (e) {
-        emitter.emit("error", `Cannot load plugin ${pluginName}`)
+        emitter.emit('error', `Cannot load plugin ${pluginName}`)
       }
       return acc
     }, [])

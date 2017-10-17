@@ -1,32 +1,32 @@
-import path from "path"
+import path from 'path'
 
-import { reduceComponentPaths } from "../utils"
+import { reduceComponentPaths } from '../utils'
 
-describe("reduceComponentPaths", () => {
+describe('reduceComponentPaths', () => {
   const component = {
     getPath: () => path.resolve(__dirname),
     getFiles: () => {},
-    getName: () => ""
+    getName: () => '',
   }
 
   const filePaths = [
     {
-      main: path.resolve(__dirname, "TestComponent.js")
+      main: path.resolve(__dirname, 'TestComponent.js'),
     },
     {
-      index: path.resolve(__dirname, "index.js")
+      index: path.resolve(__dirname, 'index.js'),
     },
     {
-      stylesheet: path.resolve(__dirname, "styles.css")
-    }
+      stylesheet: path.resolve(__dirname, 'styles.css'),
+    },
   ]
 
-  it("should return a reduced object of paths", () => {
+  it('should return a reduced object of paths', () => {
     expect(reduceComponentPaths(component, filePaths)).toEqual({
       root: path.resolve(__dirname),
-      main: path.resolve(__dirname, "TestComponent.js"),
-      index: path.resolve(__dirname, "index.js"),
-      stylesheet: path.resolve(__dirname, "styles.css")
+      main: path.resolve(__dirname, 'TestComponent.js'),
+      index: path.resolve(__dirname, 'index.js'),
+      stylesheet: path.resolve(__dirname, 'styles.css'),
     })
   })
 })

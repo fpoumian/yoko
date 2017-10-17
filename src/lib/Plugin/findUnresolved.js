@@ -1,5 +1,5 @@
 // @flow
-import find from "lodash/find"
+import find from 'lodash/find'
 
 export default function findUnresolvedPlugins(
   resolvedPlugins: Array<Object>,

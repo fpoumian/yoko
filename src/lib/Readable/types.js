@@ -2,5 +2,5 @@
 
 export type ReadableProps = {
   name: string,
-  path: string
+  path: string,
 }

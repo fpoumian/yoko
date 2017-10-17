@@ -4,23 +4,23 @@ export type Config = {
   paths: {
     components: string,
     containers: string,
-    templates: string
+    templates: string,
   },
   extensions: {
     js: {
       main: string,
       index: string,
-      tests: string
+      tests: string,
     },
     stylesheet: {
-      main: string
-    }
+      main: string,
+    },
   },
   plugins?: Array<string>,
   rules: {
-    "component-name-root-dir": boolean
+    'component-name-root-dir': boolean,
   },
   formatting: {
-    prettier: boolean | Object
-  }
+    prettier: boolean | Object,
+  },
 }

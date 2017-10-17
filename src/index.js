@@ -4,23 +4,23 @@
  * @module judex-component-generator
  */
 
-import EventEmitter from "events"
-import fs from "fs-extra"
-import nunjucks from "nunjucks"
-import prettier from "prettier"
+import EventEmitter from 'events'
+import fs from 'fs-extra'
+import nunjucks from 'nunjucks'
+import prettier from 'prettier'
 
-import makeInitGenerator from "./lib/Generator/init"
-import parseConfig from "./lib/Config/parse"
-import type { ReactComponentOptions } from "./lib/Component/types"
-import type { Config } from "./lib/Config/types"
-import makeLoadPlugins from "./lib/Plugin/load"
+import makeInitGenerator from './lib/Generator/init'
+import parseConfig from './lib/Config/parse'
+import type { ReactComponentOptions } from './lib/Component/types'
+import type { Config } from './lib/Config/types'
+import makeLoadPlugins from './lib/Plugin/load'
 
 // Setup event emitters
 const initEmitter = new EventEmitter()
 
-initEmitter.on("error", error => {
-  if (process.env.NODE_ENV === "test") {
-    if (error.code === "EBADF") {
+initEmitter.on('error', error => {
+  if (process.env.NODE_ENV === 'test') {
+    if (error.code === 'EBADF') {
       return
     }
   }
@@ -44,7 +44,7 @@ export function addEventListener(
  * @property {Function} generate - Generates a new React component.
  */
 export interface IGenerator {
-  generate(name: string, options: ReactComponentOptions): Object
+  generate(name: string, options: ReactComponentOptions): Object;
 }
 
 /**

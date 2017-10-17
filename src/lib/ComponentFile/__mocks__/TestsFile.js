@@ -1,3 +1,3 @@
-import React from "react"
-import { shallow } from "enzyme"
-import TestComponent from "../TestComponent"
+import React from 'react'
+import { shallow } from 'enzyme'
+import TestComponent from '../TestComponent'

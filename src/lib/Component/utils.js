@@ -1,6 +1,6 @@
 // @flow
 /* eslint import/prefer-default-export: off  */
-import type { Component } from "./types"
+import type { Component } from './types'
 
 export function reduceComponentPaths(
   component: Component,
@@ -9,10 +9,10 @@ export function reduceComponentPaths(
   return paths.reduce(
     (newPaths: Object, pathObj: Object) => ({
       ...newPaths,
-      ...pathObj
+      ...pathObj,
     }),
     {
-      root: component.getPath()
+      root: component.getPath(),
     }
   )
 }

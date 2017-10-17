@@ -1,7 +1,7 @@
-import path from "path"
-import makeResolveTemplate from "../resolveTemplate"
+import path from 'path'
+import makeResolveTemplate from '../resolveTemplate'
 
-describe("resolveTemplate", () => {
+describe('resolveTemplate', () => {
   let fs
   let resolveTemplate
 
@@ -9,88 +9,88 @@ describe("resolveTemplate", () => {
     resolveTemplate = makeResolveTemplate(fs)
   })
 
-  describe("given a propFiles object that does NOT contain a template property", () => {
+  describe('given a propFiles object that does NOT contain a template property', () => {
     const fileProps = {
-      name: "index",
-      extension: "js",
+      name: 'index',
+      extension: 'js',
       dir: path.resolve(__dirname),
-      role: "index"
+      role: 'index',
     }
 
-    it("should return null", () => {
+    it('should return null', () => {
       expect(resolveTemplate({}, fileProps)).toBe(null)
     })
   })
 
-  describe("given a propFiles object that contains a template property", () => {
+  describe('given a propFiles object that contains a template property', () => {
     const fileProps = {
-      name: "index",
-      extension: "js",
+      name: 'index',
+      extension: 'js',
       dir: path.resolve(__dirname),
-      role: "index",
+      role: 'index',
       template: {
-        name: "index-file.js",
-        dir: path.resolve(__dirname, "templates")
-      }
+        name: 'index-file.js',
+        dir: path.resolve(__dirname, 'templates'),
+      },
     }
 
-    describe("when the global config object does not contain a custom template path", () => {
+    describe('when the global config object does not contain a custom template path', () => {
       const config = {
-        paths: {}
+        paths: {},
       }
 
-      it("should return the same template object without changing it", () => {
+      it('should return the same template object without changing it', () => {
         expect(resolveTemplate(config, fileProps)).toEqual(fileProps.template)
       })
     })
 
-    describe("when the global config object contains an empty string in the templates path field", () => {
+    describe('when the global config object contains an empty string in the templates path field', () => {
       const config = {
         paths: {
-          templates: ""
-        }
+          templates: '',
+        },
       }
-      it("should return the same template object without changing it", () => {
+      it('should return the same template object without changing it', () => {
         expect(resolveTemplate(config, fileProps)).toEqual(fileProps.template)
       })
     })
 
-    describe("when the global config object contains a custom path field", () => {
+    describe('when the global config object contains a custom path field', () => {
       const config = {
         paths: {
-          templates: "/home/project/app/templates"
-        }
+          templates: '/home/project/app/templates',
+        },
       }
 
-      describe("when the template file exists in the custom templates dir", () => {
+      describe('when the template file exists in the custom templates dir', () => {
         beforeEach(() => {
           fs = {
             pathExistsSync() {
               return true
-            }
+            },
           }
           resolveTemplate = makeResolveTemplate(fs)
         })
 
-        it("should return a new template object with the dir prop pointing to the custom templates path", () => {
+        it('should return a new template object with the dir prop pointing to the custom templates path', () => {
           expect(resolveTemplate(config, fileProps)).toEqual({
-            name: "index-file.js",
-            dir: "/home/project/app/templates"
+            name: 'index-file.js',
+            dir: '/home/project/app/templates',
           })
         })
       })
 
-      describe("when the template file does not exist in the custom templates dir", () => {
+      describe('when the template file does not exist in the custom templates dir', () => {
         beforeEach(() => {
           fs = {
             pathExistsSync() {
               return false
-            }
+            },
           }
           resolveTemplate = makeResolveTemplate(fs)
         })
 
-        it("should return the original template object without changing it", () => {
+        it('should return the original template object without changing it', () => {
           expect(resolveTemplate(config, fileProps)).toEqual(fileProps.template)
         })
       })

@@ -1,6 +1,6 @@
 // @flow
 
-import type { Plugin } from "./types"
+import type { Plugin } from './types'
 
 export default function createPlugin(
   name: string,
@@ -14,6 +14,6 @@ export default function createPlugin(
     getPath() {
       return path
     },
-    init
+    init,
   }
 }

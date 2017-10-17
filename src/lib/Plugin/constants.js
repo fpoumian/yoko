@@ -1,3 +1,3 @@
 export default {
-  PLUGIN_PREFIX: "judex-plugin"
+  PLUGIN_PREFIX: 'judex-plugin',
 }

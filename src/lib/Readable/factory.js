@@ -1,7 +1,7 @@
 // @flow
 
-import type { IReadable } from "./interfaces"
-import type { ReadableProps } from "./types"
+import type { IReadable } from './interfaces'
+import type { ReadableProps } from './types'
 
 export default function({ name, path }: ReadableProps): IReadable {
   const Readable: IReadable = {
@@ -10,7 +10,7 @@ export default function({ name, path }: ReadableProps): IReadable {
     },
     getPath() {
       return path
-    }
+    },
   }
   return Readable
 }

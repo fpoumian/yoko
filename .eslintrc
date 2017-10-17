@@ -1,21 +1,19 @@
 {
   "parser": "babel-eslint",
   "extends": [
-    "airbnb-base",
-    "plugin:flowtype/recommended",
+    "standard",
     "prettier"
   ],
   "plugins": [
     "flowtype",
-    "flowtype-errors"
+    "flowtype-errors",
+    "prettier"
   ],
   "env": {
-    "jest": true
+    "jest": true,
+    "es6": true
   },
   "rules": {
-    "semi": [2, "never"],
-    "no-shadow":"off",
-    "comma-dangle": [2, "never"],
-    "flowtype-errors/show-errors": 2
+    "prettier/prettier": ["warn", {"singleQuote": true, "semi":false, "trailingComma": "es5"}]
   }
 }

@@ -2,21 +2,21 @@
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-import isPlainObject from "lodash/isPlainObject"
+import isPlainObject from 'lodash/isPlainObject'
 
-import type { IRenderable } from "./interfaces"
-import type { Component } from "./types"
-import type { ComponentFile } from "../ComponentFile/types"
-import type { Template } from "../Template/types"
-import type { IFileSystem } from "../FileSystem/interfaces"
-import makeWriteFile from "../ComponentFile/write"
-import type { ITemplateCompiler } from "../Template/interfaces"
-import type { IFileFormatter } from "../ComponentFile/interfaces"
-import type { Config } from "../Config/types"
+import type { IRenderable } from './interfaces'
+import type { Component } from './types'
+import type { ComponentFile } from '../ComponentFile/types'
+import type { Template } from '../Template/types'
+import type { IFileSystem } from '../FileSystem/interfaces'
+import makeWriteFile from '../ComponentFile/write'
+import type { ITemplateCompiler } from '../Template/interfaces'
+import type { IFileFormatter } from '../ComponentFile/interfaces'
+import type { Config } from '../Config/types'
 
 function getTemplateString(template: Template | null): string {
   if (!template) {
-    return ""
+    return ''
   }
   return require(template.getPath())
 }
@@ -50,8 +50,10 @@ export default (
     const filePromises: Array<Promise<any>> = roles.map((role: string) => {
       const file = componentFiles.get(role)
 
-      if (typeof file === "undefined") {
-        return Promise.reject(`Error writing file to ${component.getPath()}`)
+      if (typeof file === 'undefined') {
+        return Promise.reject(
+          new Error(`Error writing file to ${component.getPath()}`)
+        )
       }
 
       const compiledTemplate = compileTemplateString(
@@ -60,7 +62,7 @@ export default (
       )
 
       const renderedFile = renderCompiledTemplate(compiledTemplate, {
-        componentName: component.getName()
+        componentName: component.getName(),
       })
 
       const formattedFile = isPlainObject(config.formatting.prettier)
@@ -74,7 +76,7 @@ export default (
         .then(path => {
           const fileRole = file.getRole()
           return {
-            [fileRole]: path
+            [fileRole]: path,
           }
         })
         .catch(e => {

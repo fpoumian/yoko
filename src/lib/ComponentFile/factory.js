@@ -1,9 +1,9 @@
 // @flow
-import path from "path"
+import path from 'path'
 
-import type { ComponentFile, FileProps } from "./types"
-import createReadable from "../Readable/factory"
-import createTemplate from "../Template/factory"
+import type { ComponentFile, FileProps } from './types'
+import createReadable from '../Readable/factory'
+import createTemplate from '../Template/factory'
 
 export default function(props: FileProps): ComponentFile {
   const { name, extension, role } = props
@@ -13,7 +13,7 @@ export default function(props: FileProps): ComponentFile {
   const componentFile: ComponentFile = {
     ...createReadable({
       path: path.resolve(props.dir, `${props.name}.${props.extension}`),
-      name
+      name,
     }),
     getExtension() {
       return extension
@@ -23,7 +23,7 @@ export default function(props: FileProps): ComponentFile {
     },
     getRole() {
       return role
-    }
+    },
   }
 
   return componentFile

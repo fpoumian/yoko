@@ -1,30 +1,30 @@
 // @flow
 
-import path from "path"
-import type { Config } from "./types"
+import path from 'path'
+import type { Config } from './types'
 
 const config: Config = {
   paths: {
-    components: path.resolve(process.cwd(), "components"),
-    containers: path.resolve(process.cwd(), "containers"),
-    templates: ""
+    components: path.resolve(process.cwd(), 'components'),
+    containers: path.resolve(process.cwd(), 'containers'),
+    templates: '',
   },
   extensions: {
     js: {
-      main: "js",
-      index: "js",
-      tests: "test.js"
+      main: 'js',
+      index: 'js',
+      tests: 'test.js',
     },
     stylesheet: {
-      main: "css"
-    }
+      main: 'css',
+    },
   },
   rules: {
-    "component-name-root-dir": true
+    'component-name-root-dir': true,
   },
   formatting: {
-    prettier: true
-  }
+    prettier: true,
+  },
 }
 
 export default config

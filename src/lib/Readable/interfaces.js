@@ -1,6 +1,6 @@
 // @flow
 
 export interface IReadable {
-  getName(): string,
-  getPath(): string
+  getName(): string;
+  getPath(): string;
 }

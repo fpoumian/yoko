@@ -1,9 +1,9 @@
-import find from "lodash/find"
-import path from "path"
+import find from 'lodash/find'
+import path from 'path'
 
-import makeLoadPlugins from "../load"
+import makeLoadPlugins from '../load'
 
-describe("load", () => {
+describe('load', () => {
   let loadPlugins
   let loader
   let resolver
@@ -11,44 +11,44 @@ describe("load", () => {
 
   beforeEach(() => {
     emitter = {
-      emit: jest.fn()
+      emit: jest.fn(),
     }
   })
 
-  const plugins = ["main-file", "index-file"]
+  const plugins = ['main-file', 'index-file']
 
-  describe("given that all the plugins exist", () => {
+  describe('given that all the plugins exist', () => {
     beforeEach(() => {
       loader = {
-        require: jest.fn().mockReturnValue(() => function() {})
+        require: jest.fn().mockReturnValue(() => function() {}),
       }
       resolver = {
-        resolve: jest.fn().mockReturnValue(path.resolve(__dirname))
+        resolve: jest.fn().mockReturnValue(path.resolve(__dirname)),
       }
       loadPlugins = makeLoadPlugins(loader, resolver, emitter)
     })
 
-    it("should return an array with a length equal to the amount of plugins found", () => {
+    it('should return an array with a length equal to the amount of plugins found', () => {
       const loadedPlugins = loadPlugins(plugins)
       expect(loadedPlugins).toBeInstanceOf(Array)
       expect(loadedPlugins).toHaveLength(plugins.length)
     })
-    it("should return an array of objects with name, path and init properties", () => {
+    it('should return an array of objects with name, path and init properties', () => {
       const loadedPlugins = loadPlugins(plugins)
-      const mainFile = find(loadedPlugins, obj => obj.getName() === "main-file")
+      const mainFile = find(loadedPlugins, obj => obj.getName() === 'main-file')
       const indexFile = find(
         loadedPlugins,
-        obj => obj.getName() === "index-file"
+        obj => obj.getName() === 'index-file'
       )
-      expect(mainFile.getName()).toEqual("main-file")
+      expect(mainFile.getName()).toEqual('main-file')
       expect(mainFile.getPath()).toEqual(path.resolve(__dirname))
       expect(mainFile.init).toBeInstanceOf(Function)
-      expect(indexFile.getName()).toEqual("index-file")
+      expect(indexFile.getName()).toEqual('index-file')
       expect(indexFile.getPath()).toEqual(path.resolve(__dirname))
       expect(indexFile.init).toBeInstanceOf(Function)
     })
   })
-  describe("given that one plugin is not found", () => {
+  describe('given that one plugin is not found', () => {
     beforeEach(() => {
       loader = {
         require: jest
@@ -57,25 +57,25 @@ describe("load", () => {
           .mockImplementationOnce(() => function() {})
           // this will be the index-file plugin
           .mockImplementationOnce(() => {
-            throw new Error("mockImplementationError")
-          })
+            throw new Error('mockImplementationError')
+          }),
       }
       resolver = {
-        resolve: jest.fn().mockReturnValue(path.resolve(__dirname))
+        resolve: jest.fn().mockReturnValue(path.resolve(__dirname)),
       }
       loadPlugins = makeLoadPlugins(loader, resolver, emitter)
     })
 
-    it("should return an array that excludes not loaded plugins", () => {
+    it('should return an array that excludes not loaded plugins', () => {
       const loadedPlugins = loadPlugins(plugins)
       expect(loadedPlugins).toHaveLength(1)
     })
 
-    it("should call the emitter.emit method with an error argument", () => {
+    it('should call the emitter.emit method with an error argument', () => {
       loadPlugins(plugins)
       expect(emitter.emit).toHaveBeenCalledWith(
-        "error",
-        "Cannot load plugin index-file"
+        'error',
+        'Cannot load plugin index-file'
       )
     })
   })

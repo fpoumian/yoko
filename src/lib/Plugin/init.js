@@ -1,12 +1,12 @@
 // @flow
 
-import EventEmitter from "events"
+import EventEmitter from 'events'
 
-import type { Plugin } from "./types"
-import type { ReactComponentProps } from "../Component/types"
-import type { Config } from "../Config/types"
-import validateFilePlugin from "./validation"
-import constants from "./constants"
+import type { Plugin } from './types'
+import type { ReactComponentProps } from '../Component/types'
+import type { Config } from '../Config/types'
+import validateFilePlugin from './validation'
+import constants from './constants'
 
 export default (emitter: EventEmitter) =>
   function initPlugins(
@@ -22,12 +22,12 @@ export default (emitter: EventEmitter) =>
           {
             fileProps,
             name: plugin.getName(),
-            path: plugin.getPath()
-          }
+            path: plugin.getPath(),
+          },
         ]
       } catch (e) {
         emitter.emit(
-          "error",
+          'error',
           `Cannot initialize plugin ${constants.PLUGIN_PREFIX}-${plugin.getName()}.
            Problem: ${e}
            `

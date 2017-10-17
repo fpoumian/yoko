@@ -1,7 +1,7 @@
 // @flow
 
-import type { IReadable } from "../Readable/interfaces"
-import type { IInitialable } from "./interfaces"
+import type { IReadable } from '../Readable/interfaces'
+import type { IInitialable } from './interfaces'
 
 export type Plugin = IReadable & IInitialable
 

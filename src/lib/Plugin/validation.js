@@ -1,10 +1,10 @@
 // @flow
-import { isFunction, has, isString } from "lodash"
+import { isFunction, has, isString } from 'lodash'
 
-import type { Plugin } from "./types"
-import type { FileProps } from "../ComponentFile/types"
-import type { ReactComponentProps } from "../Component/types"
-import type { Config } from "../Config/types"
+import type { Plugin } from './types'
+import type { FileProps } from '../ComponentFile/types'
+import type { ReactComponentProps } from '../Component/types'
+import type { Config } from '../Config/types'
 
 export default function validateFilePlugin(
   plugin: Plugin,
@@ -17,7 +17,7 @@ export default function validateFilePlugin(
     )
   }
   const fileProps: FileProps = plugin.init(componentProps, config)
-  const requiredProps = ["name", "extension", "dir", "role"]
+  const requiredProps = ['name', 'extension', 'dir', 'role']
   requiredProps.forEach(prop => {
     if (!has(fileProps, prop)) {
       throw new Error(
@@ -30,7 +30,7 @@ export default function validateFilePlugin(
       )
     }
 
-    if (fileProps[prop].trim() === "") {
+    if (fileProps[prop].trim() === '') {
       throw new Error(
         `Property ${prop} of plugin ${plugin.getName()} cannot be an empty string.`
       )
