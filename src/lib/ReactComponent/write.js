@@ -51,7 +51,7 @@ export default (
       const file = componentFiles.get(role)
 
       if (typeof file === "undefined") {
-        throw new Error()
+        return Promise.reject(`Error writing file to ${component.getPath()}`)
       }
 
       const compiledTemplate = compileTemplateString(
