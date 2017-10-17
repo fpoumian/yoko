@@ -469,6 +469,7 @@ describe("judex-component-generator", () => {
             src: {
               components: {
                 ParentDir: {
+                  AnotherComponent: {},
                   TestComponent: {
                     "TestComponent.js": "",
                     "index.js": "",
@@ -477,6 +478,20 @@ describe("judex-component-generator", () => {
                 }
               }
             }
+          })
+        })
+
+        it("should only overwrite files for that specific component", done => {
+          expect.assertions(2)
+          expect(getDirContents(resolveInComponents("ParentDir"))).toContain(
+            "AnotherComponent"
+          )
+
+          generator.generate("ParentDir/TestComponent").on("done", () => {
+            expect(getDirContents(resolveInComponents("ParentDir"))).toContain(
+              "AnotherComponent"
+            )
+            done()
           })
         })
 

@@ -100,4 +100,41 @@ describe("validateComponentPath", () => {
       validateComponentPath(path)
     }).toThrowError(`The componentName argument cannot be an empty string.`)
   })
+
+  it("should throw error when component path contains invalid characters", () => {
+    expect(() => {
+      validateComponentPath("Parent?/")
+    }).toThrowError(
+      "The componentName argument contains an invalid character. Please remove it and try again."
+    )
+    expect(() => {
+      validateComponentPath("Parent/*.js")
+    }).toThrowError(
+      "The componentName argument contains an invalid character. Please remove it and try again."
+    )
+    expect(() => {
+      validateComponentPath("<Parent/")
+    }).toThrowError(
+      "The componentName argument contains an invalid character. Please remove it and try again."
+    )
+    expect(() => {
+      validateComponentPath("|Parent/")
+    }).toThrowError(
+      "The componentName argument contains an invalid character. Please remove it and try again."
+    )
+  })
+
+  describe("When the OS is Windows", () => {
+    beforeEach(() => {
+      process.platform = "win32"
+    })
+
+    it("should throw error when component path contains a reserved word", () => {
+      expect(() => {
+        validateComponentPath("aux")
+      }).toThrowError(
+        "The componentName argument you passed contains a reserved character. Please remove it and try again."
+      )
+    })
+  })
 })

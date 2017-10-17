@@ -56,8 +56,11 @@
   ],
   "dependencies": {
     "acorn-jsx": "^4.0.1",
+    "filename-reserved-regex": "^2.0.0",
     "fs-extra": "^4.0.1",
     "grasp-squery": "^0.4.0",
+    "is-valid-path": "^0.1.1",
+    "is-windows": "^1.0.1",
     "judex-plugin-index-file": "^0.1.0",
     "judex-plugin-main-file": "^0.1.0",
     "judex-plugin-stylesheet-file": "^0.1.0",
