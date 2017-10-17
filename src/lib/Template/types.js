@@ -1,7 +1,6 @@
 // @flow
 
 interface ITemplate {
-  getDir(): string;
   getPath(): string;
 }
 
