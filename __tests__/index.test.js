@@ -341,7 +341,7 @@ describe('judex-component-generator', () => {
         expect.assertions(1)
         generator
           .generate('TestComponent', {
-            type: 'es6class',
+            es6class: true,
           })
           .on('done', paths => {
             const testComponent = fs.readFileSync(path.resolve(paths.main), {
@@ -379,7 +379,7 @@ describe('judex-component-generator', () => {
           generator
             .generate('TestComponent', {
               container: true,
-              type: 'es6class',
+              es6class: true,
             })
             .on('done', paths => {
               const testComponent = fs.readFileSync(path.resolve(paths.main), {
@@ -421,7 +421,7 @@ describe('judex-component-generator', () => {
 
         generator
           .generate('TestComponent', {
-            type: 'es6class',
+            es6class: true,
           })
           .on('done', paths => {
             const testComponent = fs.readFileSync(path.resolve(paths.main), {
@@ -502,7 +502,7 @@ describe('judex-component-generator', () => {
 
           generator
             .generate('ParentDir/TestComponent', {
-              type: 'es6class',
+              es6class: true,
             })
             .on('done', paths => {
               const testComponent = fs.readFileSync(path.resolve(paths.main), {

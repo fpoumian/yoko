@@ -71,15 +71,15 @@ describe('validateComponentOptions', () => {
     )
   })
 
-  it('should throw error when type option is not a string', () => {
+  it('should throw error when es6class option is not a boolean', () => {
     const options = {
-      type: [],
+      es6class: [],
     }
 
     expect(() => {
       validateComponentOptions(options)
     }).toThrowError(
-      'You must pass a string as a value for type in the component options object. Array received instead.'
+      'You must pass a boolean as a value for es6class in the component options object. Array received instead.'
     )
   })
 })

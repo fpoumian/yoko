@@ -102,8 +102,8 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           const props: ReactComponentProps = {
             name: componentName,
             path: path.resolve(componentHome, ...parentDirs, rootName),
-            type: validOptions.type || 'sfc',
             main: validOptions.main || true,
+            es6class: validOptions.es6class || false,
             index: validOptions.index || false,
             stylesheet: validOptions.stylesheet || false,
             tests: validOptions.tests || false,

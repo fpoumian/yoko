@@ -26,6 +26,7 @@ export function validateComponentOptions(
     'index',
     'stylesheet',
     'tests',
+    'es6class',
   ])
 
   objectValidator.validateStringPaths(options, ['type'])

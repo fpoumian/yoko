@@ -1669,10 +1669,6 @@ escodegen@^1.6.1:
   optionalDependencies:
     source-map "~0.2.0"
 
-eslint-config-airbnb-base@^11.0.1:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-11.2.0.tgz#19a9dc4481a26f70904545ec040116876018f853"
-
 eslint-config-prettier@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-2.3.0.tgz#b75b1eabea0c8b97b34403647ee25db349b9d8a0"
@@ -3097,9 +3093,9 @@ judex-plugin-index-file@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/judex-plugin-index-file/-/judex-plugin-index-file-0.1.0.tgz#e57c2eed454191e2714c6c2b77197c2478af06d3"
 
-judex-plugin-main-file@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/judex-plugin-main-file/-/judex-plugin-main-file-0.1.0.tgz#dc82a366e010f637379e2b4c2ed190f6633bb866"
+judex-plugin-main-file@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/judex-plugin-main-file/-/judex-plugin-main-file-0.2.0.tgz#f255896eb3abb27f1f38a6ee6b50c27b91e476c4"
 
 judex-plugin-stylesheet-file@^0.1.0:
   version "0.1.1"

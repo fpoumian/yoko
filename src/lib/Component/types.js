@@ -7,7 +7,7 @@ export type Component = IComposable & IReadable
 export type ReactComponentProps = {
   name: string,
   path: string,
-  type: string,
+  es6class: boolean,
   main: boolean,
   index: boolean,
   stylesheet: boolean,
@@ -15,9 +15,9 @@ export type ReactComponentProps = {
 
 export type ReactComponentOptions = {
   container?: boolean,
-  type?: string,
   main?: boolean,
   index?: boolean,
+  es6class?: boolean,
   stylesheet?: boolean,
   tests?: boolean,
 }
