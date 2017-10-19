@@ -14,37 +14,39 @@ import parseConfig from './lib/Config/parse'
 import type { Config } from './lib/Config/types'
 import makeLoadPlugins from './lib/Plugin/load'
 import type { IGenerator } from './lib/Generator/interfaces'
+import type { ReactComponentOptions } from './lib/Component/types'
 
 // Setup event emitters
-const initEmitter = new EventEmitter()
-
-initEmitter.on('error', error => {
-  if (process.env.NODE_ENV === 'test') {
-    if (error.code === 'EBADF') {
-      return
-    }
-  }
-  console.error(error)
-})
+// const initEmitter = new EventEmitter()
+//
+// initEmitter.on('error', error => {
+//   if (process.env.NODE_ENV === 'test') {
+//     if (error.code === 'EBADF') {
+//       return
+//     }
+//   }
+//   console.error(error)
+// })
 
 /**
  *  Add Event Listeners.
  *  @param {string} [eventName] - The name of the event.
  *  @param {Function} [listener] - The listener function.
  */
-export function addEventListener(
-  eventName: string,
-  listener: any => any
-): void {
-  initEmitter.addListener(eventName, listener)
-}
+// export const addEventListener = function addEventListener(
+//   eventName: string,
+//   listener: any => any
+// ): void {
+//   initEmitter.addListener(eventName, listener)
+// }
 
 /**
- *  Initialize Generator.
+ *  Create Generator.
  *  @param {Object} [customConfig] - Global configuration object.
  */
 export default function(customConfig: Object = {}): IGenerator {
   let config: Config
+  const initEmitter = new EventEmitter()
 
   try {
     config = parseConfig(customConfig)
@@ -52,12 +54,38 @@ export default function(customConfig: Object = {}): IGenerator {
     throw e
   }
 
+  initEmitter.on('error', error => {
+    if (process.env.NODE_ENV === 'test') {
+      if (error.code === 'EBADF') {
+        return
+      }
+    }
+    console.error(error)
+  })
+
   const loadPlugins = makeLoadPlugins(
     { require },
     { resolve: require.resolve },
     initEmitter
   )
 
-  const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
-  return initGenerator(config)(fs, nunjucks, prettier)
+  function on(eventName: string, eventHandler: any) {
+    return initEmitter.on(eventName, eventHandler)
+  }
+
+  function generate(
+    componentPath: string,
+    options: ReactComponentOptions = {}
+  ) {
+    const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
+    return initGenerator(config)(fs, nunjucks, prettier).generate(
+      componentPath,
+      options
+    )
+  }
+
+  return {
+    on,
+    generate,
+  }
 }

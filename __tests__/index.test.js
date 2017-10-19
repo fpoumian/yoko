@@ -706,7 +706,6 @@ describe('judex-component-generator', () => {
             container: true,
           })
           .on('done', paths => {
-            console.log(paths)
             const testComponent = fs.readFileSync(path.resolve(paths.main), {
               encoding: 'utf8',
             })
@@ -893,6 +892,23 @@ describe('judex-component-generator', () => {
           true
         )
         done()
+      })
+    })
+  })
+
+  describe('Init Events', () => {
+    describe('given no additional plugins were specified in global config object', () => {
+      const config = {}
+      const generator = judex(config)
+
+      it('should emit pluginsRegistered event that returns an array of three plugins', done => {
+        expect.assertions(1)
+        generator.on('pluginsRegistered', plugins => {
+          expect(plugins).toHaveLength(3)
+        })
+        generator.generate('TestComponent').on('done', () => {
+          done()
+        })
       })
     })
   })
