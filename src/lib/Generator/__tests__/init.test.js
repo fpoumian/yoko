@@ -11,7 +11,7 @@ describe('init', () => {
 
   const pluginPrefix = constants.PLUGIN_PREFIX
 
-  const resolvedPlugins = [
+  const loadedPlugins = [
     {
       name: 'index-file',
       path: path.resolve(
@@ -37,11 +37,10 @@ describe('init', () => {
       ),
     },
   ]
-  const resolveFn = jest.fn().mockReturnValue([...resolvedPlugins])
 
-  const loadFn = jest.fn()
+  const loadFn = jest.fn().mockReturnValue([...loadedPlugins])
 
-  const initGenerator = makeInitGenerator(emitter, resolveFn, loadFn)
+  const initGenerator = makeInitGenerator(emitter, loadFn)
 
   describe('given a configuration object with one uninstalled plugin', () => {
     beforeEach(() => {
@@ -58,6 +57,11 @@ describe('init', () => {
         'stylesheet-file',
         'tests-file',
       ])
+    })
+
+    it('should emit pluginsLoaded event with an array of all loaded plugins', () => {
+      initGenerator(config)
+      expect(emitter.emit).toHaveBeenCalledWith('pluginsLoaded', loadedPlugins)
     })
   })
 })

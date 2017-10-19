@@ -3,8 +3,8 @@
 import path from 'path'
 import EventEmitter from 'events'
 
-import createReactComponent from '../Component/factory'
-import makeGenerateReactComponent from '../Component/generate'
+import createComponent from '../Component/factory'
+import makeGenerateComponent from '../Component/generate'
 import {
   validateComponentOptions,
   validateComponentPath,
@@ -23,7 +23,6 @@ import type {
 } from '../Component/types'
 import type { IFileSystem } from '../FileSystem/interfaces'
 import type { ITemplateCompiler } from '../Template/interfaces'
-import type { IGenerator } from './interfaces'
 import type { IEventListener } from '../EventEmitter/interfaces'
 import type { IFileFormatter } from '../ComponentFile/interfaces'
 
@@ -44,13 +43,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
    *  @param {Object} config - Global Configuration
    *  @return {IGenerator}
    */
-  function init(
-    config: Object
-  ): (
-    fs: IFileSystem,
-    templateCompiler: ITemplateCompiler,
-    fileFormatter: IFileFormatter
-  ) => IGenerator {
+  function init(config: Object): Function {
     const registeredPlugins = registerPlugins(config)
     initEmitter.emit('pluginsRegistered', registeredPlugins)
 
@@ -128,9 +121,9 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           )
 
           // Create component
-          const component: Component = createReactComponent(props, files)
+          const component: Component = createComponent(props, files)
 
-          const generateReactComponent = makeGenerateReactComponent(
+          const generateReactComponent = makeGenerateComponent(
             fs,
             emitter,
             templateCompiler,
