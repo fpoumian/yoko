@@ -103,7 +103,10 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
             name: componentName,
             path: path.resolve(componentHome, ...parentDirs, rootName),
             main: validOptions.main || true,
-            es6class: validOptions.es6class || false,
+            es6class:
+              (validOptions.container &&
+                config.rules['es6class-container-component']) ||
+              (validOptions.es6class || false),
             index: validOptions.index || false,
             stylesheet: validOptions.stylesheet || false,
             tests: validOptions.tests || false,

@@ -21,6 +21,7 @@ const config: Config = {
   },
   rules: {
     'component-name-root-dir': true,
+    'es6class-container-component': true,
   },
   formatting: {
     prettier: true,

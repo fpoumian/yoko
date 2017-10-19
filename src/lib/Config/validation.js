@@ -25,6 +25,7 @@ export default function(config: Config): Config {
 
   objectValidator.validateBooleanPaths(config, [
     'rules.component-name-root-dir',
+    'rules.es6class-container-component',
   ])
 
   objectValidator.validateBooleanOrPlainObjectPaths(config, [

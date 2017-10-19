@@ -373,6 +373,26 @@ describe('judex-component-generator', () => {
           })
       })
 
+      it('should create a valid React Component using the ES6 class template inside the Containers home dir', done => {
+        expect.assertions(2)
+        generator
+          .generate('TestComponent', {
+            container: true,
+          })
+          .on('done', paths => {
+            const testComponent = fs.readFileSync(path.resolve(paths.main), {
+              encoding: 'utf8',
+            })
+            expect(paths.root).toEqual(
+              path.resolve(containersDir, 'TestComponent')
+            )
+            expect(
+              validateES6ClassComponent(testComponent, 'TestComponent')
+            ).toBe(true)
+            done()
+          })
+      })
+
       describe('given that the ES6 Class option is set to true', () => {
         it('should create a valid React Component using the ES6 class template inside the Containers home dir', done => {
           expect.assertions(2)
@@ -656,6 +676,49 @@ describe('judex-component-generator', () => {
             expect(
               getDirContents(resolveInComponents('ComponentRootDirName'))
             ).not.toContain('index.js')
+            done()
+          })
+      })
+    })
+  })
+
+  describe('given a global configuration with es6class-container-component rule set to false', () => {
+    beforeEach(() => {
+      containersDir = path.resolve(process.cwd(), 'containers')
+    })
+
+    const config = {
+      paths: {
+        containers: path.resolve(process.cwd(), 'containers'),
+      },
+      rules: {
+        'es6class-container-component': false,
+      },
+    }
+
+    const generator = judex(config)
+
+    describe('when the container option is set to true', () => {
+      it('should create a valid React Component using the Stateless Functional Component template inside the Containers home dir', done => {
+        expect.assertions(2)
+        generator
+          .generate('TestComponent', {
+            container: true,
+          })
+          .on('done', paths => {
+            console.log(paths)
+            const testComponent = fs.readFileSync(path.resolve(paths.main), {
+              encoding: 'utf8',
+            })
+            expect(paths.root).toEqual(
+              path.resolve(containersDir, 'TestComponent')
+            )
+            expect(
+              validateStatelessFunctionalComponent(
+                testComponent,
+                'TestComponent'
+              )
+            ).toBe(true)
             done()
           })
       })

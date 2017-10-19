@@ -24,6 +24,7 @@ describe('given that the user did not provide any custom configuration', () => {
       },
       rules: {
         'component-name-root-dir': true,
+        'es6class-container-component': true,
       },
       formatting: {
         prettier: true,
