@@ -35,6 +35,8 @@ export default (
     const removeComponentRootDir = makeRemoveComponentRootDir(fs)
     const createComponentRootDir = makeCreateComponentRootDir(fs)
 
+    // TODO: Rethink removing strategy when component-name-root-dir rule is set to false
+    // and component/container does not have any parent directory.
     return removeComponentRootDir(component)
       .then(createComponentRootDir)
       .then(component => writeComponentFiles(component, config))

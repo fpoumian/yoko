@@ -16,30 +16,6 @@ import makeLoadPlugins from './lib/Plugin/load'
 import type { IGenerator } from './lib/Generator/interfaces'
 import type { ReactComponentOptions } from './lib/Component/types'
 
-// Setup event emitters
-// const initEmitter = new EventEmitter()
-//
-// initEmitter.on('error', error => {
-//   if (process.env.NODE_ENV === 'test') {
-//     if (error.code === 'EBADF') {
-//       return
-//     }
-//   }
-//   console.error(error)
-// })
-
-/**
- *  Add Event Listeners.
- *  @param {string} [eventName] - The name of the event.
- *  @param {Function} [listener] - The listener function.
- */
-// export const addEventListener = function addEventListener(
-//   eventName: string,
-//   listener: any => any
-// ): void {
-//   initEmitter.addListener(eventName, listener)
-// }
-
 /**
  *  Create Generator.
  *  @param {Object} [customConfig] - Global configuration object.

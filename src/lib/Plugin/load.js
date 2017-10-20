@@ -30,7 +30,7 @@ export default (loader: ILoader, resolver: IResolver, emitter: EventEmitter) =>
           ),
         ]
       } catch (e) {
-        emitter.emit('error', `Cannot load plugin ${pluginName}`)
+        emitter.emit('cannotLoadPlugin', pluginFullName)
       }
       return acc
     }, [])

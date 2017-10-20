@@ -71,11 +71,11 @@ describe('load', () => {
       expect(loadedPlugins).toHaveLength(1)
     })
 
-    it('should call the emitter.emit method with an error argument', () => {
+    it('should call the emitter.emit method with a cannotLoadPlugin argument', () => {
       loadPlugins(plugins)
       expect(emitter.emit).toHaveBeenCalledWith(
-        'error',
-        'Cannot load plugin index-file'
+        'cannotLoadPlugin',
+        'judex-plugin-index-file'
       )
     })
   })

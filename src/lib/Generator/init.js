@@ -44,11 +44,13 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
    *  @return {IGenerator}
    */
   function init(config: Object): Function {
+    initEmitter.emit('initGenerator')
+
     const registeredPlugins = registerPlugins(config)
     initEmitter.emit('pluginsRegistered', registeredPlugins)
 
     const plugins: Plugin[] = loadPlugins(registeredPlugins)
-    initEmitter.emit('pluginsLoaded', plugins)
+    initEmitter.emit('pluginsLoaded', plugins.map(plugin => plugin.getName()))
 
     // Inject generator dependencies
     return (

@@ -1,52 +1,38 @@
-import path from 'path'
 import makeInitGenerator from '../init'
-import constants from '../../Plugin/constants'
 
 describe('init', () => {
   let config
-
-  const emitter = {
-    emit: jest.fn(),
-  }
-
-  const pluginPrefix = constants.PLUGIN_PREFIX
+  let emitter
+  let loadFn
+  let initGenerator
 
   const loadedPlugins = [
     {
-      name: 'index-file',
-      path: path.resolve(
-        __dirname,
-        'node_modules',
-        `${pluginPrefix}-index-file`
-      ),
+      getName: () => 'index-file',
     },
     {
-      name: 'main-file',
-      path: path.resolve(
-        __dirname,
-        'node_modules',
-        `${pluginPrefix}-main-file`
-      ),
+      getName: () => 'main-file',
     },
     {
-      name: 'stylesheet-file',
-      path: path.resolve(
-        __dirname,
-        'node_modules',
-        `${pluginPrefix}-stylesheet-file`
-      ),
+      getName: () => 'stylesheet-file',
     },
   ]
-
-  const loadFn = jest.fn().mockReturnValue([...loadedPlugins])
-
-  const initGenerator = makeInitGenerator(emitter, loadFn)
 
   describe('given a configuration object with one uninstalled plugin', () => {
     beforeEach(() => {
       config = {
         plugins: ['tests-file'],
       }
+      emitter = {
+        emit: jest.fn(),
+      }
+      loadFn = jest.fn().mockReturnValue([...loadedPlugins])
+      initGenerator = makeInitGenerator(emitter, loadFn)
+    })
+
+    it('should emit initGenerator event', () => {
+      initGenerator(config)
+      expect(emitter.emit).toHaveBeenCalledWith('initGenerator')
     })
 
     it('should emit pluginsRegistered event with an array of all registered plugins', () => {
@@ -61,7 +47,11 @@ describe('init', () => {
 
     it('should emit pluginsLoaded event with an array of all loaded plugins', () => {
       initGenerator(config)
-      expect(emitter.emit).toHaveBeenCalledWith('pluginsLoaded', loadedPlugins)
+      expect(emitter.emit).toHaveBeenCalledWith('pluginsLoaded', [
+        'index-file',
+        'main-file',
+        'stylesheet-file',
+      ])
     })
   })
 })
