@@ -1,10 +1,22 @@
 // @flow
 import { isFunction, has, isString } from 'lodash'
+import Joi from 'joi'
 
 import type { Plugin } from './types'
 import type { FileProps } from '../ComponentFile/types'
 import type { ReactComponentProps } from '../Component/types'
 import type { Config } from '../Config/types'
+
+const schema = Joi.object().keys({
+  name: Joi.string().required(),
+  extension: Joi.string().required(),
+  dir: Joi.string().required(),
+  role: Joi.string().required(),
+  template: Joi.object().keys({
+    dir: Joi.string().required(),
+    name: Joi.string().required(),
+  }),
+})
 
 export default function validateFilePlugin(
   plugin: Plugin,
@@ -17,6 +29,15 @@ export default function validateFilePlugin(
     )
   }
   const fileProps: FileProps = plugin.init(componentProps, config)
+
+  const result = Joi.validate(fileProps, schema)
+
+  if (result.error) {
+    throw new Error(result.error)
+  }
+
+  return result.value
+
   const requiredProps = ['name', 'extension', 'dir', 'role']
   requiredProps.forEach(prop => {
     if (!has(fileProps, prop)) {

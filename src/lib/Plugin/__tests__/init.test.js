@@ -18,24 +18,32 @@ describe('initializePlugins', () => {
       {
         getName: jest.fn().mockReturnValue('main-file'),
         getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
-        init: jest.fn().mockImplementation(() => ({
+        init: jest.fn().mockReturnValue({
           name: 'ComponentName',
           extension: 'js',
           dir: path.resolve(__dirname),
           role: 'index',
-          template: 'StatelessFunctionalComponent.js',
-        })),
+          template: {
+            name: 'stateless-functional-component.js',
+            dir: path.resolve(__dirname, 'templates'),
+            context: {},
+          },
+        }),
       },
       {
         getName: jest.fn().mockReturnValue('index-file'),
         getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
-        init: jest.fn().mockImplementation(() => ({
+        init: jest.fn().mockReturnValue({
           name: 'index',
           extension: 'js',
           dir: path.resolve(__dirname),
           role: 'index',
-          template: 'IndexFile.js',
-        })),
+          template: {
+            name: 'index-file.js',
+            dir: path.resolve(__dirname, 'templates'),
+            context: {},
+          },
+        }),
       },
     ]
 
@@ -48,7 +56,11 @@ describe('initializePlugins', () => {
           extension: 'js',
           dir: path.resolve(__dirname),
           role: 'index',
-          template: 'StatelessFunctionalComponent.js',
+          template: {
+            name: 'stateless-functional-component.js',
+            dir: path.resolve(__dirname, 'templates'),
+            context: {},
+          },
         },
       },
       {
@@ -59,7 +71,11 @@ describe('initializePlugins', () => {
           extension: 'js',
           dir: path.resolve(__dirname),
           role: 'index',
-          template: 'IndexFile.js',
+          template: {
+            name: 'index-file.js',
+            dir: path.resolve(__dirname, 'templates'),
+            context: {},
+          },
         },
       },
     ]
@@ -79,7 +95,10 @@ describe('initializePlugins', () => {
           extension: 'js',
           dir: path.resolve(__dirname),
           role: 'index',
-          template: 'StatelessFunctionalComponent.js',
+          template: {
+            name: 'stateless-functional-component.js',
+            dir: path.resolve(__dirname, 'templates'),
+          },
         })),
       },
       {
@@ -89,7 +108,10 @@ describe('initializePlugins', () => {
           extension: 'js',
           dir: path.resolve(__dirname),
           role: 'index',
-          template: 'IndexFile.js',
+          template: {
+            name: 'index-file.js',
+            dir: path.resolve(__dirname, 'templates'),
+          },
         })),
       },
     ]
@@ -106,7 +128,10 @@ describe('initializePlugins', () => {
             extension: 'js',
             dir: path.resolve(__dirname),
             role: 'index',
-            template: 'StatelessFunctionalComponent.js',
+            template: {
+              name: 'stateless-functional-component.js',
+              dir: path.resolve(__dirname, 'templates'),
+            },
           },
         },
       ])
@@ -114,10 +139,6 @@ describe('initializePlugins', () => {
     it('should call the emitter emit method with an error argument', () => {
       initPlugins(plugins)
       expect(emitter.emit.mock.calls[0][0]).toBe('error')
-      expect(emitter.emit.mock.calls[0][1]).toContain(
-        'Cannot initialize plugin'
-      )
-      expect(emitter.emit.mock.calls[0][1]).toContain('index-file')
     })
   })
 })

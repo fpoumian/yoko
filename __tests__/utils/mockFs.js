@@ -26,11 +26,24 @@ const templateConstants = {
 export default function mockFileSystem() {
   return {
     node_modules: {
-      // NOTE: tests will fail if this prettier file is not directly copied
+      // NOTE: tests will fail if this files are not directly copied.
       prettier: {
         'parser-babylon.js': fs.readFileSync(
           path.resolve('./node_modules/prettier/parser-babylon.js')
         ),
+      },
+      joi: {
+        'package.json': fs.readFileSync(
+          path.resolve('./node_modules/joi/package.json')
+        ),
+        lib: {
+          'schemas.js': fs.readFileSync(
+            path.resolve('./node_modules/joi/lib/schemas.js')
+          ),
+          'index.js': fs.readFileSync(
+            path.resolve('./node_modules/joi/lib/index.js')
+          ),
+        },
       },
       [mainPluginName]: {
         'index.js': fs.readFileSync(mainFilePluginPath, 'utf8'),
