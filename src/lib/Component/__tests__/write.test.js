@@ -1,4 +1,3 @@
-import nunjucks from 'nunjucks'
 import path from 'path'
 import find from 'lodash/find'
 

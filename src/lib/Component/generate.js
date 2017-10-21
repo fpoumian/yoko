@@ -11,8 +11,13 @@ import type { IFileFormatter } from '../ComponentFile/interfaces'
 import type { Config } from '../Config/types'
 
 const makeRemoveComponentRootDir = (fs: IFileSystem) =>
-  function removeComponentRootDir(component: Component): Promise<Component> {
-    return fs.remove(component.getPath()).then(() => component)
+  function removeComponentRootDir(
+    component: Component,
+    config: Config
+  ): Promise<Component> {
+    return !config.rules['component-name-root-dir']
+      ? Promise.resolve(component)
+      : fs.remove(component.getPath()).then(() => component)
   }
 
 const makeCreateComponentRootDir = (fs: IFileSystem) =>
@@ -36,8 +41,7 @@ export default (
     const createComponentRootDir = makeCreateComponentRootDir(fs)
 
     // TODO: Rethink removing strategy when component-name-root-dir rule is set to false
-    // and component/container does not have any parent directory.
-    return removeComponentRootDir(component)
+    return removeComponentRootDir(component, config)
       .then(createComponentRootDir)
       .then(component => writeComponentFiles(component, config))
       .then((componentFilesPaths: Object[]) => {
