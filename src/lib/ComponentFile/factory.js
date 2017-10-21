@@ -18,6 +18,9 @@ export default function(props: FileProps): ComponentFile {
     getExtension() {
       return extension
     },
+    hasTemplate() {
+      return template !== null
+    },
     getTemplate() {
       return template
     },

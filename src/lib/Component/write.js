@@ -14,10 +14,7 @@ import type { ITemplateCompiler } from '../Template/interfaces'
 import type { IFileFormatter } from '../ComponentFile/interfaces'
 import type { Config } from '../Config/types'
 
-function getTemplateString(template: Template | null): string {
-  if (!template) {
-    return ''
-  }
+function getTemplateString(template: Template): string {
   return require(template.getPath())
 }
 
@@ -56,23 +53,31 @@ export default (
         )
       }
 
-      const compiledTemplate = compileTemplateString(
-        templateCompiler,
-        getTemplateString(file.getTemplate())
-      )
+      let fileOutput
+      const template = file.getTemplate()
 
-      const renderedFile = renderCompiledTemplate(compiledTemplate, {
-        componentName: component.getName(),
-      })
+      if (template) {
+        const compiledTemplate = compileTemplateString(
+          templateCompiler,
+          getTemplateString(template)
+        )
 
-      const formattedFile = isPlainObject(config.formatting.prettier)
-        ? // $FlowFixMe
-          fileFormatter.format(renderedFile, config.formatting.prettier)
-        : fileFormatter.format(renderedFile)
+        const renderedFile = renderCompiledTemplate(
+          compiledTemplate,
+          template.getContext()
+        )
+
+        fileOutput = isPlainObject(config.formatting.prettier)
+          ? // $FlowFixMe
+            fileFormatter.format(renderedFile, config.formatting.prettier)
+          : fileFormatter.format(renderedFile)
+      } else {
+        fileOutput = ''
+      }
 
       const writeFile = makeWriteFile(fs)
 
-      return writeFile(file, formattedFile)
+      return writeFile(file, fileOutput)
         .then(path => {
           const fileRole = file.getRole()
           return {

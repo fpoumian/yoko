@@ -4,6 +4,7 @@ import type { Template } from '../Template/types'
 
 export interface IComponentFile {
   getTemplate(): Template | null;
+  hasTemplate(): boolean;
   getRole(): string;
 }
 

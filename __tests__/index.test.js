@@ -635,6 +635,55 @@ describe('judex-component-generator', () => {
       })
     })
 
+    it('should create a stylesheet that is named like the component', done => {
+      expect.assertions(1)
+      generator
+        .generate('TestComponent', { stylesheet: true })
+        .on('done', paths => {
+          expect(paths).toHaveProperty(
+            'stylesheet',
+            resolveInComponents('TestComponent.css')
+          )
+          done()
+        })
+    })
+
+    it('should NOT delete files', done => {
+      expect.assertions(6)
+      const emitter = generator
+        .generate('ComponentsHomeDir/TestComponent', { stylesheet: true })
+        .on('done', () => {
+          expect(
+            getDirContents(resolveInComponents('ComponentsHomeDir'))
+          ).toContain('TestComponent.js')
+          expect(
+            getDirContents(resolveInComponents('ComponentsHomeDir'))
+          ).toContain('TestComponent.css')
+        })
+
+      emitter.on('done', () => {
+        generator
+          .generate('ComponentsHomeDir/AnotherTestComponent', {
+            stylesheet: true,
+          })
+          .on('done', () => {
+            expect(
+              getDirContents(resolveInComponents('ComponentsHomeDir'))
+            ).toContain('TestComponent.js')
+            expect(
+              getDirContents(resolveInComponents('ComponentsHomeDir'))
+            ).toContain('TestComponent.css')
+            expect(
+              getDirContents(resolveInComponents('ComponentsHomeDir'))
+            ).toContain('AnotherTestComponent.js')
+            expect(
+              getDirContents(resolveInComponents('ComponentsHomeDir'))
+            ).toContain('AnotherTestComponent.css')
+            done()
+          })
+      })
+    })
+
     it('should be able to handle components with no nested paths and needless file extension', done => {
       expect.assertions(1)
       generator.generate('TestComponent.jsx').on('done', paths => {

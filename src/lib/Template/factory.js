@@ -9,5 +9,8 @@ export default function(props: TemplateProps): Template {
     getPath() {
       return path.resolve(dir, name)
     },
+    getContext() {
+      return props.context
+    },
   }
 }

@@ -3089,22 +3089,6 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.3.6"
 
-judex-plugin-index-file@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/judex-plugin-index-file/-/judex-plugin-index-file-0.1.0.tgz#e57c2eed454191e2714c6c2b77197c2478af06d3"
-
-judex-plugin-main-file@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/judex-plugin-main-file/-/judex-plugin-main-file-0.2.0.tgz#f255896eb3abb27f1f38a6ee6b50c27b91e476c4"
-
-judex-plugin-stylesheet-file@^0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/judex-plugin-stylesheet-file/-/judex-plugin-stylesheet-file-0.1.1.tgz#ae3ae42ee04101467a2a9dcfd9fc55aed70cd46a"
-
-judex-plugin-tests-file@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/judex-plugin-tests-file/-/judex-plugin-tests-file-0.1.0.tgz#eb64e1595bdae022e03611cbe318c246a0cb0055"
-
 kebab-case@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/kebab-case/-/kebab-case-1.0.0.tgz#3f9e4990adcad0c686c0e701f7645868f75f91eb"
