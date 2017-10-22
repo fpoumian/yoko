@@ -11,6 +11,8 @@ import prettier from 'prettier'
 
 import makeInitGenerator from './lib/Generator/init'
 import parseConfig from './lib/Config/parse'
+import normalizeConfig from './lib/Config/normalize'
+import validateConfig from './lib/Config/validation'
 import type { Config } from './lib/Config/types'
 import makeLoadPlugins from './lib/Plugin/load'
 import type { IGenerator } from './lib/Generator/interfaces'
@@ -25,7 +27,7 @@ export default function(customConfig: Object = {}): IGenerator {
   const initEmitter = new EventEmitter()
 
   try {
-    config = parseConfig(customConfig)
+    config = parseConfig(normalizeConfig, validateConfig)(customConfig)
   } catch (e) {
     throw e
   }

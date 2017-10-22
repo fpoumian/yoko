@@ -1,6 +1,10 @@
 import path from 'path'
+import makeParseConfig from '../parse'
+import normalizeConfig from '../normalize'
+import validateConfig from '../validation'
+import BadConfigError from '../../Errors/BadConfigError'
 
-import parseConfig from '../parse'
+const parseConfig = makeParseConfig(normalizeConfig, validateConfig)
 
 describe('given that the user did not provide any custom configuration', () => {
   const userConfig = {}
@@ -229,23 +233,11 @@ describe('given that the user provided a custom templates path', () => {
 })
 
 describe('given that the user provided an invalid config argument', () => {
-  it('should throw an error', () => {
+  it('should throw a TypeError', () => {
     expect.assertions(1)
     const userConfig = []
     expect(() => {
       parseConfig(userConfig)
-    }).toThrowError()
-  })
-  it('should throw an error with correct error type and message', () => {
-    expect.assertions(2)
-    const userConfig = []
-    expect(() => {
-      parseConfig(userConfig)
     }).toThrowError(TypeError)
-    expect(() => {
-      parseConfig(userConfig)
-    }).toThrowError(
-      'You must provide a plain object type as the configuration argument. Array provided.'
-    )
   })
 })
