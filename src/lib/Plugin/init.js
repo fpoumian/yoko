@@ -14,6 +14,7 @@ const schema = Joi.object().keys({
   extension: Joi.string().required(),
   dir: Joi.string().required(),
   role: Joi.string().required(),
+  skip: Joi.boolean(),
   template: Joi.object().keys({
     dir: Joi.string().required(),
     name: Joi.string().required(),
@@ -39,8 +40,13 @@ export default (emitter: EventEmitter) =>
           schema
         )
         if (error) {
-          throw error
+          throw new TypeError(error)
         }
+
+        if (value.skip) {
+          throw new Error()
+        }
+
         return [
           ...acc,
           {
@@ -50,12 +56,22 @@ export default (emitter: EventEmitter) =>
           },
         ]
       } catch (e) {
-        emitter.emit(
-          'error',
-          `Cannot initialize plugin ${constants.PLUGIN_PREFIX}-${plugin.getName()}.
+        if (e instanceof TypeError) {
+          emitter.emit(
+            'error',
+            `Cannot initialize plugin ${constants.PLUGIN_PREFIX}-${plugin.getName()}.
            Problem: ${e}
            `
-        )
+          )
+        }
+        if (e instanceof Error) {
+          emitter.emit(
+            'warn',
+            `The value of the skip property in the plugin ${constants.PLUGIN_PREFIX}-${plugin.getName()} is set to true, 
+             therefore the file assigned to this plugin will not be created.
+           `
+          )
+        }
         return acc
       }
     }, [])

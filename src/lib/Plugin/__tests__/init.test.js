@@ -141,4 +141,63 @@ describe('initializePlugins', () => {
       expect(emitter.emit.mock.calls[0][0]).toBe('error')
     })
   })
+
+  describe('given a set of one correct plugin and one plugin whose skip value is set to true', () => {
+    const plugins = [
+      {
+        getName: jest.fn().mockReturnValue('main-file'),
+        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        init: jest.fn().mockImplementation(() => ({
+          name: 'ComponentName',
+          extension: 'js',
+          dir: path.resolve(__dirname),
+          role: 'main',
+          template: {
+            name: 'stateless-functional-component.js',
+            dir: path.resolve(__dirname, 'templates'),
+          },
+        })),
+      },
+      {
+        getName: jest.fn().mockReturnValue('index-file'),
+        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        init: jest.fn().mockImplementation(() => ({
+          name: 'index',
+          extension: 'js',
+          dir: path.resolve(__dirname),
+          role: 'index',
+          skip: true,
+          template: {
+            name: 'index-file.js',
+            dir: path.resolve(__dirname, 'templates'),
+          },
+        })),
+      },
+    ]
+
+    it('should register the correct plugin', () => {
+      const registered = initPlugins(plugins)
+      expect(registered).toHaveLength(1)
+      expect(registered).toEqual([
+        {
+          name: 'main-file',
+          path: path.resolve(__dirname),
+          fileProps: {
+            name: 'ComponentName',
+            extension: 'js',
+            dir: path.resolve(__dirname),
+            role: 'main',
+            template: {
+              name: 'stateless-functional-component.js',
+              dir: path.resolve(__dirname, 'templates'),
+            },
+          },
+        },
+      ])
+    })
+    it('should call the emitter emit method with a warn argument', () => {
+      initPlugins(plugins)
+      expect(emitter.emit.mock.calls[0][0]).toBe('warn')
+    })
+  })
 })

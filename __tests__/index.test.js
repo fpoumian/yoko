@@ -648,6 +648,15 @@ describe('judex-component-generator', () => {
         })
     })
 
+    it('should NOT create the file of a plugin whose skip prop is set to true', done => {
+      // In this case we're assuming the plugin is the index-file plugin.
+      expect.assertions(1)
+      generator.generate('TestComponent', { index: true }).on('done', paths => {
+        expect(paths).not.toHaveProperty('index')
+        done()
+      })
+    })
+
     xit('should NOT delete files', done => {
       expect.assertions(6)
       const emitter = generator
