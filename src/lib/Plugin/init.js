@@ -8,6 +8,8 @@ import type { Plugin } from './types'
 import type { ReactComponentProps } from '../Component/types'
 import type { Config } from '../Config/types'
 import constants from './constants'
+import InvalidPluginError from '../Errors/InvalidPluginError'
+import SkipPluginError from '../Errors/SkipPluginError'
 
 const schema = Joi.object().keys({
   name: Joi.string().required(),
@@ -31,7 +33,7 @@ export default (emitter: EventEmitter) =>
     return plugins.reduce((acc, plugin) => {
       try {
         if (!isFunction(plugin.init)) {
-          throw new TypeError(
+          throw new InvalidPluginError(
             `Plugin ${plugin.getName()} does not export a function.`
           )
         }
@@ -40,11 +42,11 @@ export default (emitter: EventEmitter) =>
           schema
         )
         if (error) {
-          throw new TypeError(error)
+          throw new InvalidPluginError(error)
         }
 
         if (value.skip) {
-          throw new Error()
+          throw new SkipPluginError()
         }
 
         return [
@@ -56,7 +58,7 @@ export default (emitter: EventEmitter) =>
           },
         ]
       } catch (e) {
-        if (e instanceof TypeError) {
+        if (e instanceof InvalidPluginError) {
           emitter.emit(
             'error',
             `Cannot initialize plugin ${constants.PLUGIN_PREFIX}-${plugin.getName()}.
@@ -64,7 +66,7 @@ export default (emitter: EventEmitter) =>
            `
           )
         }
-        if (e instanceof Error) {
+        if (e instanceof SkipPluginError) {
           emitter.emit(
             'warn',
             `The value of the skip property in the plugin ${constants.PLUGIN_PREFIX}-${plugin.getName()} is set to true, 
