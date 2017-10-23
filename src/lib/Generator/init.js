@@ -56,6 +56,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
       componentFs,
       templateCompiler,
       fileFormatter,
+      pluginValidator,
     }: GeneratorDependencies) => {
       /**
        * Generate a React component
@@ -107,7 +108,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           }
 
           // Initialize plugins
-          const initPlugins = makeInitPlugins(emitter)
+          const initPlugins = makeInitPlugins(emitter, pluginValidator)
           const filePluginsData: Object[] = initPlugins(
             plugins,
             { ...props },

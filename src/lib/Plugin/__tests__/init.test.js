@@ -2,7 +2,7 @@ import path from 'path'
 
 import makeInitPlugins from '../init'
 
-describe('initializePlugins', () => {
+xdescribe('initializePlugins', () => {
   let emitter
   let initPlugins
 

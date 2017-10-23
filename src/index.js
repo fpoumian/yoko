@@ -9,6 +9,7 @@ import fs from 'fs-extra'
 import nunjucks from 'nunjucks'
 import prettier from 'prettier'
 
+import validateFilePlugin from './lib/Plugin/validation'
 import makeComponentFs from './lib/Component/fs'
 import makeInitGenerator from './lib/Generator/init'
 import parseConfig from './lib/Config/parse'
@@ -61,6 +62,9 @@ export default function(customConfig: Object = {}): IGenerator {
       componentFs: makeComponentFs(fs),
       templateCompiler: nunjucks,
       fileFormatter: prettier,
+      pluginValidator: {
+        validate: validateFilePlugin,
+      },
     }).generate(componentPath, options)
   }
 

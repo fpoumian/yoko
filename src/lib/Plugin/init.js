@@ -1,8 +1,6 @@
 // @flow
 
 import EventEmitter from 'events'
-import Joi from 'joi'
-import isFunction from 'lodash/isFunction'
 
 import type { Plugin } from './types'
 import type { ReactComponentProps } from '../Component/types'
@@ -10,49 +8,28 @@ import type { Config } from '../Config/types'
 import constants from './constants'
 import InvalidPluginError from '../Errors/InvalidPluginError'
 import SkipPluginError from '../Errors/SkipPluginError'
+import type { FileProps } from '../ComponentFile/types'
+import type { IPluginValidator } from './interfaces'
 
-const schema = Joi.object().keys({
-  name: Joi.string().required(),
-  extension: Joi.string().required(),
-  dir: Joi.string().required(),
-  role: Joi.string().required(),
-  skip: Joi.boolean(),
-  template: Joi.object().keys({
-    dir: Joi.string().required(),
-    name: Joi.string().required(),
-    context: Joi.object(),
-  }),
-})
-
-export default (emitter: EventEmitter) =>
+export default (emitter: EventEmitter, pluginValidator: IPluginValidator) =>
   function initPlugins(
     plugins: Plugin[],
     props: ReactComponentProps,
     config: Config
   ): Object[] {
     return plugins.reduce((acc, plugin) => {
+      let fileProps: FileProps
       try {
-        if (!isFunction(plugin.init)) {
-          throw new InvalidPluginError(
-            `Plugin ${plugin.getName()} does not export a function.`
-          )
-        }
-        const { error, value } = Joi.validate(
-          plugin.init(props, config),
-          schema
-        )
-        if (error) {
-          throw new InvalidPluginError(error)
-        }
+        fileProps = pluginValidator.validate(plugin, plugin.init(props, config))
 
-        if (value.skip) {
+        if (fileProps.skip) {
           throw new SkipPluginError()
         }
 
         return [
           ...acc,
           {
-            fileProps: value,
+            fileProps,
             name: plugin.getName(),
             path: plugin.getPath(),
           },
