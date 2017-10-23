@@ -57,11 +57,11 @@ export default function(customConfig: Object = {}): IGenerator {
     options: ReactComponentOptions = {}
   ) {
     const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
-    return initGenerator(config)(
-      makeComponentFs(fs),
-      nunjucks,
-      prettier
-    ).generate(componentPath, options)
+    return initGenerator(config)({
+      componentFs: makeComponentFs(fs),
+      templateCompiler: nunjucks,
+      fileFormatter: prettier,
+    }).generate(componentPath, options)
   }
 
   return {

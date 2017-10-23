@@ -22,10 +22,8 @@ import type {
   ReactComponentOptions,
   Component,
 } from '../Component/types'
-import type { ITemplateCompiler } from '../Template/interfaces'
 import type { IEventListener } from '../EventEmitter/interfaces'
-import type { IFileFormatter } from '../ComponentFile/interfaces'
-import type { IComponentFs } from '../Component/interfaces'
+import type { GeneratorDependencies } from './types'
 
 /**
  * @typedef {Object} IGenerator
@@ -54,11 +52,11 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
     initEmitter.emit('pluginsLoaded', plugins.map(plugin => plugin.getName()))
 
     // Inject generator dependencies
-    return (
-      componentFs: IComponentFs,
-      templateCompiler: ITemplateCompiler,
-      fileFormatter: IFileFormatter
-    ) => {
+    return ({
+      componentFs,
+      templateCompiler,
+      fileFormatter,
+    }: GeneratorDependencies) => {
       /**
        * Generate a React component
        * @param {string} componentPath - The path of the component you wish to generate.
