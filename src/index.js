@@ -9,6 +9,7 @@ import fs from 'fs-extra'
 import nunjucks from 'nunjucks'
 import prettier from 'prettier'
 
+import makeComponentFs from './lib/Component/fs'
 import makeInitGenerator from './lib/Generator/init'
 import parseConfig from './lib/Config/parse'
 import normalizeConfig from './lib/Config/normalize'
@@ -56,10 +57,11 @@ export default function(customConfig: Object = {}): IGenerator {
     options: ReactComponentOptions = {}
   ) {
     const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
-    return initGenerator(config)(fs, nunjucks, prettier).generate(
-      componentPath,
-      options
-    )
+    return initGenerator(config)(
+      makeComponentFs(fs),
+      nunjucks,
+      prettier
+    ).generate(componentPath, options)
   }
 
   return {

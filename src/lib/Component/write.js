@@ -4,12 +4,10 @@
 
 import isPlainObject from 'lodash/isPlainObject'
 
-import type { IRenderable } from './interfaces'
+import type { IComponentFs, IRenderable } from './interfaces'
 import type { Component } from './types'
 import type { ComponentFile } from '../ComponentFile/types'
 import type { Template } from '../Template/types'
-import type { IFileSystem } from '../FileSystem/interfaces'
-import makeWriteFile from '../ComponentFile/write'
 import type { ITemplateCompiler } from '../Template/interfaces'
 import type { IFileFormatter } from '../ComponentFile/interfaces'
 import type { Config } from '../Config/types'
@@ -33,7 +31,7 @@ function renderCompiledTemplate(
 }
 
 export default (
-  fs: IFileSystem,
+  componentFs: IComponentFs,
   templateCompiler: ITemplateCompiler,
   fileFormatter: IFileFormatter
 ) =>
@@ -75,9 +73,8 @@ export default (
         fileOutput = ''
       }
 
-      const writeFile = makeWriteFile(fs)
-
-      return writeFile(file, fileOutput)
+      return componentFs
+        .writeComponentFile(file, fileOutput)
         .then(path => {
           const fileRole = file.getRole()
           return {

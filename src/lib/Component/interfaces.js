@@ -1,6 +1,18 @@
 // @flow
 
 import type { ComponentFile } from '../ComponentFile/types'
+import type { Config } from '../Config/types'
+import type { Component } from './types'
+import type { IReadable } from '../Readable/interfaces'
+
+export interface IComponentFs {
+  removeComponentRootDir(
+    component: Component,
+    config: Config
+  ): Promise<Component>;
+  createComponentRootDir(component: Component): Promise<Component>;
+  writeComponentFile(file: IReadable, data: string): Promise<any>;
+}
 
 export interface IComposable {
   getFiles(): Map<string, ComponentFile>;

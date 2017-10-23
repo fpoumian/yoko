@@ -2,6 +2,7 @@
 
 import path from 'path'
 import EventEmitter from 'events'
+import fs from 'fs-extra'
 
 import createComponent from '../Component/factory'
 import makeGenerateComponent from '../Component/generate'
@@ -21,10 +22,10 @@ import type {
   ReactComponentOptions,
   Component,
 } from '../Component/types'
-import type { IFileSystem } from '../FileSystem/interfaces'
 import type { ITemplateCompiler } from '../Template/interfaces'
 import type { IEventListener } from '../EventEmitter/interfaces'
 import type { IFileFormatter } from '../ComponentFile/interfaces'
+import type { IComponentFs } from '../Component/interfaces'
 
 /**
  * @typedef {Object} IGenerator
@@ -54,7 +55,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
 
     // Inject generator dependencies
     return (
-      fs: IFileSystem,
+      componentFs: IComponentFs,
       templateCompiler: ITemplateCompiler,
       fileFormatter: IFileFormatter
     ) => {
@@ -126,7 +127,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           const component: Component = createComponent(props, files)
 
           const generateReactComponent = makeGenerateComponent(
-            fs,
+            componentFs,
             emitter,
             templateCompiler,
             fileFormatter

@@ -60,7 +60,7 @@ describe('write', () => {
         ensureFile: jest.fn().mockReturnValue(Promise.resolve()),
       }
 
-      fs.writeFile = jest
+      fs.writeComponentFile = jest
         .fn()
         .mockReturnValueOnce(
           Promise.resolve(path.resolve(process.cwd(), 'TestComponent.js'))
@@ -91,7 +91,7 @@ describe('write', () => {
     it('should call the writeFile method as many times as there are files to write', () => {
       expect.assertions(1)
       return writeComponentFiles(component, config).then(() => {
-        expect(fs.writeFile).toHaveBeenCalledTimes(fileList.size)
+        expect(fs.writeComponentFile).toHaveBeenCalledTimes(fileList.size)
       })
     })
 
