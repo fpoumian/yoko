@@ -53,11 +53,12 @@ export default function(customConfig: Object = {}): IGenerator {
     return initEmitter.on(eventName, eventHandler)
   }
 
+  const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
+
   function generate(
     componentPath: string,
     options: ReactComponentOptions = {}
   ) {
-    const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
     return initGenerator(config)({
       componentFs: makeComponentFs(fs),
       templateCompiler: nunjucks,

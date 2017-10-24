@@ -7,28 +7,9 @@ import isPlainObject from 'lodash/isPlainObject'
 import type { IComponentFs, IRenderable } from './interfaces'
 import type { Component } from './types'
 import type { ComponentFile } from '../ComponentFile/types'
-import type { Template } from '../Template/types'
 import type { ITemplateCompiler } from '../Template/interfaces'
 import type { IFileFormatter } from '../ComponentFile/interfaces'
 import type { Config } from '../Config/types'
-
-function getTemplateString(template: Template): string {
-  return require(template.getPath())
-}
-
-function compileTemplateString(
-  templateCompiler: ITemplateCompiler,
-  templateString: string
-): IRenderable {
-  return templateCompiler.compile(templateString)
-}
-
-function renderCompiledTemplate(
-  compiledTemplate: IRenderable,
-  context: Object
-): string {
-  return compiledTemplate.render(context)
-}
 
 export default (
   componentFs: IComponentFs,
@@ -55,13 +36,10 @@ export default (
       const template = file.getTemplate()
 
       if (template) {
-        const compiledTemplate = compileTemplateString(
-          templateCompiler,
-          getTemplateString(template)
+        const compiledTemplate: IRenderable = templateCompiler.compile(
+          require(template.getPath())
         )
-
-        const renderedFile = renderCompiledTemplate(
-          compiledTemplate,
+        const renderedFile: string = compiledTemplate.render(
           template.getContext()
         )
 

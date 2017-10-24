@@ -125,7 +125,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           // Create component
           const component: Component = createComponent(props, files)
 
-          const generateReactComponent = makeGenerateComponent(
+          const generateComponent = makeGenerateComponent(
             componentFs,
             emitter,
             templateCompiler,
@@ -133,7 +133,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           )
 
           // Kick-off component generation
-          generateReactComponent(component, config)
+          generateComponent(component, config)
             .then(paths => emitter.emit('done', paths))
             .catch(error => emitter.emit('error', error))
         })
