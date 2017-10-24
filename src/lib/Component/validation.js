@@ -1,37 +1,30 @@
 // @flow
 import isString from 'lodash/isString'
-import isPlainObject from 'lodash/isPlainObject'
 import isValid from 'is-valid-path'
 import filenameReservedRegex from 'filename-reserved-regex'
+import Joi from 'joi'
 import isWindows from 'is-windows'
 
 import type { ReactComponentOptions } from './types'
-import createObjectValidator from '../Utils/validation'
-
-const objectValidator = createObjectValidator('component options object')
+import BadOptionsError from '../Errors/BadOptionsError'
 
 export function validateComponentOptions(
   options: ReactComponentOptions
 ): ReactComponentOptions {
-  if (!isPlainObject(options)) {
-    throw new TypeError(
-      `You must pass an object as the options argument. ${options.constructor
-        .name} received instead.`
-    )
+  const schema = Joi.object().keys({
+    container: Joi.boolean().strict(),
+    main: Joi.boolean().strict(),
+    index: Joi.boolean().strict(),
+    stylesheet: Joi.boolean().strict(),
+    tests: Joi.boolean().strict(),
+    es6class: Joi.boolean().strict(),
+  })
+
+  const { error, value } = Joi.validate(options, schema)
+  if (error) {
+    throw new BadOptionsError(error.details[0].message)
   }
-
-  objectValidator.validateBooleanPaths(options, [
-    'container',
-    'main',
-    'index',
-    'stylesheet',
-    'tests',
-    'es6class',
-  ])
-
-  objectValidator.validateStringPaths(options, ['type'])
-
-  return options
+  return value
 }
 
 export function validateComponentPath(componentPath: string): string {

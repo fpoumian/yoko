@@ -1,4 +1,5 @@
 import { validateComponentOptions, validateComponentPath } from '../validation'
+import BadOptionsError from '../../Errors/BadOptionsError'
 
 describe('validateComponentOptions', () => {
   it('should throw error when options is not an object', () => {
@@ -6,9 +7,7 @@ describe('validateComponentOptions', () => {
 
     expect(() => {
       validateComponentOptions(options)
-    }).toThrowError(
-      'You must pass an object as the options argument. Array received instead.'
-    )
+    }).toThrowError(BadOptionsError)
   })
 
   it('should throw error when container option is not a boolean', () => {
@@ -18,9 +17,7 @@ describe('validateComponentOptions', () => {
 
     expect(() => {
       validateComponentOptions(options)
-    }).toThrowError(
-      'You must pass a boolean as a value for container in the component options object. String received instead.'
-    )
+    }).toThrowError(BadOptionsError)
   })
 
   it('should throw error when main option is not a boolean', () => {
@@ -30,9 +27,7 @@ describe('validateComponentOptions', () => {
 
     expect(() => {
       validateComponentOptions(options)
-    }).toThrowError(
-      'You must pass a boolean as a value for main in the component options object. Number received instead.'
-    )
+    }).toThrowError(BadOptionsError)
   })
 
   it('should throw error when index option is not a boolean', () => {
@@ -42,9 +37,7 @@ describe('validateComponentOptions', () => {
 
     expect(() => {
       validateComponentOptions(options)
-    }).toThrowError(
-      'You must pass a boolean as a value for index in the component options object. Array received instead.'
-    )
+    }).toThrowError(BadOptionsError)
   })
 
   it('should throw error when stylesheet option is not a boolean', () => {
@@ -54,9 +47,7 @@ describe('validateComponentOptions', () => {
 
     expect(() => {
       validateComponentOptions(options)
-    }).toThrowError(
-      'You must pass a boolean as a value for stylesheet in the component options object. Object received instead.'
-    )
+    }).toThrowError(BadOptionsError)
   })
 
   it('should throw error when tests option is not a boolean', () => {
@@ -66,9 +57,7 @@ describe('validateComponentOptions', () => {
 
     expect(() => {
       validateComponentOptions(options)
-    }).toThrowError(
-      'You must pass a boolean as a value for tests in the component options object. Number received instead.'
-    )
+    }).toThrowError(BadOptionsError)
   })
 
   it('should throw error when es6class option is not a boolean', () => {
@@ -78,9 +67,7 @@ describe('validateComponentOptions', () => {
 
     expect(() => {
       validateComponentOptions(options)
-    }).toThrowError(
-      'You must pass a boolean as a value for es6class in the component options object. Array received instead.'
-    )
+    }).toThrowError(BadOptionsError)
   })
 })
 
