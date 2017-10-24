@@ -11,6 +11,7 @@ import prettier from 'prettier'
 
 import validateFilePlugin from './lib/Plugin/validation'
 import makeComponentFs from './lib/Component/fs'
+import makeGenerateComponentFn from './lib/Component/generate'
 import makeInitGenerator from './lib/Generator/init'
 import parseConfig from './lib/Config/parse'
 import normalizeConfig from './lib/Config/normalize'
@@ -54,19 +55,23 @@ export default function(customConfig: Object = {}): IGenerator {
   }
 
   const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
+  const generateComponentFn = makeGenerateComponentFn(
+    makeComponentFs(fs),
+    nunjucks,
+    prettier
+  )
 
   function generate(
     componentPath: string,
     options: ReactComponentOptions = {}
   ) {
     return initGenerator(config)({
-      componentFs: makeComponentFs(fs),
-      templateCompiler: nunjucks,
-      fileFormatter: prettier,
+      generateComponentFn,
+      emitter: new EventEmitter(),
       pluginValidator: {
         validate: validateFilePlugin,
       },
-    }).generate(componentPath, options)
+    }).run(componentPath, options)
   }
 
   return {

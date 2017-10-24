@@ -5,7 +5,6 @@ import EventEmitter from 'events'
 import fs from 'fs-extra'
 
 import createComponent from '../Component/factory'
-import makeGenerateComponent from '../Component/generate'
 import {
   validateComponentOptions,
   validateComponentPath,
@@ -24,6 +23,7 @@ import type {
 } from '../Component/types'
 import type { IEventListener } from '../EventEmitter/interfaces'
 import type { GeneratorDependencies } from './types'
+import reduceComponentPaths from '../Component/reducePaths'
 
 /**
  * @typedef {Object} IGenerator
@@ -53,17 +53,16 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
 
     // Inject generator dependencies
     return ({
-      componentFs,
-      templateCompiler,
-      fileFormatter,
+      generateComponentFn,
       pluginValidator,
+      emitter,
     }: GeneratorDependencies) => {
       /**
        * Generate a React component
        * @param {string} componentPath - The path of the component you wish to generate.
        * @param {Object} [options] - The set of options you wish to use to generate this component.
        */
-      function generate(
+      function run(
         componentPath: string,
         options: ReactComponentOptions = {}
       ): IEventListener {
@@ -72,7 +71,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
         const validComponentPath = validateComponentPath(componentPath)
 
         // Create new emitter
-        const emitter: EventEmitter = new EventEmitter()
+        // const emitter: EventEmitter = new EventEmitter()
         emitter.on('error', error => {
           if (process.env.NODE_ENV === 'test') {
             if (error.code === 'EBADF') {
@@ -125,15 +124,20 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           // Create component
           const component: Component = createComponent(props, files)
 
-          const generateComponent = makeGenerateComponent(
-            componentFs,
-            emitter,
-            templateCompiler,
-            fileFormatter
-          )
-
           // Kick-off component generation
-          generateComponent(component, config)
+          generateComponentFn(component, config)
+            .then((componentFilesPaths: Object[]) => {
+              componentFilesPaths.forEach(filePath => {
+                Object.keys(filePath).forEach(role => {
+                  emitter.emit('fileWritten', filePath[role])
+                  emitter.emit(`${role}FileWritten`, filePath[role])
+                })
+              })
+              return componentFilesPaths
+            })
+            .then((componentFilesPaths: Object[]) =>
+              reduceComponentPaths(component, componentFilesPaths)
+            )
             .then(paths => emitter.emit('done', paths))
             .catch(error => emitter.emit('error', error))
         })
@@ -153,7 +157,7 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
       }
 
       return {
-        generate,
+        run,
       }
     }
   }
