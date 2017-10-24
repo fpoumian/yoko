@@ -54,9 +54,10 @@ export default function(customConfig: Object = {}): IGenerator {
     return initEmitter.on(eventName, eventHandler)
   }
 
+  const componentFs = makeComponentFs(fs)
   const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
   const generateComponentFn = makeGenerateComponentFn(
-    makeComponentFs(fs),
+    componentFs,
     nunjucks,
     prettier
   )
@@ -67,6 +68,7 @@ export default function(customConfig: Object = {}): IGenerator {
   ) {
     return initGenerator(config)({
       generateComponentFn,
+      resolveComponentFileTemplateFn: componentFs.resolveComponentFileTemplate,
       emitter: new EventEmitter(),
       pluginValidator: {
         validate: validateFilePlugin,

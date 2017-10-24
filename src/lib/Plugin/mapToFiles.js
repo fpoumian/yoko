@@ -1,22 +1,17 @@
 // @flow
 import type { ComponentFile, FileProps } from '../ComponentFile/types'
 import createComponentFile from '../ComponentFile/factory'
-import makeResolveComponentFileTemplate from '../ComponentFile/resolveTemplate'
 import type { Config } from '../Config/types'
-import type { IFileSystem } from '../FileSystem/interfaces'
 
-export default (fs: IFileSystem) =>
+export default (resolveComponentFileTemplate: Function) =>
   function mapPluginsDataToComponentFiles(
-    pluginsData: Object[],
+    pluginsData: FileProps[],
     config: Config
   ): ComponentFile[] {
-    const resolveComponentFileTemplate = makeResolveComponentFileTemplate(fs)
-    return pluginsData.map(pluginData => {
-      const fileProps: FileProps = {
-        ...pluginData.fileProps,
-        template: resolveComponentFileTemplate(config, pluginData.fileProps),
-      }
-
-      return createComponentFile(fileProps)
+    return pluginsData.map((fileProps: Object) => {
+      const newFileProps: FileProps = Object.assign({}, fileProps, {
+        template: resolveComponentFileTemplate(config, fileProps),
+      })
+      return createComponentFile(newFileProps)
     })
   }

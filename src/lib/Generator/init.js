@@ -14,7 +14,7 @@ import registerPlugins from '../Plugin/register'
 import parseComponentPath from '../Component/parsePath'
 import makeMapFilePluginsDataToFiles from '../Plugin/mapToFiles'
 
-import type { ComponentFile } from '../ComponentFile/types'
+import type { ComponentFile, FileProps } from '../ComponentFile/types'
 import type { LoadPluginsFn, Plugin } from '../Plugin/types'
 import type {
   ReactComponentProps,
@@ -22,7 +22,7 @@ import type {
   Component,
 } from '../Component/types'
 import type { IEventListener } from '../EventEmitter/interfaces'
-import type { GeneratorDependencies } from './types'
+import type { RunDependencies } from './types'
 import reduceComponentPaths from '../Component/reducePaths'
 
 /**
@@ -54,9 +54,10 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
     // Inject generator dependencies
     return ({
       generateComponentFn,
+      resolveComponentFileTemplateFn,
       pluginValidator,
       emitter,
-    }: GeneratorDependencies) => {
+    }: RunDependencies) => {
       /**
        * Generate a React component
        * @param {string} componentPath - The path of the component you wish to generate.
@@ -108,14 +109,14 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
 
           // Initialize plugins
           const initPlugins = makeInitPlugins(emitter, pluginValidator)
-          const filePluginsData: Object[] = initPlugins(
+          const filePluginsData: FileProps[] = initPlugins(
             plugins,
             { ...props },
             { ...config }
           )
 
           // Map plugins to files
-          const mapFilePluginsDataToFiles = makeMapFilePluginsDataToFiles(fs)
+          const mapFilePluginsDataToFiles = makeMapFilePluginsDataToFiles(resolveComponentFileTemplateFn)
           const files: ComponentFile[] = mapFilePluginsDataToFiles(
             filePluginsData,
             { ...config }

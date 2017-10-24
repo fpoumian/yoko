@@ -4,6 +4,7 @@ import type { IFileSystem } from '../FileSystem/interfaces'
 import type { Component } from './types'
 import type { Config } from '../Config/types'
 import makeWriteComponentFile from '../ComponentFile/write'
+import makeResolveComponentFileTemplate from '../ComponentFile/resolveTemplate'
 
 export default function(fs: IFileSystem) {
   function removeComponentRootDir(
@@ -20,10 +21,12 @@ export default function(fs: IFileSystem) {
   }
 
   const writeComponentFile = makeWriteComponentFile(fs)
+  const resolveComponentFileTemplate = makeResolveComponentFileTemplate(fs)
 
   return {
     removeComponentRootDir,
     createComponentRootDir,
     writeComponentFile,
+    resolveComponentFileTemplate,
   }
 }

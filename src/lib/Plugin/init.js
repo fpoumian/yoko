@@ -1,7 +1,5 @@
 // @flow
 
-import EventEmitter from 'events'
-
 import type { Plugin } from './types'
 import type { ReactComponentProps } from '../Component/types'
 import type { Config } from '../Config/types'
@@ -10,8 +8,9 @@ import InvalidPluginError from '../Errors/InvalidPluginError'
 import SkipPluginError from '../Errors/SkipPluginError'
 import type { FileProps } from '../ComponentFile/types'
 import type { IPluginValidator } from './interfaces'
+import type { IEventEmitter } from '../EventEmitter/interfaces'
 
-export default (emitter: EventEmitter, pluginValidator: IPluginValidator) =>
+export default (emitter: IEventEmitter, pluginValidator: IPluginValidator) =>
   function initPlugins(
     plugins: Plugin[],
     props: ReactComponentProps,
@@ -26,14 +25,7 @@ export default (emitter: EventEmitter, pluginValidator: IPluginValidator) =>
           throw new SkipPluginError()
         }
 
-        return [
-          ...acc,
-          {
-            fileProps,
-            name: plugin.getName(),
-            path: plugin.getPath(),
-          },
-        ]
+        return [...acc, fileProps]
       } catch (e) {
         if (e instanceof InvalidPluginError) {
           emitter.emit(

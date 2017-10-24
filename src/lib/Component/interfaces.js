@@ -1,6 +1,6 @@
 // @flow
 
-import type { ComponentFile } from '../ComponentFile/types'
+import type { ComponentFile, FileProps } from '../ComponentFile/types'
 import type { Config } from '../Config/types'
 import type { Component } from './types'
 import type { IReadable } from '../Readable/interfaces'
@@ -12,6 +12,10 @@ export interface IComponentFs {
   ): Promise<Component>;
   createComponentRootDir(component: Component): Promise<Component>;
   writeComponentFile(file: IReadable, data: string): Promise<any>;
+  resolveComponentFileTemplate(
+    config: Object,
+    fileProps: FileProps
+  ): Object | null;
 }
 
 export interface IComposable {
