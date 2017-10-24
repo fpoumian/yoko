@@ -1,4 +1,5 @@
 import makeInitGenerator from '../init'
+import NodeCache from 'node-cache'
 
 describe('init', () => {
   let config
@@ -18,6 +19,8 @@ describe('init', () => {
     },
   ]
 
+  const initCache = new NodeCache({ stdTTL: 0.00001, checkPeriod: 0.00001 })
+
   describe('given a configuration object with one uninstalled plugin', () => {
     beforeEach(() => {
       config = {
@@ -27,7 +30,7 @@ describe('init', () => {
         emit: jest.fn(),
       }
       loadFn = jest.fn().mockReturnValue([...loadedPlugins])
-      initGenerator = makeInitGenerator(emitter, loadFn)
+      initGenerator = makeInitGenerator(emitter, initCache, loadFn)
     })
 
     it('should emit initGenerator event', () => {

@@ -83,6 +83,8 @@ describe('judex-component-generator', () => {
       it('should be able create multiple directories inside of components home directory', () => {
         expect.assertions(1)
 
+        generator.on('pluginsLoaded', console.log)
+
         const promises = [
           eventToPromise(generator.generate('ComponentOne'), 'done'),
           eventToPromise(generator.generate('ComponentTwo'), 'done'),

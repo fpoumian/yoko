@@ -8,6 +8,7 @@ import EventEmitter from 'events'
 import fs from 'fs-extra'
 import nunjucks from 'nunjucks'
 import prettier from 'prettier'
+import NodeCache from 'node-cache'
 
 import validateFilePlugin from './lib/Plugin/validation'
 import makeComponentFs from './lib/Component/fs'
@@ -27,13 +28,15 @@ import type { ReactComponentOptions } from './lib/Component/types'
  */
 export default function(customConfig: Object = {}): IGenerator {
   let config: Config
-  const initEmitter = new EventEmitter()
 
   try {
     config = parseConfig(normalizeConfig, validateConfig)(customConfig)
   } catch (e) {
     throw e
   }
+
+  const initEmitter = new EventEmitter()
+  const initCache = new NodeCache({ stdTTL: 100, checkPeriod: 120 })
 
   initEmitter.on('error', error => {
     if (process.env.NODE_ENV === 'test') {
@@ -50,18 +53,30 @@ export default function(customConfig: Object = {}): IGenerator {
     initEmitter
   )
 
-  function on(eventName: string, eventHandler: any) {
-    return initEmitter.on(eventName, eventHandler)
-  }
-
   const componentFs = makeComponentFs(fs)
-  const initGenerator = makeInitGenerator(initEmitter, loadPlugins)
+  const initGenerator = makeInitGenerator(initEmitter, initCache, loadPlugins)
   const generateComponentFn = makeGenerateComponentFn(
     componentFs,
     nunjucks,
     prettier
   )
 
+  // Public API
+
+  /***
+   * Add Event Listeners
+   * @param {Object} eventName - The name of the event
+   * @param eventHandler - Handler
+   */
+  function on(eventName: string, eventHandler: any) {
+    return initEmitter.on(eventName, eventHandler)
+  }
+
+  /***
+   * Generate component
+   * @param {string} componentPath - The name of the component
+   * @param {Object} options - The options for the component
+   */
   function generate(
     componentPath: string,
     options: ReactComponentOptions = {}

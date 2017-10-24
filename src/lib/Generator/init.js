@@ -2,7 +2,6 @@
 
 import path from 'path'
 import EventEmitter from 'events'
-import fs from 'fs-extra'
 
 import createComponent from '../Component/factory'
 import {
@@ -25,31 +24,27 @@ import type { IEventListener } from '../EventEmitter/interfaces'
 import type { RunDependencies } from './types'
 import reduceComponentPaths from '../Component/reducePaths'
 
-/**
- * @typedef {Object} IGenerator
- * @property {Function} generate Generates a new React component.
- */
-
-/**
- *  Inject init dependencies.
- *  @param {Object} initEmitter - EventEmitter
- *  @param {Function} loadPlugins - Function to load plugins
- *  @return {IGenerator}
- */
-export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
-  /**
-   *  Init generator.
-   *  @param {Object} config - Global Configuration
-   *  @return {IGenerator}
-   */
+export default (
+  initEmitter: EventEmitter,
+  initCache: Object,
+  loadPlugins: LoadPluginsFn
+) =>
   function init(config: Object): Function {
     initEmitter.emit('initGenerator')
+    let plugins: Plugin[]
 
-    const registeredPlugins = registerPlugins(config)
-    initEmitter.emit('pluginsRegistered', registeredPlugins)
+    const cachedPlugins = initCache.get('plugins')
 
-    const plugins: Plugin[] = loadPlugins(registeredPlugins)
-    initEmitter.emit('pluginsLoaded', plugins.map(plugin => plugin.getName()))
+    if (typeof cachedPlugins === 'undefined') {
+      const registeredPlugins = registerPlugins(config)
+      initEmitter.emit('pluginsRegistered', registeredPlugins)
+
+      plugins = loadPlugins(registeredPlugins)
+      initEmitter.emit('pluginsLoaded', plugins.map(plugin => plugin.getName()))
+      initCache.set('plugins', plugins)
+    } else {
+      plugins = cachedPlugins
+    }
 
     // Inject generator dependencies
     return ({
@@ -58,11 +53,6 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
       pluginValidator,
       emitter,
     }: RunDependencies) => {
-      /**
-       * Generate a React component
-       * @param {string} componentPath - The path of the component you wish to generate.
-       * @param {Object} [options] - The set of options you wish to use to generate this component.
-       */
       function run(
         componentPath: string,
         options: ReactComponentOptions = {}
@@ -90,10 +80,12 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
             componentName,
           } = parseComponentPath(validComponentPath, { ...config })
 
+          // Resolve Component Home Directory
           const componentHome: string = validOptions.container
             ? config.paths.containers
             : config.paths.components
 
+          // Resolve component props
           const props: ReactComponentProps = {
             name: componentName,
             path: path.resolve(componentHome, ...parentDirs, rootName),
@@ -116,7 +108,9 @@ export default (initEmitter: EventEmitter, loadPlugins: LoadPluginsFn) =>
           )
 
           // Map plugins to files
-          const mapFilePluginsDataToFiles = makeMapFilePluginsDataToFiles(resolveComponentFileTemplateFn)
+          const mapFilePluginsDataToFiles = makeMapFilePluginsDataToFiles(
+            resolveComponentFileTemplateFn
+          )
           const files: ComponentFile[] = mapFilePluginsDataToFiles(
             filePluginsData,
             { ...config }
