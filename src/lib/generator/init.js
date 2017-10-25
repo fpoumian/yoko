@@ -145,7 +145,14 @@ export default (
 
         return {
           on(eventName, listener) {
-            return emitter.on(eventName, listener)
+            emitter.on(eventName, listener)
+            return this
+          },
+          then(cb: any => any) {
+            return new Promise((resolve, reject) => {
+              emitter.on('done', paths => resolve(cb(paths)))
+              emitter.on('error', err => reject(cb(err)))
+            })
           },
         }
       }

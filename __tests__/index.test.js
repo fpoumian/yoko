@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import eventToPromise from 'event-to-promise'
 import mock from 'mock-fs'
 import prettier from 'prettier'
 
@@ -68,6 +67,14 @@ describe('judex-component-generator', () => {
         })
       })
 
+      it('should resolve one directory inside of components Home directory', () => {
+        expect.assertions(1)
+
+        return generator.generate('TestComponent').then(paths => {
+          expect(resolveInComponents('TestComponent')).toEqual(paths.root)
+        })
+      })
+
       it('should return a path object with only root and main properties', done => {
         expect.assertions(1)
 
@@ -80,17 +87,15 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should be able create multiple directories inside of components home directory', () => {
+      it('should be able to create multiple directories inside of components home directory', () => {
         expect.assertions(1)
 
-        generator.on('pluginsLoaded', console.log)
-
         const promises = [
-          eventToPromise(generator.generate('ComponentOne'), 'done'),
-          eventToPromise(generator.generate('ComponentTwo'), 'done'),
-          eventToPromise(generator.generate('ComponentThree'), 'done'),
-          eventToPromise(generator.generate('ComponentFour'), 'done'),
-          eventToPromise(generator.generate('ComponenFive'), 'done'),
+          generator.generate('ComponentOne'),
+          generator.generate('ComponentTwo'),
+          generator.generate('ComponentThree'),
+          generator.generate('ComponentFour'),
+          generator.generate('ComponentFive'),
         ]
 
         return Promise.all(promises).then(() => {
@@ -126,14 +131,8 @@ describe('judex-component-generator', () => {
         expect.assertions(1)
 
         const promises = [
-          eventToPromise(
-            generator.generate('ParentDirectory/ComponentOne'),
-            'done'
-          ),
-          eventToPromise(
-            generator.generate('ParentDirectory/ComponentTwo'),
-            'done'
-          ),
+          generator.generate('ParentDirectory/ComponentOne'),
+          generator.generate('ParentDirectory/ComponentTwo'),
         ]
 
         return Promise.all(promises).then(() => {
@@ -155,14 +154,8 @@ describe('judex-component-generator', () => {
         expect.assertions(2)
 
         const promises = [
-          eventToPromise(
-            generator.generate('ParentDirectory/ComponentOne'),
-            'done'
-          ),
-          eventToPromise(
-            generator.generate('ParentDirectory/ComponentTwo'),
-            'done'
-          ),
+          generator.generate('ParentDirectory/ComponentOne'),
+          generator.generate('ParentDirectory/ComponentTwo'),
         ]
 
         return Promise.all(promises).then(() => {
@@ -237,18 +230,9 @@ describe('judex-component-generator', () => {
         expect.assertions(3)
 
         const promises = [
-          eventToPromise(
-            generator.generate('ParentDirectory/ComponentOne', { index: true }),
-            'done'
-          ),
-          eventToPromise(
-            generator.generate('ParentDirectory/ComponentTwo', { index: true }),
-            'done'
-          ),
-          eventToPromise(
-            generator.generate('ParentDirectory/ComponentThree'),
-            'done'
-          ),
+          generator.generate('ParentDirectory/ComponentOne', { index: true }),
+          generator.generate('ParentDirectory/ComponentTwo', { index: true }),
+          generator.generate('ParentDirectory/ComponentThree'),
         ]
 
         return Promise.all(promises).then(() => {
