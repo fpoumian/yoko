@@ -34,6 +34,7 @@ export default (
           let fileOutput
           const template = file.getTemplate()
 
+          // If the file has a template specified then compile it and render it.
           if (template) {
             const compiledTemplate: IRenderable = templateCompiler.compile(
               require(template.getPath())
@@ -42,11 +43,14 @@ export default (
               template.getContext()
             )
 
+            // if there is a prettier configuration specified use it to format the rendered file;
+            // otherwise just use the default prettier configuration.
             fileOutput = isPlainObject(config.formatting.prettier)
               ? // $FlowFixMe
                 fileFormatter.format(renderedFile, config.formatting.prettier)
               : fileFormatter.format(renderedFile)
           } else {
+            // If there is not template specified for this file, then just output en empty string.
             fileOutput = ''
           }
 

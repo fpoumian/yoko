@@ -74,11 +74,11 @@ export default function(customConfig: Object = {}): IGenerator {
 
   /***
    * Generate component
-   * @param {string} componentPath - The name of the component
+   * @param {string} componentName - The name of the component
    * @param {Object} options - The options for the component
    */
   function generate(
-    componentPath: string,
+    componentName: string,
     options: ReactComponentOptions = {}
   ) {
     return initGenerator(config)({
@@ -88,7 +88,7 @@ export default function(customConfig: Object = {}): IGenerator {
       pluginValidator: {
         validate: validateFilePlugin,
       },
-    }).run(componentPath, options)
+    }).run(componentName, options)
   }
 
   return {

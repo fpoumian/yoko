@@ -6,11 +6,11 @@ import EventEmitter from 'events'
 import createComponent from '../Component/factory'
 import {
   validateComponentOptions,
-  validateComponentPath,
+  validateComponentName,
 } from '../Component/validation'
 import makeInitPlugins from '../Plugin/init'
 import registerPlugins from '../Plugin/register'
-import parseComponentPath from '../Component/parsePath'
+import parseComponentName from '../Component/parseName'
 import makeMapFilePluginsDataToFiles from '../Plugin/mapToFiles'
 
 import type { ComponentFile, FileProps } from '../ComponentFile/types'
@@ -54,15 +54,14 @@ export default (
       emitter,
     }: RunDependencies) => {
       function run(
-        componentPath: string,
+        componentName: string,
         options: ReactComponentOptions = {}
       ): IEventListener {
         // Handle input errors
         const validOptions = validateComponentOptions(options)
-        const validComponentPath = validateComponentPath(componentPath)
+        const validComponentName = validateComponentName(componentName)
 
         // Create new emitter
-        // const emitter: EventEmitter = new EventEmitter()
         emitter.on('error', error => {
           if (process.env.NODE_ENV === 'test') {
             if (error.code === 'EBADF') {
@@ -78,7 +77,7 @@ export default (
             rootName,
             parentDirs,
             componentName,
-          } = parseComponentPath(validComponentPath, { ...config })
+          } = parseComponentName(validComponentName, { ...config })
 
           // Resolve Component Home Directory
           const componentHome: string = validOptions.container

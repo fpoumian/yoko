@@ -7,6 +7,7 @@ import isWindows from 'is-windows'
 
 import type { ReactComponentOptions } from './types'
 import BadOptionsError from '../Errors/BadOptionsError'
+import BadNameError from '../Errors/BadNameError'
 
 export function validateComponentOptions(
   options: ReactComponentOptions
@@ -27,32 +28,34 @@ export function validateComponentOptions(
   return value
 }
 
-export function validateComponentPath(componentPath: string): string {
-  if (!isString(componentPath)) {
-    throw new TypeError(
-      `You must pass a string as a value for the componentName argument. ${componentPath
+export function validateComponentName(componentName: string): string {
+  if (!isString(componentName)) {
+    throw new BadNameError(
+      `You must pass a string as a value for the componentName argument. ${componentName
         .constructor.name} received instead.`
     )
   }
 
-  if (componentPath.trim() === '') {
-    throw new Error(`The componentName argument cannot be an empty string.`)
+  if (componentName.trim() === '') {
+    throw new BadNameError(
+      `The componentName argument cannot be an empty string.`
+    )
   }
 
-  if (!isValid(componentPath)) {
-    throw new Error(
+  if (!isValid(componentName)) {
+    throw new BadNameError(
       'The componentName argument contains an invalid character. Please remove it and try again.'
     )
   }
 
   // Check for reserved words in Windows
   if (isWindows()) {
-    if (filenameReservedRegex.windowsNames().test(componentPath)) {
-      throw new Error(
+    if (filenameReservedRegex.windowsNames().test(componentName)) {
+      throw new BadNameError(
         'The componentName argument you passed contains a reserved character. Please remove it and try again.'
       )
     }
   }
 
-  return componentPath
+  return componentName
 }

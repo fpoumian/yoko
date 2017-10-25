@@ -1,10 +1,10 @@
-import parseComponentPath from '../parsePath'
+import parseComponentName from '../parseName'
 
-describe('parseComponentPath', () => {
+describe('parseComponentName', () => {
   describe('given a name with nested directories', () => {
     it('should get name info from the given path', () => {
       expect.assertions(1)
-      expect(parseComponentPath('Parent/SubParent/ComponentName')).toEqual({
+      expect(parseComponentName('Parent/SubParent/ComponentName')).toEqual({
         rootName: 'ComponentName',
         componentName: 'ComponentName',
         parentDirs: ['Parent', 'SubParent'],
@@ -12,7 +12,7 @@ describe('parseComponentPath', () => {
     })
     it('should be able to remove trailing slash', () => {
       expect.assertions(1)
-      expect(parseComponentPath('Parent/SubParent/ComponentName/')).toEqual({
+      expect(parseComponentName('Parent/SubParent/ComponentName/')).toEqual({
         rootName: 'ComponentName',
         componentName: 'ComponentName',
         parentDirs: ['Parent', 'SubParent'],
@@ -20,7 +20,7 @@ describe('parseComponentPath', () => {
     })
     it('should be able to remove initial slash', () => {
       expect.assertions(1)
-      expect(parseComponentPath('/Parent/SubParent/ComponentName')).toEqual({
+      expect(parseComponentName('/Parent/SubParent/ComponentName')).toEqual({
         rootName: 'ComponentName',
         componentName: 'ComponentName',
         parentDirs: ['', 'Parent', 'SubParent'],
@@ -29,7 +29,7 @@ describe('parseComponentPath', () => {
     it('should be able to handle path with file extension', () => {
       expect.assertions(1)
       expect(
-        parseComponentPath('/Parent/SubParent/ComponentName.jsx')
+        parseComponentName('/Parent/SubParent/ComponentName.jsx')
       ).toEqual({
         rootName: 'ComponentName',
         componentName: 'ComponentName',
@@ -46,7 +46,7 @@ describe('parseComponentPath', () => {
       it('should return the correct rootName when path is nested', () => {
         expect.assertions(1)
         expect(
-          parseComponentPath('Parent/SubParent/ComponentName', config)
+          parseComponentName('Parent/SubParent/ComponentName', config)
         ).toEqual({
           rootName: 'SubParent',
           componentName: 'ComponentName',
@@ -55,7 +55,7 @@ describe('parseComponentPath', () => {
       })
       it('should return the correct rootName when path is not nested', () => {
         expect.assertions(1)
-        expect(parseComponentPath('ComponentName', config)).toEqual({
+        expect(parseComponentName('ComponentName', config)).toEqual({
           rootName: '',
           componentName: 'ComponentName',
           parentDirs: [],
@@ -67,7 +67,7 @@ describe('parseComponentPath', () => {
     const name = 'ComponentName'
     it('should get name info from the given path', () => {
       expect.assertions(1)
-      expect(parseComponentPath(name)).toEqual({
+      expect(parseComponentName(name)).toEqual({
         rootName: name,
         componentName: name,
         parentDirs: [],
@@ -78,7 +78,7 @@ describe('parseComponentPath', () => {
     const name = 'Parent?/<SubParent>/Component:Name*'
     it('should get name info from the given path', () => {
       expect.assertions(1)
-      expect(parseComponentPath(name)).toEqual({
+      expect(parseComponentName(name)).toEqual({
         rootName: 'ComponentName',
         componentName: 'ComponentName',
         parentDirs: ['Parent', 'SubParent'],

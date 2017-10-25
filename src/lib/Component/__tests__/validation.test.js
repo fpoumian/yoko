@@ -1,5 +1,6 @@
-import { validateComponentOptions, validateComponentPath } from '../validation'
+import { validateComponentOptions, validateComponentName } from '../validation'
 import BadOptionsError from '../../Errors/BadOptionsError'
+import BadNameError from '../../Errors/BadNameError'
 
 describe('validateComponentOptions', () => {
   it('should throw error when options is not an object', () => {
@@ -71,44 +72,34 @@ describe('validateComponentOptions', () => {
   })
 })
 
-describe('validateComponentPath', () => {
+describe('validateComponentName', () => {
   it('should throw TypeError when component path is not a string', () => {
     const path = 1
     expect(() => {
-      validateComponentPath(path)
-    }).toThrowError(
-      `You must pass a string as a value for the componentName argument. Number received instead.`
-    )
+      validateComponentName(path)
+    }).toThrowError(BadNameError)
   })
 
   it('should throw when component path is an empty string', () => {
     const path = ''
     expect(() => {
-      validateComponentPath(path)
-    }).toThrowError(`The componentName argument cannot be an empty string.`)
+      validateComponentName(path)
+    }).toThrowError(BadNameError)
   })
 
   it('should throw error when component path contains invalid characters', () => {
     expect(() => {
-      validateComponentPath('Parent?/')
-    }).toThrowError(
-      'The componentName argument contains an invalid character. Please remove it and try again.'
-    )
+      validateComponentName('Parent?/')
+    }).toThrowError(BadNameError)
     expect(() => {
-      validateComponentPath('Parent/*.js')
-    }).toThrowError(
-      'The componentName argument contains an invalid character. Please remove it and try again.'
-    )
+      validateComponentName('Parent/*.js')
+    }).toThrowError(BadNameError)
     expect(() => {
-      validateComponentPath('<Parent/')
-    }).toThrowError(
-      'The componentName argument contains an invalid character. Please remove it and try again.'
-    )
+      validateComponentName('<Parent/')
+    }).toThrowError(BadNameError)
     expect(() => {
-      validateComponentPath('|Parent/')
-    }).toThrowError(
-      'The componentName argument contains an invalid character. Please remove it and try again.'
-    )
+      validateComponentName('|Parent/')
+    }).toThrowError(BadNameError)
   })
 
   describe('When the OS is Windows', () => {
@@ -118,10 +109,8 @@ describe('validateComponentPath', () => {
 
     it('should throw error when component path contains a reserved word', () => {
       expect(() => {
-        validateComponentPath('aux')
-      }).toThrowError(
-        'The componentName argument you passed contains a reserved character. Please remove it and try again.'
-      )
+        validateComponentName('aux')
+      }).toThrowError(BadNameError)
     })
   })
 })

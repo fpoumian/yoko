@@ -28,15 +28,15 @@ function getComponentRootDirParents(
   return splitName.slice(0, splitName.length - 2).map(dir => sanitize(dir))
 }
 
-function removeFileExtension(componentPath: string) {
-  return componentPath.replace(path.extname(componentPath), '')
+function removeFileExtension(componentName: string) {
+  return componentName.replace(path.extname(componentName), '')
 }
 
-export default function parseComponentPath(
-  componentPath: string,
+export default function parseComponentName(
+  componentName: string,
   config: Config | null
 ): Object {
-  const normalized = removeFileExtension(path.normalize(slashes(componentPath)))
+  const normalized = removeFileExtension(path.normalize(slashes(componentName)))
   const splitName: string[] = normalized.split(path.sep)
   return {
     rootName: getComponentRootDir(splitName, config),

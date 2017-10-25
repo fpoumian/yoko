@@ -1,6 +1,7 @@
 // @flow
 
 import type { Plugin } from './types'
+import constants from './constants'
 
 export default function createPlugin(
   name: string,
@@ -13,6 +14,9 @@ export default function createPlugin(
     },
     getPath() {
       return path
+    },
+    getPrefixedName() {
+      return `${constants.PLUGIN_PREFIX}-${name}`
     },
     init,
   }
