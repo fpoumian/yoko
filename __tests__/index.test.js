@@ -179,7 +179,7 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should create a valid React Component using the default Stateless Functional Component template', done => {
+      it('should create a valid React component using the default Stateless Functional component template', done => {
         expect.assertions(1)
         generator.generate('TestComponent').on('done', paths => {
           const testComponent = fs.readFileSync(path.resolve(paths.main), {
@@ -339,7 +339,7 @@ describe('judex-component-generator', () => {
     })
 
     describe('when the ES6 Class option is set to true', () => {
-      it('should create a valid React Component using the ES6 class template inside the default components home dir', done => {
+      it('should create a valid React component using the ES6 class template inside the default components home dir', done => {
         expect.assertions(1)
         generator
           .generate('TestComponent', {
@@ -375,7 +375,7 @@ describe('judex-component-generator', () => {
           })
       })
 
-      it('should create a valid React Component using the ES6 class template inside the Containers home dir', done => {
+      it('should create a valid React component using the ES6 class template inside the Containers home dir', done => {
         expect.assertions(2)
         generator
           .generate('TestComponent', {
@@ -396,7 +396,7 @@ describe('judex-component-generator', () => {
       })
 
       describe('given that the ES6 Class option is set to true', () => {
-        it('should create a valid React Component using the ES6 class template inside the Containers home dir', done => {
+        it('should create a valid React component using the ES6 class template inside the Containers home dir', done => {
           expect.assertions(2)
           generator
             .generate('TestComponent', {
@@ -574,7 +574,7 @@ describe('judex-component-generator', () => {
 
     const generator = judex(config)
 
-    it('should create a Main Component file with custom JSX extension', done => {
+    it('should create a Main component file with custom JSX extension', done => {
       expect.assertions(1)
       generator.generate('TestComponent').on('done', paths => {
         expect(getDirContents(paths.root)).toContain('TestComponent.jsx')
@@ -760,7 +760,7 @@ describe('judex-component-generator', () => {
     const generator = judex(config)
 
     describe('when the container option is set to true', () => {
-      it('should create a valid React Component using the Stateless Functional Component template inside the Containers home dir', done => {
+      it('should create a valid React component using the Stateless Functional component template inside the Containers home dir', done => {
         expect.assertions(2)
         generator
           .generate('TestComponent', {

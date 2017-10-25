@@ -1,5 +1,5 @@
 import validateConfig from '../validation'
-import BadConfigError from '../../Errors/BadConfigError'
+import BadConfigError from '../../errors/BadConfigError'
 
 describe('validateConfig', () => {
   it('should throw BadConfigError when catching invalid value type for config.paths', () => {

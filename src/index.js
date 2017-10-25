@@ -1,6 +1,6 @@
 // @flow
 /**
- * Judex Component Generator
+ * Judex component Generator
  * @module judex-component-generator
  */
 
@@ -10,18 +10,18 @@ import nunjucks from 'nunjucks'
 import prettier from 'prettier'
 import NodeCache from 'node-cache'
 
-import validateFilePlugin from './lib/Plugin/validation'
-import makeComponentFs from './lib/Component/fs'
-import makeGenerateComponentFn from './lib/Component/generate'
-import makeRenderTemplateFn from './lib/Template/render'
-import makeInitGenerator from './lib/Generator/init'
-import parseConfig from './lib/Config/parse'
-import normalizeConfig from './lib/Config/normalize'
-import validateConfig from './lib/Config/validation'
-import makeLoadPlugins from './lib/Plugin/load'
-import type { Config } from './lib/Config/types'
-import type { IGenerator } from './lib/Generator/interfaces'
-import type { ComponentOptions } from './lib/Component/types'
+import validateFilePlugin from './lib/plugin/validation'
+import makeComponentFs from './lib/component/fs'
+import makeGenerateComponentFn from './lib/component/generate'
+import makeRenderTemplateFn from './lib/template/render'
+import makeInitGenerator from './lib/generator/init'
+import parseConfig from './lib/config/parse'
+import normalizeConfig from './lib/config/normalize'
+import validateConfig from './lib/config/validation'
+import makeLoadPlugins from './lib/plugin/load'
+import type { Config } from './lib/config/types'
+import type { IGenerator } from './lib/generator/interfaces'
+import type { ComponentOptions } from './lib/component/types'
 
 /**
  *  Create Generator.

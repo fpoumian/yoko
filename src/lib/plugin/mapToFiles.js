@@ -1,7 +1,7 @@
 // @flow
 import type { ComponentFile, FileProps } from '../ComponentFile/types'
 import createComponentFile from '../ComponentFile/factory'
-import type { Config } from '../Config/types'
+import type { Config } from '../config/types'
 
 export default (resolveComponentFileTemplate: Function) =>
   function mapPluginsDataToComponentFiles(

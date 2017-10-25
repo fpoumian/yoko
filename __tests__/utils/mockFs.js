@@ -4,7 +4,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import pluginConstants from '../../src/lib/Plugin/constants'
+import pluginConstants from '../../src/lib/plugin/constants'
 
 const mainPluginName = `${pluginConstants.PLUGIN_PREFIX}-main-file`
 const indexPluginName = `${pluginConstants.PLUGIN_PREFIX}-index-file`

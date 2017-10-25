@@ -1,6 +1,6 @@
-import type { IPluginValidator } from '../Plugin/interfaces'
-import type { Component } from '../Component/types'
-import type { Config } from '../Config/types'
+import type { IPluginValidator } from '../plugin/interfaces'
+import type { Component } from '../component/types'
+import type { Config } from '../config/types'
 import type { IEventEmitter, IEventListener } from '../EventEmitter/interfaces'
 
 export type RunDependencies = {

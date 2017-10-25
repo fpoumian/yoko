@@ -6,8 +6,8 @@ import Joi from 'joi'
 import isWindows from 'is-windows'
 
 import type { ComponentOptions } from './types'
-import BadOptionsError from '../Errors/BadOptionsError'
-import BadNameError from '../Errors/BadNameError'
+import BadOptionsError from '../errors/BadOptionsError'
+import BadNameError from '../errors/BadNameError'
 
 export function validateComponentOptions(
   options: ComponentOptions

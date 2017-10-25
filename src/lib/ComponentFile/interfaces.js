@@ -1,6 +1,6 @@
 // @flow
 
-import type { Template } from '../Template/types'
+import type { Template } from '../template/types'
 
 export interface IFileFormatter {
   format(string, ?Object | boolean): string;

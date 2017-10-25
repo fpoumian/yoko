@@ -1,6 +1,6 @@
 import { validateComponentOptions, validateComponentName } from '../validation'
-import BadOptionsError from '../../Errors/BadOptionsError'
-import BadNameError from '../../Errors/BadNameError'
+import BadOptionsError from '../../errors/BadOptionsError'
+import BadNameError from '../../errors/BadNameError'
 
 describe('validateComponentOptions', () => {
   it('should throw error when options is not an object', () => {

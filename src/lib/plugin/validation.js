@@ -3,7 +3,7 @@ import isFunction from 'lodash/isFunction'
 
 import type { Plugin } from './types'
 import type { FileProps } from '../ComponentFile/types'
-import InvalidPluginError from '../Errors/InvalidPluginError'
+import InvalidPluginError from '../errors/InvalidPluginError'
 
 const schema = Joi.object().keys({
   name: Joi.string().required(),

@@ -1,6 +1,6 @@
 // @flow
 
-import type { Config } from '../Config/types'
+import type { Config } from '../config/types'
 
 export default function registerPlugins(config: Config): string[] {
   return [

@@ -30,7 +30,7 @@ const indexFile = path.resolve(__dirname, '..', '__mocks__', 'IndexFile.js')
 const testsFile = path.resolve(__dirname, '..', '__mocks__', 'TestsFile.js')
 
 describe('validateStatelessFunctionalComponent', () => {
-  it('should validate a correct React Stateless Functional Component file', done => {
+  it('should validate a correct React Stateless Functional component file', done => {
     expect.assertions(1)
     fs.readFile(sfComponent, 'utf8', (err, data) => {
       expect(validateStatelessFunctionalComponent(data, 'TestComponent')).toBe(
@@ -39,7 +39,7 @@ describe('validateStatelessFunctionalComponent', () => {
       done()
     })
   })
-  it('should not validate a React ES6 Class Component file', done => {
+  it('should not validate a React ES6 Class component file', done => {
     expect.assertions(1)
     fs.readFile(es6ClassComponent, 'utf8', (err, data) => {
       expect(validateStatelessFunctionalComponent(data, 'TestComponent')).toBe(
@@ -51,14 +51,14 @@ describe('validateStatelessFunctionalComponent', () => {
 })
 
 describe('validateE6ClassComponent', () => {
-  it('should validate a correct React ES6 Class Component file', done => {
+  it('should validate a correct React ES6 Class component file', done => {
     expect.assertions(1)
     fs.readFile(es6ClassComponent, 'utf8', (err, data) => {
       expect(validateES6ClassComponent(data, 'TestComponent')).toBe(true)
       done()
     })
   })
-  it('should not validate a Stateless Functional Component file', done => {
+  it('should not validate a Stateless Functional component file', done => {
     expect.assertions(1)
     fs.readFile(sfComponent, 'utf8', (err, data) => {
       expect(validateES6ClassComponent(data, 'TestComponent')).toBe(false)
@@ -68,7 +68,7 @@ describe('validateE6ClassComponent', () => {
 })
 
 describe('validateIndexFile', () => {
-  it('should validate a correct React Component index file', done => {
+  it('should validate a correct React component index file', done => {
     expect.assertions(1)
     fs.readFile(indexFile, 'utf8', (err, data) => {
       expect(validateIndexFile(data, 'StatelessFunctionalComponent')).toBe(true)
@@ -78,7 +78,7 @@ describe('validateIndexFile', () => {
 })
 
 describe('validateTestsFile', () => {
-  it('should validate a correct React Component tests file', done => {
+  it('should validate a correct React component tests file', done => {
     expect.assertions(1)
     fs.readFile(testsFile, 'utf8', (err, data) => {
       expect(validateTestsFile(data, 'TestComponent')).toBe(true)

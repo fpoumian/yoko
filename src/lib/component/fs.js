@@ -2,7 +2,7 @@
 
 import type { IFileSystem } from '../FileSystem/interfaces'
 import type { Component } from './types'
-import type { Config } from '../Config/types'
+import type { Config } from '../config/types'
 import makeWriteComponentFile from '../ComponentFile/write'
 import makeResolveComponentFileTemplate from '../ComponentFile/resolveTemplate'
 

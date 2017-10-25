@@ -1,14 +1,14 @@
 // @flow
 
 import type { Plugin } from './types'
-import type { ComponentProps } from '../Component/types'
-import type { Config } from '../Config/types'
+import type { ComponentProps } from '../component/types'
+import type { Config } from '../config/types'
 import type { FileProps } from '../ComponentFile/types'
 import type { IPluginValidator } from './interfaces'
 import type { IEventEmitter } from '../EventEmitter/interfaces'
 
-import InvalidPluginError from '../Errors/InvalidPluginError'
-import SkipPluginError from '../Errors/SkipPluginError'
+import InvalidPluginError from '../errors/InvalidPluginError'
+import SkipPluginError from '../errors/SkipPluginError'
 
 export default (emitter: IEventEmitter, pluginValidator: IPluginValidator) =>
   function initPlugins(

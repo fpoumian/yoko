@@ -1,7 +1,7 @@
 // @flow
 
 import type { ComponentFile, FileProps } from '../ComponentFile/types'
-import type { Config } from '../Config/types'
+import type { Config } from '../config/types'
 import type { Component } from './types'
 import type { IReadable } from '../Readable/interfaces'
 

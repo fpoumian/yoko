@@ -1,10 +1,10 @@
 // @flow
 
 import type { Component } from './types'
-import type { Config } from '../Config/types'
+import type { Config } from '../config/types'
 import type { IComponentFs } from './interfaces'
 import type { ComponentFile } from '../ComponentFile/types'
-import type { RenderTemplateFn } from '../Template/types'
+import type { RenderTemplateFn } from '../template/types'
 
 export default (
   componentFs: IComponentFs,

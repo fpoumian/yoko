@@ -3,8 +3,8 @@ import path from 'path'
 
 import type { FileProps } from './types'
 import createReadable from '../Readable/factory'
-import createTemplate from '../Template/factory'
-import type { RenderTemplateFn, Template } from '../Template/types'
+import createTemplate from '../template/factory'
+import type { RenderTemplateFn, Template } from '../template/types'
 
 export default function(props: FileProps) {
   const { name, extension, role } = props

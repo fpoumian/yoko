@@ -2,26 +2,26 @@
 
 import path from 'path'
 
-import createComponent from '../Component/factory'
+import createComponent from '../component/factory'
 import {
   validateComponentOptions,
   validateComponentName,
-} from '../Component/validation'
-import makeInitPlugins from '../Plugin/init'
-import registerPlugins from '../Plugin/register'
-import parseComponentName from '../Component/parseName'
-import makeMapFilePluginsDataToFiles from '../Plugin/mapToFiles'
+} from '../component/validation'
+import makeInitPlugins from '../plugin/init'
+import registerPlugins from '../plugin/register'
+import parseComponentName from '../component/parseName'
+import makeMapFilePluginsDataToFiles from '../plugin/mapToFiles'
 
 import type { ComponentFile, FileProps } from '../ComponentFile/types'
-import type { LoadPluginsFn, Plugin } from '../Plugin/types'
+import type { LoadPluginsFn, Plugin } from '../plugin/types'
 import type {
   ComponentProps,
   ComponentOptions,
   Component,
-} from '../Component/types'
+} from '../component/types'
 import type { IEventEmitter, IEventListener } from '../EventEmitter/interfaces'
 import type { RunDependencies } from './types'
-import reduceComponentPaths from '../Component/reducePaths'
+import reduceComponentPaths from '../component/reducePaths'
 import type { ICache } from './interfaces'
 
 export default (
@@ -79,7 +79,7 @@ export default (
             componentName,
           } = parseComponentName(validComponentName, { ...config })
 
-          // Resolve Component Home Directory
+          // Resolve component Home Directory
           const componentHome: string = validOptions.container
             ? config.paths.containers
             : config.paths.components

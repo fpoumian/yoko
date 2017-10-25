@@ -1,7 +1,7 @@
 // @flow
 import type { Config } from './types'
 import Joi from 'joi'
-import BadConfigError from '../Errors/BadConfigError'
+import BadConfigError from '../errors/BadConfigError'
 
 const schema = Joi.object().keys({
   paths: Joi.object().keys({

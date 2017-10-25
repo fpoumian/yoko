@@ -3,7 +3,7 @@ import path from 'path'
 import slashes from 'remove-trailing-slash'
 import sanitize from 'sanitize-filename'
 
-import type { Config } from '../Config/types'
+import type { Config } from '../config/types'
 
 function getComponentName(splitName: string[]) {
   return sanitize(splitName[splitName.length - 1])

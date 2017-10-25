@@ -2,7 +2,7 @@ import isPlainObject from 'lodash/isPlainObject'
 
 import type { ITemplateCompiler } from './interfaces'
 import type { IFileFormatter } from '../ComponentFile/interfaces'
-import type { IRenderable } from '../Component/interfaces'
+import type { IRenderable } from '../component/interfaces'
 import type { Template } from './types'
 
 export default (

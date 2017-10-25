@@ -1,7 +1,7 @@
 // @flow
 
 import type { IEventListener } from '../EventEmitter/interfaces'
-import type { ComponentOptions } from '../Component/types'
+import type { ComponentOptions } from '../component/types'
 
 export interface IGenerator {
   generate(name: string, options: ComponentOptions): IEventListener;
