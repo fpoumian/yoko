@@ -1,6 +1,6 @@
 // @flow
 
-import type { IEventListener } from '../EventEmitter/interfaces'
+import type { IEventListener } from '../common/interfaces'
 import type { ComponentOptions } from '../component/types'
 
 export interface IGenerator {

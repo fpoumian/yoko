@@ -1,6 +1,6 @@
 // @flow
 
-import type { IFileSystem } from '../FileSystem/interfaces'
+import type { IFileSystem } from '../common/interfaces'
 import type { Component } from './types'
 import type { Config } from '../config/types'
 import makeWriteComponentFile from '../ComponentFile/write'

@@ -11,3 +11,12 @@ export interface IFileSystem {
   remove(string): Promise<any>;
   pathExistsSync(string): boolean;
 }
+
+export interface IEventListener {
+  on(eventName: string, eventListener: (any) => any): any;
+}
+
+export interface IEventEmitter {
+  emit(eventName: string, data: any): boolean;
+}
+

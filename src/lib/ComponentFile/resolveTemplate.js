@@ -2,7 +2,7 @@
 import path from 'path'
 import has from 'lodash/has'
 
-import type { IFileSystem } from '../FileSystem/interfaces'
+import type { IFileSystem } from '../common/interfaces'
 import type { FileProps } from './types'
 
 export default (fs: IFileSystem) =>

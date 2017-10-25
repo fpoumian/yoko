@@ -5,7 +5,7 @@ import type { ComponentProps } from '../component/types'
 import type { Config } from '../config/types'
 import type { FileProps } from '../ComponentFile/types'
 import type { IPluginValidator } from './interfaces'
-import type { IEventEmitter } from '../EventEmitter/interfaces'
+import type { IEventEmitter } from '../common/interfaces'
 
 import InvalidPluginError from '../errors/InvalidPluginError'
 import SkipPluginError from '../errors/SkipPluginError'

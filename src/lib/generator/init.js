@@ -19,7 +19,7 @@ import type {
   ComponentOptions,
   Component,
 } from '../component/types'
-import type { IEventEmitter, IEventListener } from '../EventEmitter/interfaces'
+import type { IEventEmitter, IEventListener } from '../common/interfaces'
 import type { RunDependencies } from './types'
 import reduceComponentPaths from '../component/reducePaths'
 import type { ICache } from './interfaces'
