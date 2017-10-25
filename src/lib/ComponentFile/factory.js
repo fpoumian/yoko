@@ -1,16 +1,19 @@
 // @flow
 import path from 'path'
 
-import type { ComponentFile, FileProps } from './types'
+import type { FileProps } from './types'
 import createReadable from '../Readable/factory'
 import createTemplate from '../Template/factory'
+import type { RenderTemplateFn, Template } from '../Template/types'
 
-export default function(props: FileProps): ComponentFile {
+export default function(props: FileProps) {
   const { name, extension, role } = props
-  const template = props.template ? createTemplate(props.template) : null
+  const template: Template | null = props.template
+    ? createTemplate(props.template)
+    : null
 
   // Public API
-  const componentFile: ComponentFile = {
+  const componentFile = {
     ...createReadable({
       path: path.resolve(props.dir, `${props.name}.${props.extension}`),
       name,
@@ -20,6 +23,9 @@ export default function(props: FileProps): ComponentFile {
     },
     getTemplate() {
       return template
+    },
+    getRenderedOutput(renderTemplateFn: RenderTemplateFn) {
+      return !template ? '' : renderTemplateFn(template)
     },
     getRole() {
       return role

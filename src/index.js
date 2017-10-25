@@ -13,12 +13,13 @@ import NodeCache from 'node-cache'
 import validateFilePlugin from './lib/Plugin/validation'
 import makeComponentFs from './lib/Component/fs'
 import makeGenerateComponentFn from './lib/Component/generate'
+import makeRenderTemplateFn from './lib/Template/render'
 import makeInitGenerator from './lib/Generator/init'
 import parseConfig from './lib/Config/parse'
 import normalizeConfig from './lib/Config/normalize'
 import validateConfig from './lib/Config/validation'
-import type { Config } from './lib/Config/types'
 import makeLoadPlugins from './lib/Plugin/load'
+import type { Config } from './lib/Config/types'
 import type { IGenerator } from './lib/Generator/interfaces'
 import type { ReactComponentOptions } from './lib/Component/types'
 
@@ -47,18 +48,19 @@ export default function(customConfig: Object = {}): IGenerator {
     console.error(error)
   })
 
-  const loadPlugins = makeLoadPlugins(
-    { require },
-    { resolve: require.resolve },
-    initEmitter
-  )
-
+  // Create and inject dependencies
+  const loadPlugins = makeLoadPlugins(require, require.resolve, initEmitter)
   const componentFs = makeComponentFs(fs)
   const initGenerator = makeInitGenerator(initEmitter, initCache, loadPlugins)
+  const renderTemplateFn = makeRenderTemplateFn(
+    nunjucks,
+    prettier,
+    config.formatting.prettier,
+    require
+  )
   const generateComponentFn = makeGenerateComponentFn(
     componentFs,
-    nunjucks,
-    prettier
+    renderTemplateFn
   )
 
   // Public API

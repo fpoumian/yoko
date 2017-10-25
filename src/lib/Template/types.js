@@ -13,3 +13,5 @@ export type TemplateProps = {
   dir: string,
   context: Object,
 }
+
+export type RenderTemplateFn = (template: Template) => string

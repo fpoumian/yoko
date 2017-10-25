@@ -5,8 +5,8 @@ import makeLoadPlugins from '../load'
 
 describe('load', () => {
   let loadPlugins
-  let loader
-  let resolver
+  let require
+  let resolve
   let emitter
 
   beforeEach(() => {
@@ -19,13 +19,9 @@ describe('load', () => {
 
   describe('given that all the plugins exist', () => {
     beforeEach(() => {
-      loader = {
-        require: jest.fn().mockReturnValue(() => function() {}),
-      }
-      resolver = {
-        resolve: jest.fn().mockReturnValue(path.resolve(__dirname)),
-      }
-      loadPlugins = makeLoadPlugins(loader, resolver, emitter)
+      require = jest.fn().mockReturnValue(() => function() {})
+      resolve = jest.fn().mockReturnValue(path.resolve(__dirname))
+      loadPlugins = makeLoadPlugins(require, resolve, emitter)
     })
 
     it('should return an array with a length equal to the amount of plugins found', () => {
@@ -50,20 +46,18 @@ describe('load', () => {
   })
   describe('given that one plugin is not found', () => {
     beforeEach(() => {
-      loader = {
-        require: jest
-          .fn()
-          // this will be the main-file plugin
-          .mockImplementationOnce(() => function() {})
-          // this will be the index-file plugin
-          .mockImplementationOnce(() => {
-            throw new Error('mockImplementationError')
-          }),
-      }
-      resolver = {
-        resolve: jest.fn().mockReturnValue(path.resolve(__dirname)),
-      }
-      loadPlugins = makeLoadPlugins(loader, resolver, emitter)
+      require = jest
+        .fn()
+        // this will be the main-file plugin
+        .mockImplementationOnce(() => function() {})
+        // this will be the index-file plugin
+        .mockImplementationOnce(() => {
+          throw new Error('mockImplementationError')
+        })
+
+      resolve = jest.fn().mockReturnValue(path.resolve(__dirname))
+
+      loadPlugins = makeLoadPlugins(require, resolve, emitter)
     })
 
     it('should return an array that excludes not loaded plugins', () => {

@@ -31,6 +31,7 @@ describe('generateComponent', () => {
         getPath,
         getTemplate: () => ({ getPath: () => '', getContext: () => {} }),
         getExtension: jest.fn(),
+        getRenderedOutput: jest.fn().mockReturnValue(''),
         getRole,
       }
 
@@ -107,39 +108,10 @@ describe('generateComponent', () => {
       })
     })
 
-    it('should call the formatter.format method as many times as there are files to write', () => {
+    it('should call the file.getRenderedOutput as many times as there are files to write', () => {
       expect.assertions(1)
       return generateComponent(component, config).then(() => {
-        expect(formatter.format).toHaveBeenCalledTimes(fileList.size)
-      })
-    })
-
-    it('should call the formatter.format method with only the code string as only argument', () => {
-      expect.assertions(1)
-      return generateComponent(component, config).then(() => {
-        expect(formatter.format).toHaveBeenCalledWith('')
-      })
-    })
-
-    describe('when the global config object contains a custom prettier configuration', () => {
-      beforeEach(() => {
-        config = {
-          formatting: {
-            prettier: {
-              semi: false,
-              singleQuote: true,
-            },
-          },
-        }
-      })
-      it('should call the formatter.format method with both the code string and the custom configuration as arguments', () => {
-        expect.assertions(1)
-        return generateComponent(component, config).then(() => {
-          expect(formatter.format).toHaveBeenCalledWith(
-            '',
-            config.formatting.prettier
-          )
-        })
+        expect(file.getRenderedOutput).toHaveBeenCalledTimes(fileList.size)
       })
     })
 

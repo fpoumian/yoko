@@ -1,17 +1,14 @@
 // @flow
-import isPlainObject from 'lodash/isPlainObject'
 
 import type { Component } from './types'
-import type { ITemplateCompiler } from '../Template/interfaces'
-import type { IFileFormatter } from '../ComponentFile/interfaces'
 import type { Config } from '../Config/types'
-import type { IComponentFs, IRenderable } from './interfaces'
+import type { IComponentFs } from './interfaces'
 import type { ComponentFile } from '../ComponentFile/types'
+import type { RenderTemplateFn } from '../Template/types'
 
 export default (
   componentFs: IComponentFs,
-  templateCompiler: ITemplateCompiler,
-  fileFormatter: IFileFormatter
+  renderTemplateFn: RenderTemplateFn
 ) =>
   function generateComponent(component: Component, config: Config) {
     // TODO: Rethink removing strategy when component-name-root-dir rule is set to false
@@ -23,39 +20,10 @@ export default (
         const roles: string[] = Array.from(componentFiles.keys())
 
         const filePromises: Array<Promise<any>> = roles.map(role => {
-          const file: ComponentFile = componentFiles.get(role)
-
-          // if (typeof file === 'undefined') {
-          //   return Promise.reject(
-          //     new Error(`Error writing file to ${component.getPath()}`)
-          //   )
-          // }
-
-          let fileOutput
-          const template = file.getTemplate()
-
-          // If the file has a template specified then compile it and render it.
-          if (template) {
-            const compiledTemplate: IRenderable = templateCompiler.compile(
-              require(template.getPath())
-            )
-            const renderedFile: string = compiledTemplate.render(
-              template.getContext()
-            )
-
-            // if there is a prettier configuration specified use it to format the rendered file;
-            // otherwise just use the default prettier configuration.
-            fileOutput = isPlainObject(config.formatting.prettier)
-              ? // $FlowFixMe
-                fileFormatter.format(renderedFile, config.formatting.prettier)
-              : fileFormatter.format(renderedFile)
-          } else {
-            // If there is not template specified for this file, then just output en empty string.
-            fileOutput = ''
-          }
+          const file: any = componentFiles.get(role)
 
           return componentFs
-            .writeComponentFile(file, fileOutput)
+            .writeComponentFile(file, file.getRenderedOutput(renderTemplateFn))
             .then(path => {
               const fileRole = file.getRole()
               return {
