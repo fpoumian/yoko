@@ -1,7 +1,6 @@
 // @flow
 
 import path from 'path'
-import EventEmitter from 'events'
 
 import createComponent from '../Component/factory'
 import {
@@ -20,14 +19,15 @@ import type {
   ComponentOptions,
   Component,
 } from '../Component/types'
-import type { IEventListener } from '../EventEmitter/interfaces'
+import type { IEventEmitter, IEventListener } from '../EventEmitter/interfaces'
 import type { RunDependencies } from './types'
 import reduceComponentPaths from '../Component/reducePaths'
+import type { ICache } from './interfaces'
 
 export default (
-  initEmitter: EventEmitter,
-  initCache: Object,
-  loadPlugins: LoadPluginsFn
+  initEmitter: IEventEmitter,
+  initCache: ICache,
+  loadPluginsFn: LoadPluginsFn
 ) =>
   function init(config: Object): Function {
     initEmitter.emit('initGenerator')
@@ -39,7 +39,7 @@ export default (
       const registeredPlugins = registerPlugins(config)
       initEmitter.emit('pluginsRegistered', registeredPlugins)
 
-      plugins = loadPlugins(registeredPlugins)
+      plugins = loadPluginsFn(registeredPlugins)
       initEmitter.emit('pluginsLoaded', plugins.map(plugin => plugin.getName()))
       initCache.set('plugins', plugins)
     } else {

@@ -5,5 +5,5 @@ export interface IEventListener {
 }
 
 export interface IEventEmitter {
-  emit(eventName: string, data: any): void;
+  emit(eventName: string, data: any): boolean;
 }
