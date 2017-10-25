@@ -22,14 +22,14 @@ export default (
         const componentFiles: Map<string, ComponentFile> = component.getFiles()
         const roles: string[] = Array.from(componentFiles.keys())
 
-        const filePromises: Array<Promise<any>> = roles.map((role: string) => {
-          const file = componentFiles.get(role)
+        const filePromises: Array<Promise<any>> = roles.map(role => {
+          const file: ComponentFile = componentFiles.get(role)
 
-          if (typeof file === 'undefined') {
-            return Promise.reject(
-              new Error(`Error writing file to ${component.getPath()}`)
-            )
-          }
+          // if (typeof file === 'undefined') {
+          //   return Promise.reject(
+          //     new Error(`Error writing file to ${component.getPath()}`)
+          //   )
+          // }
 
           let fileOutput
           const template = file.getTemplate()

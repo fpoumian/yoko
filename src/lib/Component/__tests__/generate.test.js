@@ -7,7 +7,6 @@ describe('generateComponent', () => {
   let getRole
   let getPath
   let component
-  let emitter
   let generateComponent
   let file
   let fileList
@@ -18,9 +17,6 @@ describe('generateComponent', () => {
 
   describe('given a valid component', () => {
     beforeEach(() => {
-      emitter = {
-        emit: jest.fn(),
-      }
       getRole = jest
         .fn()
         .mockReturnValueOnce('main')
@@ -33,9 +29,7 @@ describe('generateComponent', () => {
       file = {
         getName: jest.fn(),
         getPath,
-        getTemplate: jest
-          .fn()
-          .mockReturnValue({ getPath: () => '', getContext: () => {} }),
+        getTemplate: () => ({ getPath: () => '', getContext: () => {} }),
         getExtension: jest.fn(),
         getRole,
       }
@@ -149,7 +143,7 @@ describe('generateComponent', () => {
       })
     })
 
-    xit('should return a Promise which resolves into an array of Paths objects with the correct file roles', () => {
+    it('should return a Promise which resolves into an array of Paths objects with the correct file roles', () => {
       expect.assertions(2)
       return generateComponent(component, config).then(paths => {
         expect(find(paths, o => o.main)).toEqual({
