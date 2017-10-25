@@ -1,14 +1,14 @@
 import path from 'path'
 import find from 'lodash/find'
 
-import write from '../write'
+import makeGenerateComponent from '../generate'
 
-describe('write', () => {
+describe('generateComponent', () => {
   let getRole
   let getPath
   let component
   let emitter
-  let writeComponentFiles
+  let generateComponent
   let file
   let fileList
   let fs
@@ -36,7 +36,6 @@ describe('write', () => {
         getTemplate: jest
           .fn()
           .mockReturnValue({ getPath: () => '', getContext: () => {} }),
-        hasTemplate: jest.fn().mockReturnValue(true),
         getExtension: jest.fn(),
         getRole,
       }
@@ -48,9 +47,6 @@ describe('write', () => {
       component = {
         getName: jest.fn(),
         getPath: jest.fn(),
-        getEmitter() {
-          return emitter
-        },
         getFiles() {
           return fileList
         },
@@ -58,6 +54,14 @@ describe('write', () => {
 
       fs = {
         ensureFile: jest.fn().mockReturnValue(Promise.resolve()),
+        removeComponentRootDir: jest
+          .fn()
+          .mockImplementation((component, config) =>
+            Promise.resolve(component)
+          ),
+        createComponentRootDir: jest
+          .fn()
+          .mockImplementation(component => Promise.resolve(component)),
       }
 
       fs.writeComponentFile = jest
@@ -85,26 +89,40 @@ describe('write', () => {
         }),
       }
 
-      writeComponentFiles = write(fs, templateCompiler, formatter)
+      generateComponent = makeGenerateComponent(fs, templateCompiler, formatter)
     })
 
-    it('should call the writeFile method as many times as there are files to write', () => {
+    it('should call the removeComponentRootDir method one time only', () => {
       expect.assertions(1)
-      return writeComponentFiles(component, config).then(() => {
+      return generateComponent(component, config).then(() => {
+        expect(fs.removeComponentRootDir).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    it('should call the createComponentRootDir method one time only', () => {
+      expect.assertions(1)
+      return generateComponent(component, config).then(() => {
+        expect(fs.createComponentRootDir).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    it('should call the writeComponentFile method as many times as there are files to write', () => {
+      expect.assertions(1)
+      return generateComponent(component, config).then(() => {
         expect(fs.writeComponentFile).toHaveBeenCalledTimes(fileList.size)
       })
     })
 
     it('should call the formatter.format method as many times as there are files to write', () => {
       expect.assertions(1)
-      return writeComponentFiles(component, config).then(() => {
+      return generateComponent(component, config).then(() => {
         expect(formatter.format).toHaveBeenCalledTimes(fileList.size)
       })
     })
 
     it('should call the formatter.format method with only the code string as only argument', () => {
       expect.assertions(1)
-      return writeComponentFiles(component, config).then(() => {
+      return generateComponent(component, config).then(() => {
         expect(formatter.format).toHaveBeenCalledWith('')
       })
     })
@@ -122,7 +140,7 @@ describe('write', () => {
       })
       it('should call the formatter.format method with both the code string and the custom configuration as arguments', () => {
         expect.assertions(1)
-        return writeComponentFiles(component, config).then(() => {
+        return generateComponent(component, config).then(() => {
           expect(formatter.format).toHaveBeenCalledWith(
             '',
             config.formatting.prettier
@@ -131,71 +149,15 @@ describe('write', () => {
       })
     })
 
-    it('should return a Promise', () => {
-      expect(writeComponentFiles(component, config)).toBeInstanceOf(Promise)
-    })
-
-    it('should return a Promise which resolves into an array of objects', () => {
-      expect.assertions(3)
-      return writeComponentFiles(component, config).then(result => {
-        expect(result).toHaveLength(2)
-        expect(result[0]).toBeInstanceOf(Object)
-        expect(result[1]).toBeInstanceOf(Object)
-      })
-    })
-
     xit('should return a Promise which resolves into an array of Paths objects with the correct file roles', () => {
       expect.assertions(2)
-      return writeComponentFiles(component, config).then(paths => {
+      return generateComponent(component, config).then(paths => {
         expect(find(paths, o => o.main)).toEqual({
           main: path.resolve(process.cwd(), 'TestComponent.js'),
         })
         expect(find(paths, o => o.index)).toEqual({
           index: path.resolve(process.cwd(), 'index.js'),
         })
-      })
-    })
-
-    xit('should call the component emitter emit method as many times as files in the list (multiplied by two)', () => {
-      expect.assertions(1)
-      return writeComponentFiles(component, config).then(() => {
-        expect(emitter.emit).toHaveBeenCalledTimes(fileList.size * 2)
-      })
-    })
-
-    xit('should call the component getName() method as many times as files in the list', () => {
-      expect.assertions(1)
-      return writeComponentFiles(component, config).then(() => {
-        expect(component.getName).toHaveBeenCalledTimes(fileList.size)
-      })
-    })
-
-    it('should call the file getRole() method as many times as files in the list', () => {
-      expect.assertions(1)
-      return writeComponentFiles(component, config).then(() => {
-        expect(file.getRole).toHaveBeenCalledTimes(fileList.size)
-      })
-    })
-
-    it('should call the file getTemplate() method as many times as files in the list', () => {
-      expect.assertions(1)
-      return writeComponentFiles(component, config).then(() => {
-        expect(file.getTemplate).toHaveBeenCalledTimes(fileList.size)
-      })
-    })
-
-    xit('should call the component emitter fileWritten event with the correct file path as an argument', () => {
-      expect.assertions(3)
-      return writeComponentFiles(component, config).then(() => {
-        expect(emitter.emit).toHaveBeenCalledWith(
-          'mainFileWritten',
-          path.resolve(process.cwd(), 'TestComponent.js')
-        )
-        expect(emitter.emit).toHaveBeenLastCalledWith(
-          'indexFileWritten',
-          path.resolve(process.cwd(), 'index.js')
-        )
-        expect(emitter.emit).toHaveBeenCalledTimes(fileList.size * 2)
       })
     })
   })
