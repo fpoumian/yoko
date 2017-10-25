@@ -21,7 +21,7 @@ export interface IEventEmitter {
 }
 
 export interface IHasPath {
-  getPath(): string;
+  path(): string;
 }
 
 export interface IHasName {

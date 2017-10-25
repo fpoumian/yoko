@@ -13,7 +13,7 @@ export default (
 ) =>
   function renderTemplate(template: Template) {
     const compiledTemplate: ICanRender = templateCompiler.compile(
-      require(template.getPath())
+      require(template.path())
     )
     const renderedFile: string = compiledTemplate.render(template.getContext())
 

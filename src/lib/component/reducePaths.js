@@ -11,7 +11,7 @@ export default function reduceComponentPaths(
       ...pathObj,
     }),
     {
-      root: component.getPath(),
+      root: component.path(),
     }
   )
 }

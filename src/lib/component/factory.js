@@ -22,7 +22,7 @@ export default function createReactComponent(
     getName() {
       return name
     },
-    getPath() {
+    path() {
       return path
     },
     getFiles() {

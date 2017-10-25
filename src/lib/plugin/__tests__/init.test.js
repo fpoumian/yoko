@@ -17,7 +17,7 @@ xdescribe('initializePlugins', () => {
     const plugins = [
       {
         getName: jest.fn().mockReturnValue('main-file'),
-        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockReturnValue({
           name: 'ComponentName',
           extension: 'js',
@@ -32,7 +32,7 @@ xdescribe('initializePlugins', () => {
       },
       {
         getName: jest.fn().mockReturnValue('index-file'),
-        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockReturnValue({
           name: 'index',
           extension: 'js',
@@ -89,7 +89,7 @@ xdescribe('initializePlugins', () => {
     const plugins = [
       {
         getName: jest.fn().mockReturnValue('main-file'),
-        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: 'ComponentName',
           extension: 'js',
@@ -103,7 +103,7 @@ xdescribe('initializePlugins', () => {
       },
       {
         getName: jest.fn().mockReturnValue('index-file'),
-        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           extension: 'js',
           dir: path.resolve(__dirname),
@@ -146,7 +146,7 @@ xdescribe('initializePlugins', () => {
     const plugins = [
       {
         getName: jest.fn().mockReturnValue('main-file'),
-        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: 'ComponentName',
           extension: 'js',
@@ -160,7 +160,7 @@ xdescribe('initializePlugins', () => {
       },
       {
         getName: jest.fn().mockReturnValue('index-file'),
-        getPath: jest.fn().mockReturnValue(path.resolve(__dirname)),
+        path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: 'index',
           extension: 'js',

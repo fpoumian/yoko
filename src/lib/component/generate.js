@@ -32,7 +32,7 @@ export default (
             })
             .catch(e => {
               const err: Error = new Error()
-              err.message = `Error writing file to ${file.getPath()}`
+              err.message = `Error writing file to ${file.path()}`
               err.stack = e.stack
               throw err
             })

@@ -1,11 +1,11 @@
-import path from 'path'
+import pathNode from 'path'
 import find from 'lodash/find'
 
 import makeGenerateComponent from '../generate'
 
 describe('generateComponent', () => {
   let getRole
-  let getPath
+  let path
   let component
   let generateComponent
   let file
@@ -21,15 +21,15 @@ describe('generateComponent', () => {
         .fn()
         .mockReturnValueOnce('main')
         .mockReturnValue('index')
-      getPath = jest
+      path = jest
         .fn()
-        .mockReturnValue(path.resolve(__dirname, 'Component.js'))
-        .mockReturnValue(path.resolve(__dirname, 'index.js'))
+        .mockReturnValue(pathNode.resolve(__dirname, 'Component.js'))
+        .mockReturnValue(pathNode.resolve(__dirname, 'index.js'))
 
       file = {
         getName: jest.fn(),
-        getPath,
-        getTemplate: () => ({ getPath: () => '', getContext: () => {} }),
+        path,
+        getTemplate: () => ({ path: () => '', getContext: () => {} }),
         getExtension: jest.fn(),
         renderOutput: jest.fn().mockReturnValue(''),
         getRole,
@@ -41,7 +41,7 @@ describe('generateComponent', () => {
 
       component = {
         getName: jest.fn(),
-        getPath: jest.fn(),
+        path: jest.fn(),
         getFiles() {
           return fileList
         },
@@ -62,10 +62,10 @@ describe('generateComponent', () => {
       fs.writeComponentFile = jest
         .fn()
         .mockReturnValueOnce(
-          Promise.resolve(path.resolve(process.cwd(), 'TestComponent.js'))
+          Promise.resolve(pathNode.resolve(process.cwd(), 'TestComponent.js'))
         )
         .mockReturnValue(
-          Promise.resolve(path.resolve(process.cwd(), 'index.js'))
+          Promise.resolve(pathNode.resolve(process.cwd(), 'index.js'))
         )
 
       formatter = {
@@ -119,10 +119,10 @@ describe('generateComponent', () => {
       expect.assertions(2)
       return generateComponent(component, config).then(paths => {
         expect(find(paths, o => o.main)).toEqual({
-          main: path.resolve(process.cwd(), 'TestComponent.js'),
+          main: pathNode.resolve(process.cwd(), 'TestComponent.js'),
         })
         expect(find(paths, o => o.index)).toEqual({
-          index: path.resolve(process.cwd(), 'index.js'),
+          index: pathNode.resolve(process.cwd(), 'index.js'),
         })
       })
     })

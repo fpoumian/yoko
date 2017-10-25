@@ -13,7 +13,7 @@ export default function(props: FileProps) {
 
   // Public API
   const componentFile = {
-    getPath() {
+    path() {
       return path.resolve(dir, `${name}.${extension}`)
     },
     getName() {

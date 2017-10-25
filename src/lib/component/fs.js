@@ -13,11 +13,11 @@ export default function(fs: IFileSystem) {
   ): Promise<Component> {
     return !config.rules['component-name-root-dir']
       ? Promise.resolve(component)
-      : fs.remove(component.getPath()).then(() => component)
+      : fs.remove(component.path()).then(() => component)
   }
 
   function createComponentRootDir(component: Component): Promise<Component> {
-    return fs.ensureDir(component.getPath()).then(() => component)
+    return fs.ensureDir(component.path()).then(() => component)
   }
 
   const writeComponentFile = makeWriteComponentFile(fs)

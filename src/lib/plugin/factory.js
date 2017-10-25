@@ -12,7 +12,7 @@ export default function createPlugin(
     getName() {
       return name
     },
-    getPath() {
+    path() {
       return path
     },
     getPrefixedName() {

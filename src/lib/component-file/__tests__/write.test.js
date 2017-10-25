@@ -1,10 +1,10 @@
-import path from 'path'
+import pathNode from 'path'
 
 import makeWriteComponentFile from '../write'
 
 describe('write', () => {
   let getRole
-  let getPath
+  let path
   let writeComponentFile
   let file
   let fs
@@ -15,14 +15,14 @@ describe('write', () => {
         .fn()
         .mockReturnValueOnce('main')
         .mockReturnValue('index')
-      getPath = jest
+      path = jest
         .fn()
-        .mockReturnValue(path.resolve(process.cwd(), 'TestComponent.js'))
-        .mockReturnValue(path.resolve(process.cwd(), 'index.js'))
+        .mockReturnValue(pathNode.resolve(process.cwd(), 'TestComponent.js'))
+        .mockReturnValue(pathNode.resolve(process.cwd(), 'index.js'))
 
       file = {
         getName: jest.fn(),
-        getPath,
+        path,
         getTemplate: jest.fn(),
         getExtension: jest.fn(),
         getRole,
@@ -33,10 +33,10 @@ describe('write', () => {
         writeFile: jest
           .fn()
           .mockReturnValueOnce(
-            Promise.resolve(path.resolve(process.cwd(), 'TestComponent.js'))
+            Promise.resolve(pathNode.resolve(process.cwd(), 'TestComponent.js'))
           )
           .mockReturnValue(
-            Promise.resolve(path.resolve(process.cwd(), 'index.js'))
+            Promise.resolve(pathNode.resolve(process.cwd(), 'index.js'))
           ),
       }
       writeComponentFile = makeWriteComponentFile(fs)
@@ -52,7 +52,7 @@ describe('write', () => {
     it('should call the writeFile method with correct set of arguments', () => {
       expect.assertions(1)
       return writeComponentFile(file, '').then(() => {
-        expect(fs.writeFile).toHaveBeenCalledWith(file.getPath(), '', 'utf8')
+        expect(fs.writeFile).toHaveBeenCalledWith(file.path(), '', 'utf8')
       })
     })
 
@@ -66,14 +66,14 @@ describe('write', () => {
     it('should call the ensureFile method with correct set of arguments', () => {
       expect.assertions(1)
       return writeComponentFile(file, '').then(() => {
-        expect(fs.ensureFile).toHaveBeenCalledWith(file.getPath())
+        expect(fs.ensureFile).toHaveBeenCalledWith(file.path())
       })
     })
 
-    it('should call the file.getPath method three times', () => {
+    it('should call the file.path method three times', () => {
       expect.assertions(1)
       return writeComponentFile(file, '').then(() => {
-        expect(file.getPath).toHaveBeenCalledTimes(3)
+        expect(file.path).toHaveBeenCalledTimes(3)
       })
     })
   })

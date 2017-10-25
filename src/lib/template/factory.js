@@ -4,7 +4,7 @@ import type { TemplateProps } from './types'
 
 export default function({ name, dir, context }: TemplateProps): Object {
   return {
-    getPath() {
+    path() {
       return path.resolve(dir, name)
     },
     getContext() {

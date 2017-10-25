@@ -37,10 +37,10 @@ describe('load', () => {
         obj => obj.getName() === 'index-file'
       )
       expect(mainFile.getName()).toEqual('main-file')
-      expect(mainFile.getPath()).toEqual(path.resolve(__dirname))
+      expect(mainFile.path()).toEqual(path.resolve(__dirname))
       expect(mainFile.init).toBeInstanceOf(Function)
       expect(indexFile.getName()).toEqual('index-file')
-      expect(indexFile.getPath()).toEqual(path.resolve(__dirname))
+      expect(indexFile.path()).toEqual(path.resolve(__dirname))
       expect(indexFile.init).toBeInstanceOf(Function)
     })
   })
