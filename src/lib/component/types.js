@@ -1,8 +1,8 @@
 // @flow
-import type { IComposable } from './interfaces'
-import type { IReadable } from '../Readable/interfaces'
+import type { IHasFiles } from './interfaces'
+import type { IHasPath } from '../common/interfaces'
 
-export type Component = IComposable & IReadable
+export type Component = IHasFiles & IHasPath
 
 export type ComponentProps = {
   name: string,

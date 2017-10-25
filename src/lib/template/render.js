@@ -1,8 +1,8 @@
 import isPlainObject from 'lodash/isPlainObject'
 
 import type { ITemplateCompiler } from './interfaces'
-import type { IFileFormatter } from '../ComponentFile/interfaces'
-import type { IRenderable } from '../component/interfaces'
+import type { IFileFormatter } from '../component-file/interfaces'
+import type { ICanRender } from '../component/interfaces'
 import type { Template } from './types'
 
 export default (
@@ -12,7 +12,7 @@ export default (
   require: string => any
 ) =>
   function renderTemplate(template: Template) {
-    const compiledTemplate: IRenderable = templateCompiler.compile(
+    const compiledTemplate: ICanRender = templateCompiler.compile(
       require(template.getPath())
     )
     const renderedFile: string = compiledTemplate.render(template.getContext())

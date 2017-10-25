@@ -20,3 +20,10 @@ export interface IEventEmitter {
   emit(eventName: string, data: any): boolean;
 }
 
+export interface IHasPath {
+  getPath(): string;
+}
+
+export interface IHasName {
+  getName(): string;
+}

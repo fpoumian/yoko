@@ -1,9 +1,9 @@
 // @flow
 
-import type { ComponentFile, FileProps } from '../ComponentFile/types'
+import type { ComponentFile, FileProps } from '../component-file/types'
 import type { Config } from '../config/types'
 import type { Component } from './types'
-import type { IReadable } from '../Readable/interfaces'
+import type { IHasPath } from '../common/interfaces'
 
 export interface IComponentFs {
   removeComponentRootDir(
@@ -11,17 +11,17 @@ export interface IComponentFs {
     config: Config
   ): Promise<Component>;
   createComponentRootDir(component: Component): Promise<Component>;
-  writeComponentFile(file: IReadable, data: string): Promise<any>;
+  writeComponentFile(file: IHasPath, data: string): Promise<any>;
   resolveComponentFileTemplate(
     config: Object,
     fileProps: FileProps
   ): Object | null;
 }
 
-export interface IComposable {
+export interface IHasFiles {
   getFiles(): Map<string, ComponentFile>;
 }
 
-export interface IRenderable {
+export interface ICanRender {
   render(context: Object): string;
 }

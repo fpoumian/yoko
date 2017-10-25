@@ -1,7 +1,7 @@
 // @flow
 
 import type { Plugin } from './types'
-import type { FileProps } from '../ComponentFile/types'
+import type { FileProps } from '../component-file/types'
 
 export interface IPluginValidator {
   validate(plugin: Plugin, fileProps: FileProps): FileProps;

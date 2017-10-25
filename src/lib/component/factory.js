@@ -1,8 +1,7 @@
 // @flow
 
 import type { Component, ComponentProps } from './types'
-import createReadable from '../Readable/factory'
-import type { ComponentFile } from '../ComponentFile/types'
+import type { ComponentFile } from '../component-file/types'
 
 export default function createReactComponent(
   props: ComponentProps,
@@ -20,10 +19,12 @@ export default function createReactComponent(
 
   // Public API
   const reactComponent: Component = {
-    ...createReadable({
-      name,
-      path,
-    }),
+    getName() {
+      return name
+    },
+    getPath() {
+      return path
+    },
     getFiles() {
       return filesMap
     },

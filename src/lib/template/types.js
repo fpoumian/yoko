@@ -1,11 +1,9 @@
 // @flow
 
-interface ITemplate {
-  getPath(): string;
-  getContext(): Object;
-}
+import type { IHasContext } from './interfaces'
+import type { IHasPath } from '../common/interfaces'
 
-export type Template = ITemplate
+export type Template = (IHasContext & IHasPath) | null
 
 export type TemplateProps = {
   name: string,

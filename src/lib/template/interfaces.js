@@ -1,7 +1,11 @@
 // @flow
 
-import type { IRenderable } from '../component/interfaces'
+import type { ICanRender } from '../component/interfaces'
 
 export interface ITemplateCompiler {
-  compile: string => IRenderable;
+  compile: string => ICanRender;
+}
+
+export interface IHasContext {
+  getContext(): Object;
 }

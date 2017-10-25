@@ -3,7 +3,7 @@
 import type { Component } from './types'
 import type { Config } from '../config/types'
 import type { IComponentFs } from './interfaces'
-import type { ComponentFile } from '../ComponentFile/types'
+import type { ComponentFile } from '../component-file/types'
 import type { RenderTemplateFn } from '../template/types'
 
 export default (
@@ -23,7 +23,7 @@ export default (
           const file: any = componentFiles.get(role)
 
           return componentFs
-            .writeComponentFile(file, file.getRenderedOutput(renderTemplateFn))
+            .writeComponentFile(file, file.renderOutput(renderTemplateFn))
             .then(path => {
               const fileRole = file.getRole()
               return {

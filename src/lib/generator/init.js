@@ -12,7 +12,7 @@ import registerPlugins from '../plugin/register'
 import parseComponentName from '../component/parseName'
 import makeMapFilePluginsDataToFiles from '../plugin/mapToFiles'
 
-import type { ComponentFile, FileProps } from '../ComponentFile/types'
+import type { ComponentFile, FileProps } from '../component-file/types'
 import type { LoadPluginsFn, Plugin } from '../plugin/types'
 import type {
   ComponentProps,

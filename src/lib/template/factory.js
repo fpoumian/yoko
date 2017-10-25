@@ -1,16 +1,14 @@
 // @flow
 import path from 'path'
+import type { TemplateProps } from './types'
 
-import type { Template, TemplateProps } from './types'
-
-export default function(props: TemplateProps): Template {
-  const { name, dir } = props
+export default function({ name, dir, context }: TemplateProps): Object {
   return {
     getPath() {
       return path.resolve(dir, name)
     },
     getContext() {
-      return props.context
+      return context
     },
   }
 }

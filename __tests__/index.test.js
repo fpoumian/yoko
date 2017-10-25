@@ -10,7 +10,7 @@ import {
   validateIndexFile,
   validateES6ClassComponent,
   validateTestsFile,
-} from '../src/lib/ComponentFile/validation'
+} from '../src/lib/component-file/validation'
 import mockFileSystem from './utils/mockFs'
 
 const mockedFileSystem = mockFileSystem()

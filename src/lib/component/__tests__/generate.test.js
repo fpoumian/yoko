@@ -31,7 +31,7 @@ describe('generateComponent', () => {
         getPath,
         getTemplate: () => ({ getPath: () => '', getContext: () => {} }),
         getExtension: jest.fn(),
-        getRenderedOutput: jest.fn().mockReturnValue(''),
+        renderOutput: jest.fn().mockReturnValue(''),
         getRole,
       }
 
@@ -111,7 +111,7 @@ describe('generateComponent', () => {
     it('should call the file.getRenderedOutput as many times as there are files to write', () => {
       expect.assertions(1)
       return generateComponent(component, config).then(() => {
-        expect(file.getRenderedOutput).toHaveBeenCalledTimes(fileList.size)
+        expect(file.renderOutput).toHaveBeenCalledTimes(fileList.size)
       })
     })
 

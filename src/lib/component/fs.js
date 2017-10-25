@@ -3,8 +3,8 @@
 import type { IFileSystem } from '../common/interfaces'
 import type { Component } from './types'
 import type { Config } from '../config/types'
-import makeWriteComponentFile from '../ComponentFile/write'
-import makeResolveComponentFileTemplate from '../ComponentFile/resolveTemplate'
+import makeWriteComponentFile from '../component-file/write'
+import makeResolveComponentFileTemplate from '../component-file/resolveTemplate'
 
 export default function(fs: IFileSystem) {
   function removeComponentRootDir(

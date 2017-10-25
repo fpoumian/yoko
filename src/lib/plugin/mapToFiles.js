@@ -1,6 +1,6 @@
 // @flow
-import type { ComponentFile, FileProps } from '../ComponentFile/types'
-import createComponentFile from '../ComponentFile/factory'
+import type { ComponentFile, FileProps } from '../component-file/types'
+import createComponentFile from '../component-file/factory'
 import type { Config } from '../config/types'
 
 export default (resolveComponentFileTemplate: Function) =>
