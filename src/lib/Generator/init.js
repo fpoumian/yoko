@@ -16,8 +16,8 @@ import makeMapFilePluginsDataToFiles from '../Plugin/mapToFiles'
 import type { ComponentFile, FileProps } from '../ComponentFile/types'
 import type { LoadPluginsFn, Plugin } from '../Plugin/types'
 import type {
-  ReactComponentProps,
-  ReactComponentOptions,
+  ComponentProps,
+  ComponentOptions,
   Component,
 } from '../Component/types'
 import type { IEventListener } from '../EventEmitter/interfaces'
@@ -55,7 +55,7 @@ export default (
     }: RunDependencies) => {
       function run(
         componentName: string,
-        options: ReactComponentOptions = {}
+        options: ComponentOptions = {}
       ): IEventListener {
         // Handle input errors
         const validOptions = validateComponentOptions(options)
@@ -85,7 +85,7 @@ export default (
             : config.paths.components
 
           // Resolve component props
-          const props: ReactComponentProps = {
+          const props: ComponentProps = {
             name: componentName,
             path: path.resolve(componentHome, ...parentDirs, rootName),
             main: validOptions.main || true,

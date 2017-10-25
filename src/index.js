@@ -21,7 +21,7 @@ import validateConfig from './lib/Config/validation'
 import makeLoadPlugins from './lib/Plugin/load'
 import type { Config } from './lib/Config/types'
 import type { IGenerator } from './lib/Generator/interfaces'
-import type { ReactComponentOptions } from './lib/Component/types'
+import type { ComponentOptions } from './lib/Component/types'
 
 /**
  *  Create Generator.
@@ -79,10 +79,7 @@ export default function(customConfig: Object = {}): IGenerator {
    * @param {string} componentName - The name of the component
    * @param {Object} options - The options for the component
    */
-  function generate(
-    componentName: string,
-    options: ReactComponentOptions = {}
-  ) {
+  function generate(componentName: string, options: ComponentOptions = {}) {
     return initGenerator(config)({
       generateComponentFn,
       resolveComponentFileTemplateFn: componentFs.resolveComponentFileTemplate,

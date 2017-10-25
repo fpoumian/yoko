@@ -1,11 +1,11 @@
 // @flow
 
-import type { Component, ReactComponentProps } from './types'
+import type { Component, ComponentProps } from './types'
 import createReadable from '../Readable/factory'
 import type { ComponentFile } from '../ComponentFile/types'
 
 export default function createReactComponent(
-  props: ReactComponentProps,
+  props: ComponentProps,
   files: ComponentFile[]
 ): Component {
   const { name, path } = props

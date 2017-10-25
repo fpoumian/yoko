@@ -4,7 +4,7 @@ import type { IReadable } from '../Readable/interfaces'
 
 export type Component = IComposable & IReadable
 
-export type ReactComponentProps = {
+export type ComponentProps = {
   name: string,
   path: string,
   es6class: boolean,
@@ -13,7 +13,7 @@ export type ReactComponentProps = {
   stylesheet: boolean,
 }
 
-export type ReactComponentOptions = {
+export type ComponentOptions = {
   container?: boolean,
   main?: boolean,
   index?: boolean,

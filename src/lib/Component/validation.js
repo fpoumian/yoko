@@ -5,13 +5,13 @@ import filenameReservedRegex from 'filename-reserved-regex'
 import Joi from 'joi'
 import isWindows from 'is-windows'
 
-import type { ReactComponentOptions } from './types'
+import type { ComponentOptions } from './types'
 import BadOptionsError from '../Errors/BadOptionsError'
 import BadNameError from '../Errors/BadNameError'
 
 export function validateComponentOptions(
-  options: ReactComponentOptions
-): ReactComponentOptions {
+  options: ComponentOptions
+): ComponentOptions {
   const schema = Joi.object().keys({
     container: Joi.boolean().strict(),
     main: Joi.boolean().strict(),

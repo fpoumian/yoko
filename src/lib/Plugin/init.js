@@ -1,7 +1,7 @@
 // @flow
 
 import type { Plugin } from './types'
-import type { ReactComponentProps } from '../Component/types'
+import type { ComponentProps } from '../Component/types'
 import type { Config } from '../Config/types'
 import type { FileProps } from '../ComponentFile/types'
 import type { IPluginValidator } from './interfaces'
@@ -13,7 +13,7 @@ import SkipPluginError from '../Errors/SkipPluginError'
 export default (emitter: IEventEmitter, pluginValidator: IPluginValidator) =>
   function initPlugins(
     plugins: Plugin[],
-    props: ReactComponentProps,
+    props: ComponentProps,
     config: Config
   ): Object[] {
     return plugins.reduce((acc, plugin) => {
