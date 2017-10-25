@@ -58,16 +58,7 @@ describe('judex-component-generator', () => {
     const generator = judex(config)
 
     describe('when no component options are provided', () => {
-      it('should create one directory inside of components Home directory', done => {
-        expect.assertions(1)
-
-        generator.generate('TestComponent').on('done', paths => {
-          expect(resolveInComponents('TestComponent')).toEqual(paths.root)
-          done()
-        })
-      })
-
-      it('should resolve one directory inside of components Home directory', () => {
+      it('should create one directory inside of components Home directory', () => {
         expect.assertions(1)
 
         return generator.generate('TestComponent').then(paths => {
@@ -75,15 +66,14 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should return a path object with only root and main properties', done => {
+      it('should return a path object with only root and main properties', () => {
         expect.assertions(1)
 
-        generator.generate('TestComponent').on('done', paths => {
+        return generator.generate('TestComponent').then(paths => {
           expect(paths).toEqual({
             root: resolveInComponents('TestComponent'),
             main: resolveInComponents('TestComponent', 'TestComponent.js'),
           })
-          done()
         })
       })
 
@@ -103,27 +93,31 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should emit a mainFileWritten event', done => {
+      it('should emit a fileWritten event with the main component file path', () => {
         expect.assertions(1)
+        let paths = []
 
-        generator.generate('TestComponent').on('mainFileWritten', path => {
-          expect(path).toEqual(
-            resolveInComponents('TestComponent', 'TestComponent.js')
-          )
-          done()
-        })
+        return generator
+          .generate('TestComponent', { index: true })
+          .on('fileWritten', path => {
+            paths.push(path)
+          })
+          .then(() => {
+            expect(paths).toContain(
+              resolveInComponents('TestComponent', 'TestComponent.js')
+            )
+          })
       })
 
-      it('should create components directories with a nested path', done => {
+      it('should create components directories with a nested path', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('ParentDirectory/TestComponent')
-          .on('done', paths => {
+          .then(paths => {
             expect(paths).toHaveProperty(
               'root',
               resolveInComponents('ParentDirectory', 'TestComponent')
             )
-            done()
           })
       })
 
@@ -142,11 +136,10 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should create a main JS file for the component', done => {
+      it('should create a main JS file for the component', () => {
         expect.assertions(1)
-        generator.generate('TestComponent').on('done', paths => {
+        return generator.generate('TestComponent').then(paths => {
           expect(getDirContents(paths.root)).toContain('TestComponent.js')
-          done()
         })
       })
 
@@ -172,57 +165,53 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should create a valid React component using the default Stateless Functional component template', done => {
+      it('should create a valid React component using the default Stateless Functional component template', () => {
         expect.assertions(1)
-        generator.generate('TestComponent').on('done', paths => {
+        return generator.generate('TestComponent').then(paths => {
           const testComponent = fs.readFileSync(path.resolve(paths.main), {
             encoding: 'utf8',
           })
           expect(
             validateStatelessFunctionalComponent(testComponent, 'TestComponent')
           ).toBe(true)
-          done()
         })
       })
     })
 
     describe('when the index option is set to true in component options', () => {
-      it('should return a path object with root, index and main properties', done => {
+      it('should return a path object with root, index and main properties', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', {
             index: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             expect(paths).toEqual({
               root: resolveInComponents('TestComponent'),
               main: resolveInComponents('TestComponent', 'TestComponent.js'),
               index: resolveInComponents('TestComponent', 'index.js'),
             })
-            done()
           })
       })
 
-      it('should create a index JS file for the component', done => {
+      it('should create a index JS file for the component', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', { index: true })
-          .on('done', paths => {
+          .then(paths => {
             expect(getDirContents(paths.root)).toContain('index.js')
-            done()
           })
       })
 
-      it('should create a valid index.js file', done => {
+      it('should create a valid index.js file', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', { index: true })
-          .on('done', paths => {
+          .then(paths => {
             const indexFile = fs.readFileSync(path.resolve(paths.index), {
               encoding: 'utf8',
             })
             expect(validateIndexFile(indexFile, 'TestComponent')).toBe(true)
-            done()
           })
       })
 
@@ -254,118 +243,119 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should emit a indexFileWritten event', done => {
+      it('should emit a fileWritten event with the index file path', () => {
         expect.assertions(1)
+        let paths = []
 
-        generator
+        return generator
           .generate('TestComponent', { index: true })
-          .on('indexFileWritten', path => {
-            expect(path).toEqual(
+          .on('fileWritten', path => {
+            paths.push(path)
+          })
+          .then(() => {
+            expect(paths).toContain(
               resolveInComponents('TestComponent', 'index.js')
             )
-            done()
           })
       })
     })
 
     describe('when the stylesheet option is set to true in component options', () => {
-      it('should return a path object with root, stylesheet and main properties', done => {
+      it('should return a path object with root, stylesheet and main properties', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', {
             stylesheet: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             expect(paths).toEqual({
               root: resolveInComponents('TestComponent'),
               main: resolveInComponents('TestComponent', 'TestComponent.js'),
               stylesheet: resolveInComponents('TestComponent', 'styles.css'),
             })
-            done()
           })
       })
 
-      it('should create a stylesheet file for the component', done => {
+      it('should create a stylesheet file for the component', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', { stylesheet: true })
-          .on('done', paths => {
+          .then(paths => {
             expect(getDirContents(paths.root)).toContain('styles.css')
-            done()
           })
       })
 
-      it('should emit a stylesheetFileWritten event', done => {
+      it('should emit a fileWritten event with stylesheet file path', () => {
         expect.assertions(1)
+        let paths = []
 
-        generator
+        return generator
           .generate('TestComponent', { stylesheet: true })
-          .on('stylesheetFileWritten', path => {
-            expect(path).toEqual(
+          .on('fileWritten', path => {
+            paths.push(path)
+          })
+          .then(() => {
+            expect(paths).toContain(
               resolveInComponents('TestComponent', 'styles.css')
             )
-            done()
           })
       })
 
-      it('should create an empty stylesheet file', done => {
+      it('should create an empty stylesheet file', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', { stylesheet: true })
           .on('done', paths => {
             const stylesheet = fs.readFileSync(path.resolve(paths.stylesheet), {
               encoding: 'utf8',
             })
             expect(stylesheet.trim()).toBe('')
-            done()
           })
       })
     })
 
     describe('when the ES6 Class option is set to true', () => {
-      it('should create a valid React component using the ES6 class template inside the default components home dir', done => {
+      it('should create a valid React component using the ES6 class template inside the default components home dir', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', {
             es6class: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             const testComponent = fs.readFileSync(path.resolve(paths.main), {
               encoding: 'utf8',
             })
             expect(
               validateES6ClassComponent(testComponent, 'TestComponent')
             ).toBe(true)
-            done()
           })
       })
     })
 
     describe('when the container option is set to true', () => {
-      it('should return a path object with the Containers dir as home of component', done => {
+      it('should return a path object with the Containers dir as home of component', () => {
         expect.assertions(2)
-        generator
+        return generator
           .generate('TestComponent', {
             container: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             expect(paths.root).toEqual(
               path.resolve(containersDir, 'TestComponent')
             )
             expect(paths.main).toEqual(
               path.resolve(containersDir, 'TestComponent', 'TestComponent.js')
             )
-            done()
           })
       })
 
-      it('should create a valid React component using the ES6 class template inside the Containers home dir', done => {
+      it('should create a valid React component using the ES6 class template inside the Containers home dir', () => {
         expect.assertions(2)
-        generator
+        return generator
           .generate('TestComponent', {
             container: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             const testComponent = fs.readFileSync(path.resolve(paths.main), {
               encoding: 'utf8',
             })
@@ -375,19 +365,18 @@ describe('judex-component-generator', () => {
             expect(
               validateES6ClassComponent(testComponent, 'TestComponent')
             ).toBe(true)
-            done()
           })
       })
 
       describe('given that the ES6 Class option is set to true', () => {
-        it('should create a valid React component using the ES6 class template inside the Containers home dir', done => {
+        it('should create a valid React component using the ES6 class template inside the Containers home dir', () => {
           expect.assertions(2)
-          generator
+          return generator
             .generate('TestComponent', {
               container: true,
               es6class: true,
             })
-            .on('done', paths => {
+            .then(paths => {
               const testComponent = fs.readFileSync(path.resolve(paths.main), {
                 encoding: 'utf8',
               })
@@ -397,7 +386,6 @@ describe('judex-component-generator', () => {
               expect(
                 validateES6ClassComponent(testComponent, 'TestComponent')
               ).toBe(true)
-              done()
             })
         })
       })
@@ -419,17 +407,17 @@ describe('judex-component-generator', () => {
         })
       })
 
-      it('should overwrite files inside component', done => {
+      it('should overwrite files inside component', () => {
         expect.assertions(3)
         expect(getDirContents(resolveInComponents('TestComponent'))).toContain(
           'TestComponent.js'
         )
 
-        generator
+        return generator
           .generate('TestComponent', {
             es6class: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             const testComponent = fs.readFileSync(path.resolve(paths.main), {
               encoding: 'utf8',
             })
@@ -442,11 +430,10 @@ describe('judex-component-generator', () => {
                 'TestComponent'
               )
             ).toBe(false)
-            done()
           })
       })
 
-      it('should remove needless files', done => {
+      it('should remove needless files', () => {
         expect.assertions(5)
         expect(getDirContents(resolveInComponents('TestComponent'))).toContain(
           'TestComponent.js'
@@ -457,14 +444,13 @@ describe('judex-component-generator', () => {
         expect(getDirContents(resolveInComponents('TestComponent'))).toContain(
           'styles.css'
         )
-        generator.generate('TestComponent').on('done', () => {
+        return generator.generate('TestComponent').then(() => {
           expect(
             getDirContents(resolveInComponents('TestComponent'))
           ).not.toContain('index.js')
           expect(
             getDirContents(resolveInComponents('TestComponent'))
           ).not.toContain('styles.css')
-          done()
         })
       })
       describe('given a component name with nested path', () => {
@@ -486,31 +472,30 @@ describe('judex-component-generator', () => {
           })
         })
 
-        it('should only overwrite files for that specific component', done => {
+        it('should only overwrite files for that specific component', () => {
           expect.assertions(2)
           expect(getDirContents(resolveInComponents('ParentDir'))).toContain(
             'AnotherComponent'
           )
 
-          generator.generate('ParentDir/TestComponent').on('done', () => {
+          return generator.generate('ParentDir/TestComponent').then(() => {
             expect(getDirContents(resolveInComponents('ParentDir'))).toContain(
               'AnotherComponent'
             )
-            done()
           })
         })
 
-        it('should overwrite files and remove needless ones', done => {
+        it('should overwrite files and remove needless ones', () => {
           expect.assertions(5)
           expect(
             getDirContents(resolveInComponents('ParentDir', 'TestComponent'))
           ).toContain('TestComponent.js')
 
-          generator
+          return generator
             .generate('ParentDir/TestComponent', {
               es6class: true,
             })
-            .on('done', paths => {
+            .then(paths => {
               const testComponent = fs.readFileSync(path.resolve(paths.main), {
                 encoding: 'utf8',
               })
@@ -533,7 +518,6 @@ describe('judex-component-generator', () => {
                   resolveInComponents('ParentDir', 'TestComponent')
                 )
               ).not.toContain('styles.css')
-              done()
             })
         })
       })
@@ -558,29 +542,28 @@ describe('judex-component-generator', () => {
 
     const generator = judex(config)
 
-    it('should create a Main component file with custom JSX extension', done => {
+    it('should create a Main component file with custom JSX extension', () => {
       expect.assertions(1)
-      generator.generate('TestComponent').on('done', paths => {
+      return generator.generate('TestComponent').then(paths => {
         expect(getDirContents(paths.root)).toContain('TestComponent.jsx')
-        done()
       })
     })
 
-    it('should create a index JS file with default JS extension', done => {
+    it('should create a index JS file with default JS extension', () => {
       expect.assertions(1)
-      generator.generate('TestComponent', { index: true }).on('done', paths => {
-        expect(getDirContents(paths.root)).toContain('index.js')
-        done()
-      })
+      return generator
+        .generate('TestComponent', { index: true })
+        .then(paths => {
+          expect(getDirContents(paths.root)).toContain('index.js')
+        })
     })
 
-    it('should create a Main Stylesheet file with custom SCSS extension', done => {
+    it('should create a Main Stylesheet file with custom SCSS extension', () => {
       expect.assertions(1)
-      generator
+      return generator
         .generate('TestComponent', { stylesheet: true })
-        .on('done', paths => {
+        .then(paths => {
           expect(getDirContents(paths.root)).toContain('styles.scss')
-          done()
         })
     })
   })
@@ -598,49 +581,47 @@ describe('judex-component-generator', () => {
 
     const generator = judex(config)
 
-    it('should create a component that does not use the component name to create a root dir', done => {
+    it('should create a component that does not use the component name to create a root dir', () => {
       expect.assertions(1)
-      generator
+      return generator
         .generate('ComponentRootDirName/TestComponent')
-        .on('done', paths => {
+        .then(paths => {
           expect(paths).toHaveProperty(
             'root',
             resolveInComponents('ComponentRootDirName')
           )
-          done()
         })
     })
-    it('should be able to create components that use the components Home dir as the component root dir', done => {
+    it('should be able to create components that use the components Home dir as the component root dir', () => {
       expect.assertions(1)
-      generator.generate('TestComponent').on('done', paths => {
+      return generator.generate('TestComponent').then(paths => {
         expect(paths).toHaveProperty(
           'main',
           resolveInComponents('TestComponent.js')
         )
-        done()
       })
     })
 
-    it('should create a stylesheet that is named like the component', done => {
+    it('should create a stylesheet that is named like the component', () => {
       expect.assertions(1)
-      generator
+      return generator
         .generate('TestComponent', { stylesheet: true })
-        .on('done', paths => {
+        .then(paths => {
           expect(paths).toHaveProperty(
             'stylesheet',
             resolveInComponents('TestComponent.css')
           )
-          done()
         })
     })
 
-    it('should NOT create the file of a plugin whose skip prop is set to true', done => {
+    it('should NOT create the file of a plugin whose skip prop is set to true', () => {
       // In this case we're assuming the plugin is the index-file plugin.
       expect.assertions(1)
-      generator.generate('TestComponent', { index: true }).on('done', paths => {
-        expect(paths).not.toHaveProperty('index')
-        done()
-      })
+      return generator
+        .generate('TestComponent', { index: true })
+        .then(paths => {
+          expect(paths).not.toHaveProperty('index')
+        })
     })
 
     xit('should NOT delete files', done => {
@@ -679,27 +660,25 @@ describe('judex-component-generator', () => {
       })
     })
 
-    it('should be able to handle components with no nested paths and needless file extension', done => {
+    it('should be able to handle components with no nested paths and needless file extension', () => {
       expect.assertions(1)
-      generator.generate('TestComponent.jsx').on('done', paths => {
+      return generator.generate('TestComponent.jsx').then(paths => {
         expect(paths).toHaveProperty(
           'main',
           resolveInComponents('TestComponent.js')
         )
-        done()
       })
     })
 
-    it('should create a component whose main file has the name of the component', done => {
+    it('should create a component whose main file has the name of the component', () => {
       expect.assertions(1)
-      generator
+      return generator
         .generate('ComponentRootDirName/TestComponent')
-        .on('done', paths => {
+        .then(paths => {
           expect(paths).toHaveProperty(
             'main',
             resolveInComponents('ComponentRootDirName/TestComponent.js')
           )
-          done()
         })
     })
 
@@ -744,13 +723,13 @@ describe('judex-component-generator', () => {
     const generator = judex(config)
 
     describe('when the container option is set to true', () => {
-      it('should create a valid React component using the Stateless Functional component template inside the Containers home dir', done => {
+      it('should create a valid React component using the Stateless Functional component template inside the Containers home dir', () => {
         expect.assertions(2)
-        generator
+        return generator
           .generate('TestComponent', {
             container: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             const testComponent = fs.readFileSync(path.resolve(paths.main), {
               encoding: 'utf8',
             })
@@ -763,7 +742,6 @@ describe('judex-component-generator', () => {
                 'TestComponent'
               )
             ).toBe(true)
-            done()
           })
       })
     })
@@ -777,28 +755,26 @@ describe('judex-component-generator', () => {
 
     const generator = judex()
 
-    it('should create one directory inside the default components home directory', done => {
+    it('should create one directory inside the default components home directory', () => {
       expect.assertions(1)
-      generator.generate('TestComponent').on('done', componentPaths => {
+      return generator.generate('TestComponent').on('done', componentPaths => {
         expect(resolveInComponents('TestComponent')).toEqual(
           componentPaths.root
         )
-        done()
       })
     })
 
     describe('when the container option is set to true', () => {
-      it('should create one directory inside the default containers home directory', done => {
+      it('should create one directory inside the default containers home directory', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', {
             container: true,
           })
-          .on('done', componentPaths => {
+          .then(componentPaths => {
             expect(resolveInContainers('TestComponent')).toEqual(
               componentPaths.root
             )
-            done()
           })
       })
     })
@@ -828,13 +804,13 @@ describe('judex-component-generator', () => {
 
     const generator = judex(config)
     describe('when the test option is set to true', () => {
-      it('should return a path object with root, tests and main properties', done => {
+      it('should return a path object with root, tests and main properties', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', {
             tests: true,
           })
-          .on('done', paths => {
+          .then(paths => {
             expect(paths).toEqual({
               root: resolveInComponents('TestComponent'),
               main: resolveInComponents('TestComponent', 'TestComponent.js'),
@@ -844,47 +820,47 @@ describe('judex-component-generator', () => {
                 'TestComponent.spec.js'
               ),
             })
-            done()
           })
       })
-      it('should create a test file for the component', done => {
+      it('should create a test file for the component', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', { tests: true })
-          .on('done', paths => {
+          .then(paths => {
             expect(
               getDirContents(path.resolve(paths.root, '__tests__'))
             ).toContain('TestComponent.spec.js')
-            done()
           })
       })
-      it('should create a valid test file for the component', done => {
+      it('should create a valid test file for the component', () => {
         expect.assertions(1)
-        generator
+        return generator
           .generate('TestComponent', { tests: true })
-          .on('done', paths => {
+          .then(paths => {
             const testsFile = fs.readFileSync(path.resolve(paths.tests), {
               encoding: 'utf8',
             })
             expect(validateTestsFile(testsFile, 'TestComponent')).toBe(true)
-            done()
           })
       })
 
-      it('should emit a testsFileWritten event', done => {
+      it('should emit a fileWritten event with the tests file path', () => {
         expect.assertions(1)
+        let paths = []
 
-        generator
+        return generator
           .generate('TestComponent', { tests: true })
-          .on('testsFileWritten', path => {
-            expect(path).toEqual(
+          .on('fileWritten', path => {
+            paths.push(path)
+          })
+          .then(() => {
+            expect(paths).toContain(
               resolveInComponents(
                 'TestComponent',
                 '__tests__',
                 'TestComponent.spec.js'
               )
             )
-            done()
           })
       })
     })
@@ -905,14 +881,13 @@ describe('judex-component-generator', () => {
   describe('given a global configuration with no formatting option specified', () => {
     const config = {}
     const generator = judex(config)
-    it('should generate a component using the default Prettier configuration', done => {
+    it('should generate a component using the default Prettier configuration', () => {
       expect.assertions(1)
-      generator.generate('TestComponent').on('done', paths => {
+      return generator.generate('TestComponent').then(paths => {
         const testComponent = fs.readFileSync(path.resolve(paths.main), {
           encoding: 'utf8',
         })
         expect(prettier.check(testComponent)).toBe(true)
-        done()
       })
     })
   })
@@ -927,16 +902,15 @@ describe('judex-component-generator', () => {
       },
     }
     const generator = judex(config)
-    it('should generate a component using the specified prettier configuration', done => {
+    it('should generate a component using the specified prettier configuration', () => {
       expect.assertions(1)
-      generator.generate('TestComponent').on('done', paths => {
+      return generator.generate('TestComponent').then(paths => {
         const testComponent = fs.readFileSync(path.resolve(paths.main), {
           encoding: 'utf8',
         })
         expect(prettier.check(testComponent, config.formatting.prettier)).toBe(
           true
         )
-        done()
       })
     })
   })
