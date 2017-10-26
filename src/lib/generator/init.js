@@ -18,7 +18,6 @@ import type {
   Component,
 } from '../component/types'
 import type { IEventEmitter, IEventListener } from '../common/interfaces'
-import type { RunDependencies } from './types'
 import reduceComponentPaths from '../component/reducePaths'
 import type { ICache } from './interfaces'
 
@@ -44,13 +43,13 @@ export default (
       plugins = cachedPlugins
     }
 
-    // Inject generator dependencies
+    // Inject run dependencies
     return ({
       generateComponentFn,
       mapPluginsDataToFilesFn,
       makeInitPluginsFn,
       emitter,
-    }: RunDependencies) => {
+    }) => {
       function run(
         componentName: string,
         options: ComponentOptions = {}
@@ -105,17 +104,16 @@ export default (
 
           // Initialize plugins
           const initPlugins = makeInitPluginsFn(emitter)
-          const filePluginsData: FileProps[] = initPlugins(
+          const pluginsData: FileProps[] = initPlugins(
             plugins,
             { ...props },
             { ...config }
           )
 
           // Map plugin data to files
-          const files: ComponentFile[] = mapPluginsDataToFilesFn(
-            filePluginsData,
-            { ...config }
-          )
+          const files: ComponentFile[] = mapPluginsDataToFilesFn(pluginsData, {
+            ...config,
+          })
 
           // Create component
           const component: Component = createComponent(props, files)
