@@ -40,7 +40,7 @@ export default (
       initEmitter.emit('pluginsRegistered', registeredPlugins)
 
       plugins = loadPluginsFn(registeredPlugins)
-      initEmitter.emit('pluginsLoaded', plugins.map(plugin => plugin.getName()))
+      initEmitter.emit('pluginsLoaded', plugins.map(plugin => plugin.name()))
       initCache.set('plugins', plugins)
     } else {
       plugins = cachedPlugins

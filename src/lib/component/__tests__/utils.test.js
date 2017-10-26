@@ -5,8 +5,8 @@ import reduceComponentPaths from '../reducePaths'
 describe('reduceComponentPaths', () => {
   const component = {
     path: () => path.resolve(__dirname),
-    getFiles: () => {},
-    getName: () => '',
+    files: () => {},
+    name: () => '',
   }
 
   const filePaths = [

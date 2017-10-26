@@ -7,7 +7,7 @@ export default function({ name, dir, context }: TemplateProps): Object {
     path() {
       return path.resolve(dir, name)
     },
-    getContext() {
+    context() {
       return context
     },
   }

@@ -19,7 +19,7 @@ export interface IComponentFs {
 }
 
 export interface IHasFiles {
-  getFiles(): Map<string, ComponentFile>;
+  files(): Map<string, ComponentFile>;
 }
 
 export interface ICanRender {

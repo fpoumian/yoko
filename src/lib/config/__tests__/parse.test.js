@@ -2,7 +2,6 @@ import path from 'path'
 import makeParseConfig from '../parse'
 import normalizeConfig from '../normalize'
 import validateConfig from '../validation'
-import BadConfigError from '../../errors/BadConfigError'
 
 const parseConfig = makeParseConfig(normalizeConfig, validateConfig)
 

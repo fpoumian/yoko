@@ -16,7 +16,7 @@ export default (
       .removeComponentRootDir(component, config)
       .then(componentFs.createComponentRootDir)
       .then(component => {
-        const componentFiles: Map<string, ComponentFile> = component.getFiles()
+        const componentFiles: Map<string, ComponentFile> = component.files()
         const roles: string[] = Array.from(componentFiles.keys())
 
         const filePromises: Array<Promise<any>> = roles.map(role => {
@@ -25,7 +25,7 @@ export default (
           return componentFs
             .writeComponentFile(file, file.renderOutput(renderTemplateFn))
             .then(path => {
-              const fileRole = file.getRole()
+              const fileRole = file.role()
               return {
                 [fileRole]: path,
               }

@@ -31,15 +31,12 @@ describe('load', () => {
     })
     it('should return an array of objects with name, path and init properties', () => {
       const loadedPlugins = loadPlugins(plugins)
-      const mainFile = find(loadedPlugins, obj => obj.getName() === 'main-file')
-      const indexFile = find(
-        loadedPlugins,
-        obj => obj.getName() === 'index-file'
-      )
-      expect(mainFile.getName()).toEqual('main-file')
+      const mainFile = find(loadedPlugins, obj => obj.name() === 'main-file')
+      const indexFile = find(loadedPlugins, obj => obj.name() === 'index-file')
+      expect(mainFile.name()).toEqual('main-file')
       expect(mainFile.path()).toEqual(path.resolve(__dirname))
       expect(mainFile.init).toBeInstanceOf(Function)
-      expect(indexFile.getName()).toEqual('index-file')
+      expect(indexFile.name()).toEqual('index-file')
       expect(indexFile.path()).toEqual(path.resolve(__dirname))
       expect(indexFile.init).toBeInstanceOf(Function)
     })

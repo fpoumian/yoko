@@ -7,5 +7,5 @@ export interface ITemplateCompiler {
 }
 
 export interface IHasContext {
-  getContext(): Object;
+  context(): Object;
 }

@@ -1,9 +1,8 @@
 import pathNode from 'path'
-
 import makeWriteComponentFile from '../write'
 
 describe('write', () => {
-  let getRole
+  let role
   let path
   let writeComponentFile
   let file
@@ -11,7 +10,7 @@ describe('write', () => {
 
   describe('given a valid file', () => {
     beforeEach(() => {
-      getRole = jest
+      role = jest
         .fn()
         .mockReturnValueOnce('main')
         .mockReturnValue('index')
@@ -21,11 +20,11 @@ describe('write', () => {
         .mockReturnValue(pathNode.resolve(process.cwd(), 'index.js'))
 
       file = {
-        getName: jest.fn(),
+        name: jest.fn(),
         path,
-        getTemplate: jest.fn(),
-        getExtension: jest.fn(),
-        getRole,
+        template: jest.fn(),
+        extension: jest.fn(),
+        role,
       }
 
       fs = {

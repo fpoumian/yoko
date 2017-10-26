@@ -25,5 +25,5 @@ export interface IHasPath {
 }
 
 export interface IHasName {
-  getName(): string;
+  name(): string;
 }

@@ -7,19 +7,19 @@ export interface IFileFormatter {
 }
 
 export interface IFile {
-  getExtension(): string;
+  extension(): string;
 }
 
 export interface IHasTemplate {
-  getTemplate(): Template | null;
+  template(): Template | null;
 }
 
 export interface IHasExtension {
-  getExtension(): string;
+  extension(): string;
 }
 
 export interface IHasRole {
-  getRole(): string;
+  role(): string;
 }
 
 export interface ICanRenderOutput {

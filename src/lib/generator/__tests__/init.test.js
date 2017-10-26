@@ -9,13 +9,13 @@ describe('init', () => {
 
   const loadedPlugins = [
     {
-      getName: () => 'index-file',
+      name: () => 'index-file',
     },
     {
-      getName: () => 'main-file',
+      name: () => 'main-file',
     },
     {
-      getName: () => 'stylesheet-file',
+      name: () => 'stylesheet-file',
     },
   ]
 

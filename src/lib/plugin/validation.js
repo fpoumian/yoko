@@ -24,7 +24,7 @@ export default function validateFilePlugin(
 ): FileProps {
   if (!isFunction(plugin.init)) {
     throw new InvalidPluginError(
-      `Plugin ${plugin.getName()} does not export a function.`
+      `Plugin ${plugin.name()} does not export a function.`
     )
   }
 

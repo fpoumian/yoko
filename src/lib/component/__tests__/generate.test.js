@@ -4,7 +4,7 @@ import find from 'lodash/find'
 import makeGenerateComponent from '../generate'
 
 describe('generateComponent', () => {
-  let getRole
+  let role
   let path
   let component
   let generateComponent
@@ -17,7 +17,7 @@ describe('generateComponent', () => {
 
   describe('given a valid component', () => {
     beforeEach(() => {
-      getRole = jest
+      role = jest
         .fn()
         .mockReturnValueOnce('main')
         .mockReturnValue('index')
@@ -27,12 +27,12 @@ describe('generateComponent', () => {
         .mockReturnValue(pathNode.resolve(__dirname, 'index.js'))
 
       file = {
-        getName: jest.fn(),
+        name: jest.fn(),
         path,
-        getTemplate: () => ({ path: () => '', getContext: () => {} }),
-        getExtension: jest.fn(),
+        template: () => ({ path: () => '', context: () => {} }),
+        extension: jest.fn(),
         renderOutput: jest.fn().mockReturnValue(''),
-        getRole,
+        role,
       }
 
       fileList = new Map()
@@ -40,9 +40,9 @@ describe('generateComponent', () => {
       fileList.set('index', file)
 
       component = {
-        getName: jest.fn(),
+        name: jest.fn(),
         path: jest.fn(),
-        getFiles() {
+        files() {
           return fileList
         },
       }

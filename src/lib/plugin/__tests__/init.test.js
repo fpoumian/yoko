@@ -16,7 +16,7 @@ xdescribe('initializePlugins', () => {
   describe('given a set of correct plugins', () => {
     const plugins = [
       {
-        getName: jest.fn().mockReturnValue('main-file'),
+        name: jest.fn().mockReturnValue('main-file'),
         path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockReturnValue({
           name: 'ComponentName',
@@ -31,7 +31,7 @@ xdescribe('initializePlugins', () => {
         }),
       },
       {
-        getName: jest.fn().mockReturnValue('index-file'),
+        name: jest.fn().mockReturnValue('index-file'),
         path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockReturnValue({
           name: 'index',
@@ -88,7 +88,7 @@ xdescribe('initializePlugins', () => {
   describe('given a set of one correct plugin and one invalid plugin (missing name prop)', () => {
     const plugins = [
       {
-        getName: jest.fn().mockReturnValue('main-file'),
+        name: jest.fn().mockReturnValue('main-file'),
         path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: 'ComponentName',
@@ -102,7 +102,7 @@ xdescribe('initializePlugins', () => {
         })),
       },
       {
-        getName: jest.fn().mockReturnValue('index-file'),
+        name: jest.fn().mockReturnValue('index-file'),
         path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           extension: 'js',
@@ -145,7 +145,7 @@ xdescribe('initializePlugins', () => {
   describe('given a set of one correct plugin and one plugin whose skip value is set to true', () => {
     const plugins = [
       {
-        getName: jest.fn().mockReturnValue('main-file'),
+        name: jest.fn().mockReturnValue('main-file'),
         path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: 'ComponentName',
@@ -159,7 +159,7 @@ xdescribe('initializePlugins', () => {
         })),
       },
       {
-        getName: jest.fn().mockReturnValue('index-file'),
+        name: jest.fn().mockReturnValue('index-file'),
         path: jest.fn().mockReturnValue(path.resolve(__dirname)),
         init: jest.fn().mockImplementation(() => ({
           name: 'index',

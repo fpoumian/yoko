@@ -12,20 +12,20 @@ export default function createReactComponent(
 
   // Add file if requested on props
   files.forEach(file => {
-    if (props[file.getRole()]) {
-      filesMap.set(file.getRole(), file)
+    if (props[file.role()]) {
+      filesMap.set(file.role(), file)
     }
   })
 
   // Public API
   const reactComponent: Component = {
-    getName() {
+    name() {
       return name
     },
     path() {
       return path
     },
-    getFiles() {
+    files() {
       return filesMap
     },
   }

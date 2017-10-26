@@ -30,7 +30,7 @@ export default (emitter: IEventEmitter, pluginValidator: IPluginValidator) =>
         if (e instanceof InvalidPluginError) {
           emitter.emit(
             'error',
-            `Cannot initialize plugin ${plugin.getPrefixedName()}.
+            `Cannot initialize plugin ${plugin.prefixedName()}.
            Problem: ${e}
            `
           )
@@ -38,7 +38,7 @@ export default (emitter: IEventEmitter, pluginValidator: IPluginValidator) =>
         if (e instanceof SkipPluginError) {
           emitter.emit(
             'warn',
-            `The value of the skip property in the plugin ${plugin.getPrefixedName()} is set to true, 
+            `The value of the skip property in the plugin ${plugin.prefixedName()} is set to true, 
              therefore the file assigned to this plugin will not be created.
            `
           )

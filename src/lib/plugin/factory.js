@@ -1,22 +1,21 @@
 // @flow
 
-import type { Plugin } from './types'
 import constants from './constants'
 
 export default function createPlugin(
   name: string,
   path: string,
   init: any => any
-): Plugin {
+): Object {
   return {
-    getName() {
+    name() {
       return name
     },
     path() {
       return path
     },
-    getPrefixedName() {
-      return `${constants.PLUGIN_PREFIX}-${name}`
+    prefixedName() {
+      return `${constants.PLUGIN_PREFIX}-${this.name()}`
     },
     init,
   }

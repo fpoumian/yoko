@@ -2,7 +2,6 @@
 
 import type {
   ICanRenderOutput,
-  IFile,
   IHasExtension,
   IHasRole,
   IHasTemplate,

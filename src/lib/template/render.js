@@ -15,7 +15,7 @@ export default (
     const compiledTemplate: ICanRender = templateCompiler.compile(
       require(template.path())
     )
-    const renderedFile: string = compiledTemplate.render(template.getContext())
+    const renderedFile: string = compiledTemplate.render(template.context())
 
     return isPlainObject(prettierConfig)
       ? fileFormatter.format(renderedFile, prettierConfig)

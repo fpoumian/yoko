@@ -12,29 +12,27 @@ export default function(props: FileProps) {
     : null
 
   // Public API
-  const componentFile = {
+  return {
     path() {
       return path.resolve(dir, `${name}.${extension}`)
     },
-    getName() {
+    name() {
       return name
     },
-    getExtension() {
+    extension() {
       return extension
     },
-    getTemplate() {
+    template() {
       return template
     },
     hasTemplate() {
-      return this.getTemplate() !== null
+      return this.template() !== null
     },
     renderOutput(renderTemplateFn: RenderTemplateFn) {
       return !this.hasTemplate() ? '' : renderTemplateFn(template)
     },
-    getRole() {
+    role() {
       return role
     },
   }
-
-  return componentFile
 }

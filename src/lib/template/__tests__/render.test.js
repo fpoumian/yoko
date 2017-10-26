@@ -26,7 +26,7 @@ describe('render', () => {
     beforeEach(() => {
       template = {
         path: () => '',
-        getContext: () => ({
+        context: () => ({
           value: 'World',
         }),
       }
