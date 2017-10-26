@@ -1,9 +1,9 @@
 {
-  "name": "judex-component-generator",
+  "name": "yoko-core",
   "version": "0.1.0",
-  "description": "Judex is a Component Generator/Scaffolding Library.",
+  "description": "Yoko is a Component Generator/Scaffolding Library.",
   "license": "MIT",
-  "repository": "fpoumian/judex-component-generator",
+  "repository": "fpoumian/yoko-core",
   "main": "index.js",
   "author": {
     "name": "Fernando Poumián",

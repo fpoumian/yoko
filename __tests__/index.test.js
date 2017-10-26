@@ -3,7 +3,7 @@ import path from 'path'
 import mock from 'mock-fs'
 import prettier from 'prettier'
 
-import judex from '../src'
+import yoko from '../src'
 import {
   validateStatelessFunctionalComponent,
   validateIndexFile,
@@ -21,7 +21,7 @@ function getDirContents(path) {
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-describe('judex-component-generator', () => {
+describe('yoko-core', () => {
   let srcDir
   let componentsDir
   let containersDir
@@ -55,7 +55,7 @@ describe('judex-component-generator', () => {
       },
     }
 
-    const generator = judex(config)
+    const generator = yoko(config)
 
     describe('when no component options are provided', () => {
       it('should create one directory inside of components Home directory', () => {
@@ -540,7 +540,7 @@ describe('judex-component-generator', () => {
       },
     }
 
-    const generator = judex(config)
+    const generator = yoko(config)
 
     it('should create a Main component file with custom JSX extension', () => {
       expect.assertions(1)
@@ -579,7 +579,7 @@ describe('judex-component-generator', () => {
       },
     }
 
-    const generator = judex(config)
+    const generator = yoko(config)
 
     it('should create a component that does not use the component name to create a root dir', () => {
       expect.assertions(1)
@@ -720,7 +720,7 @@ describe('judex-component-generator', () => {
       },
     }
 
-    const generator = judex(config)
+    const generator = yoko(config)
 
     describe('when the container option is set to true', () => {
       it('should create a valid React component using the Stateless Functional component template inside the Containers home dir', () => {
@@ -753,7 +753,7 @@ describe('judex-component-generator', () => {
       containersDir = path.resolve(process.cwd(), 'containers')
     })
 
-    const generator = judex()
+    const generator = yoko()
 
     it('should create one directory inside the default components home directory', () => {
       expect.assertions(1)
@@ -802,7 +802,7 @@ describe('judex-component-generator', () => {
       plugins: ['tests-file'],
     }
 
-    const generator = judex(config)
+    const generator = yoko(config)
     describe('when the test option is set to true', () => {
       it('should return a path object with root, tests and main properties', () => {
         expect.assertions(1)
@@ -867,7 +867,7 @@ describe('judex-component-generator', () => {
   })
 
   describe('given an invalid argument type for the componentName and options arguments', () => {
-    const generator = judex()
+    const generator = yoko()
     it('should throw an Error', () => {
       expect(() => {
         generator.generate([1, 2, 3])
@@ -880,7 +880,7 @@ describe('judex-component-generator', () => {
 
   describe('given a global configuration with no formatting option specified', () => {
     const config = {}
-    const generator = judex(config)
+    const generator = yoko(config)
     it('should generate a component using the default Prettier configuration', () => {
       expect.assertions(1)
       return generator.generate('TestComponent').then(paths => {
@@ -901,7 +901,7 @@ describe('judex-component-generator', () => {
         },
       },
     }
-    const generator = judex(config)
+    const generator = yoko(config)
     it('should generate a component using the specified prettier configuration', () => {
       expect.assertions(1)
       return generator.generate('TestComponent').then(paths => {
@@ -918,7 +918,7 @@ describe('judex-component-generator', () => {
   describe('Init Events', () => {
     describe('given no additional plugins were specified in global config object', () => {
       const config = {}
-      const generator = judex(config)
+      const generator = yoko(config)
 
       it('should emit pluginsRegistered event that returns an array of three plugins', done => {
         expect.assertions(1)
@@ -932,7 +932,7 @@ describe('judex-component-generator', () => {
     })
   })
 
-  // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("judex-component-generator") block,
+  // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("yoko-core") block,
   // otherwise the rest of the test suites won't work!
   afterEach(() => {
     mock.restore()

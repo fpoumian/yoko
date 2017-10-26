@@ -66,7 +66,7 @@ describe('load', () => {
       loadPlugins(plugins)
       expect(emitter.emit).toHaveBeenCalledWith(
         'cannotLoadPlugin',
-        'judex-plugin-index-file'
+        'yoko-plugin-index-file'
       )
     })
   })

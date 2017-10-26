@@ -1,7 +1,7 @@
 // @flow
 /**
- * Judex component Generator
- * @module judex-component-generator
+ * Yoko Core
+ * @module yoko-core
  */
 
 import EventEmitter from 'events'
