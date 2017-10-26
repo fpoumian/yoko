@@ -7,10 +7,8 @@ import {
   validateComponentOptions,
   validateComponentName,
 } from '../component/validation'
-import makeInitPlugins from '../plugin/init'
 import registerPlugins from '../plugin/register'
 import parseComponentName from '../component/parseName'
-import makeMapFilePluginsDataToFiles from '../plugin/mapToFiles'
 
 import type { ComponentFile, FileProps } from '../component-file/types'
 import type { LoadPluginsFn, Plugin } from '../plugin/types'
@@ -49,8 +47,8 @@ export default (
     // Inject generator dependencies
     return ({
       generateComponentFn,
-      resolveComponentFileTemplateFn,
-      pluginValidator,
+      mapPluginsDataToFilesFn,
+      makeInitPluginsFn,
       emitter,
     }: RunDependencies) => {
       function run(
@@ -106,18 +104,15 @@ export default (
           }
 
           // Initialize plugins
-          const initPlugins = makeInitPlugins(emitter, pluginValidator)
+          const initPlugins = makeInitPluginsFn(emitter)
           const filePluginsData: FileProps[] = initPlugins(
             plugins,
             { ...props },
             { ...config }
           )
 
-          // Map plugins to files
-          const mapFilePluginsDataToFiles = makeMapFilePluginsDataToFiles(
-            resolveComponentFileTemplateFn
-          )
-          const files: ComponentFile[] = mapFilePluginsDataToFiles(
+          // Map plugin data to files
+          const files: ComponentFile[] = mapPluginsDataToFilesFn(
             filePluginsData,
             { ...config }
           )

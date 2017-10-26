@@ -13,6 +13,8 @@ import NodeCache from 'node-cache'
 import validateFilePlugin from './lib/plugin/validation'
 import makeComponentFs from './lib/component/fs'
 import makeGenerateComponentFn from './lib/component/generate'
+import makeInitPlugins from './lib/plugin/init'
+import makeMapPluginDataToFiles from './lib/plugin/mapToFiles'
 import makeRenderTemplateFn from './lib/template/render'
 import makeInitGenerator from './lib/generator/init'
 import parseConfig from './lib/config/parse'
@@ -82,11 +84,11 @@ export default function(customConfig: Object = {}): IGenerator {
   function generate(componentName: string, options: ComponentOptions = {}) {
     return initGenerator(config)({
       generateComponentFn,
-      resolveComponentFileTemplateFn: componentFs.resolveComponentFileTemplate,
+      mapPluginsDataToFilesFn: makeMapPluginDataToFiles(
+        componentFs.resolveComponentFileTemplate
+      ),
       emitter: new EventEmitter(),
-      pluginValidator: {
-        validate: validateFilePlugin,
-      },
+      makeInitPluginsFn: makeInitPlugins(validateFilePlugin),
     }).run(componentName, options)
   }
 
