@@ -36,6 +36,12 @@ export function validateComponentName(componentName: string): string {
     )
   }
 
+  if (!isNaN(componentName)) {
+    throw new BadNameError(
+      `You must pass a string as a value for the componentName argument. Number received instead.`
+    )
+  }
+
   if (componentName.trim() === '') {
     throw new BadNameError(
       `The componentName argument cannot be an empty string.`

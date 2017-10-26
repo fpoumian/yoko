@@ -73,8 +73,15 @@ describe('validateComponentOptions', () => {
 })
 
 describe('validateComponentName', () => {
-  it('should throw TypeError when component path is not a string', () => {
+  it('should throw BadNameError when component name is not a string', () => {
     const path = 1
+    expect(() => {
+      validateComponentName(path)
+    }).toThrowError(BadNameError)
+  })
+
+  it('should throw BadNameError when component name is a number string', () => {
+    const path = '1'
     expect(() => {
       validateComponentName(path)
     }).toThrowError(BadNameError)

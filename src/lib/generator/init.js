@@ -58,8 +58,15 @@ export default (
         options: ComponentOptions = {}
       ): IEventListener {
         // Handle input errors
-        const validOptions = validateComponentOptions(options)
-        const validComponentName = validateComponentName(componentName)
+        let validOptions
+        let validComponentName
+
+        try {
+          validOptions = validateComponentOptions(options)
+          validComponentName = validateComponentName(componentName)
+        } catch (e) {
+          throw e
+        }
 
         // Create new emitter
         emitter.on('error', error => {
@@ -119,7 +126,7 @@ export default (
           const component: Component = createComponent(props, files)
 
           // Kick-off component generation
-          generateComponentFn(component, config)
+          return generateComponentFn(component, config)
             .then((componentFilesPaths: Object[]) => {
               componentFilesPaths.forEach(filePath => {
                 Object.keys(filePath).forEach(role => {
