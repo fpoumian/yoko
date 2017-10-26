@@ -6,10 +6,6 @@ export interface IFileFormatter {
   format(string, ?Object | boolean): string;
 }
 
-export interface IFile {
-  extension(): string;
-}
-
 export interface IHasTemplate {
   template(): Template | null;
 }

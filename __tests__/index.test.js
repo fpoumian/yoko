@@ -624,37 +624,37 @@ describe('judex-component-generator', () => {
         })
     })
 
-    xit('should NOT delete files', done => {
+    it('should NOT delete the components home dir', done => {
       expect.assertions(6)
       const emitter = generator
-        .generate('ComponentsHomeDir/TestComponent', { stylesheet: true })
+        .generate('Component1', { stylesheet: true })
         .on('done', () => {
-          expect(
-            getDirContents(resolveInComponents('ComponentsHomeDir'))
-          ).toContain('TestComponent.js')
-          expect(
-            getDirContents(resolveInComponents('ComponentsHomeDir'))
-          ).toContain('TestComponent.css')
+          expect(getDirContents(resolveInComponents())).toContain(
+            'Component1.js'
+          )
+          expect(getDirContents(resolveInComponents())).toContain(
+            'Component1.css'
+          )
         })
 
       emitter.on('done', () => {
         generator
-          .generate('ComponentsHomeDir/AnotherTestComponent', {
+          .generate('Component2', {
             stylesheet: true,
           })
           .on('done', () => {
-            expect(
-              getDirContents(resolveInComponents('ComponentsHomeDir'))
-            ).toContain('TestComponent.js')
-            expect(
-              getDirContents(resolveInComponents('ComponentsHomeDir'))
-            ).toContain('TestComponent.css')
-            expect(
-              getDirContents(resolveInComponents('ComponentsHomeDir'))
-            ).toContain('AnotherTestComponent.js')
-            expect(
-              getDirContents(resolveInComponents('ComponentsHomeDir'))
-            ).toContain('AnotherTestComponent.css')
+            expect(getDirContents(resolveInComponents())).toContain(
+              'Component2.js'
+            )
+            expect(getDirContents(resolveInComponents())).toContain(
+              'Component2.css'
+            )
+            expect(getDirContents(resolveInComponents())).toContain(
+              'Component1.js'
+            )
+            expect(getDirContents(resolveInComponents())).toContain(
+              'Component1.css'
+            )
             done()
           })
       })
