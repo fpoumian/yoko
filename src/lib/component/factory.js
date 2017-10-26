@@ -1,12 +1,12 @@
 // @flow
 
-import type { Component, ComponentProps } from './types'
+import type { ComponentProps } from './types'
 import type { ComponentFile } from '../component-file/types'
 
 export default function createReactComponent(
   props: ComponentProps,
   files: ComponentFile[]
-): Component {
+): Object {
   const { name, path } = props
   const filesMap: Map<string, ComponentFile> = new Map()
 
@@ -18,7 +18,7 @@ export default function createReactComponent(
   })
 
   // Public API
-  const reactComponent: Component = {
+  return {
     name() {
       return name
     },
@@ -29,6 +29,4 @@ export default function createReactComponent(
       return filesMap
     },
   }
-
-  return reactComponent
 }
