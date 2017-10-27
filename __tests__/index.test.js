@@ -624,6 +624,27 @@ describe('yoko', () => {
         })
     })
 
+    describe('when the config has the skip-index-file rule set to false', () => {
+      const config = {
+        rules: {
+          'component-name-root-dir': false,
+          'skip-index-file': false,
+        },
+      }
+
+      const generator = yoko(config)
+
+      it('should create the index file', () => {
+        // In this case we're assuming the plugin is the index-file plugin.
+        expect.assertions(1)
+        return generator
+          .generate('TestComponent', { index: true })
+          .then(paths => {
+            expect(paths).toHaveProperty('index')
+          })
+      })
+    })
+
     it('should NOT delete the components home dir', done => {
       expect.assertions(6)
       const emitter = generator
