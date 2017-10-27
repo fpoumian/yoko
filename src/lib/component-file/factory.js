@@ -29,7 +29,7 @@ export default function(props: FileProps) {
       return this.template() !== null
     },
     renderOutput(renderTemplateFn: RenderTemplateFn) {
-      return !this.hasTemplate() ? '' : renderTemplateFn(template)
+      return !this.hasTemplate() ? '' : renderTemplateFn(this.template())
     },
     role() {
       return role

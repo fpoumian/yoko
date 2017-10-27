@@ -21,7 +21,7 @@ function getDirContents(path) {
 /* eslint import/no-dynamic-require: off  */
 /* eslint global-require: off  */
 
-describe('yoko-core', () => {
+describe('yoko', () => {
   let srcDir
   let componentsDir
   let containersDir
@@ -932,7 +932,7 @@ describe('yoko-core', () => {
     })
   })
 
-  // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("yoko-core") block,
+  // IMPORTANT: Always make sure to place this mock.restore() before the end of the describe("yoko") block,
   // otherwise the rest of the test suites won't work!
   afterEach(() => {
     mock.restore()

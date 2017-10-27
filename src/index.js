@@ -1,7 +1,7 @@
 // @flow
 /**
- * Yoko Core
- * @module yoko-core
+ * Yoko Component Generator
+ * @module yoko
  */
 
 import EventEmitter from 'events'
