@@ -66,34 +66,30 @@ export default function(customConfig: Object = {}): IGenerator {
   )
 
   // Public API
-
-  /***
-   * Add Event Listeners
-   * @param {Object} eventName - The name of the event
-   * @param eventHandler - Handler
-   */
-  function on(eventName: string, eventHandler: any) {
-    return initEmitter.on(eventName, eventHandler)
-  }
-
-  /***
-   * Generate component
-   * @param {string} componentName - The name of the component
-   * @param {Object} options - The options for the component
-   */
-  function generate(componentName: string, options: ComponentOptions = {}) {
-    return initGenerator(config)({
-      generateComponentFn,
-      mapPluginsDataToFilesFn: makeMapPluginDataToFiles(
-        componentFs.resolveComponentFileTemplate
-      ),
-      emitter: new EventEmitter(),
-      makeInitPluginsFn: makeInitPlugins(validateFilePlugin),
-    }).run(componentName, options)
-  }
-
   return {
-    on,
-    generate,
+    /***
+     * Add Event Listeners
+     * @param {Object} eventName - The name of the event
+     * @param eventHandler - Handler
+     */
+    on(eventName: string, eventHandler: any) {
+      initEmitter.on(eventName, eventHandler)
+      return this
+    },
+    /***
+     * Generate component
+     * @param {string} componentName - The name of the component
+     * @param {Object} options - The options for the component
+     */
+    generate(componentName: string, options: ComponentOptions = {}) {
+      return initGenerator(config)({
+        generateComponentFn,
+        mapPluginsDataToFilesFn: makeMapPluginDataToFiles(
+          componentFs.resolveComponentFileTemplate
+        ),
+        emitter: new EventEmitter(),
+        makeInitPluginsFn: makeInitPlugins(validateFilePlugin),
+      }).run(componentName, options)
+    },
   }
 }
