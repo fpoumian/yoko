@@ -5280,9 +5280,9 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-yoko-plugin-index-file@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/yoko-plugin-index-file/-/yoko-plugin-index-file-0.1.0.tgz#2bfe4b035dd7cb2aa05299ea046f3f3588f8219f"
+yoko-plugin-index-file@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/yoko-plugin-index-file/-/yoko-plugin-index-file-0.1.2.tgz#1856092f88c8a95a05f9cc03dda87e6089bd3413"
 
 yoko-plugin-main-file@^0.2.0:
   version "0.2.0"

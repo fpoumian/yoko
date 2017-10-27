@@ -72,8 +72,8 @@
     "prettier": "1.7.4",
     "remove-trailing-slash": "^0.1.0",
     "sanitize-filename": "^1.6.1",
+    "yoko-plugin-index-file": "^0.1.2",
     "yoko-plugin-main-file": "^0.2.0",
-    "yoko-plugin-index-file": "^0.1.0",
     "yoko-plugin-stylesheet-file": "^0.1.1",
     "yoko-plugin-tests-file": "^0.1.0"
   },
