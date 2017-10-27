@@ -5279,3 +5279,19 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+yoko-plugin-index-file@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/yoko-plugin-index-file/-/yoko-plugin-index-file-0.1.0.tgz#2bfe4b035dd7cb2aa05299ea046f3f3588f8219f"
+
+yoko-plugin-main-file@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/yoko-plugin-main-file/-/yoko-plugin-main-file-0.2.0.tgz#4d4c4c2389b2219680fb9dc251c74ea7cc8552b7"
+
+yoko-plugin-stylesheet-file@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/yoko-plugin-stylesheet-file/-/yoko-plugin-stylesheet-file-0.1.1.tgz#25571c13e923d61800cb1c634920454576f38160"
+
+yoko-plugin-tests-file@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/yoko-plugin-tests-file/-/yoko-plugin-tests-file-0.1.0.tgz#dc64b7ded9beaf83c39d924475687bf35e243d5b"
