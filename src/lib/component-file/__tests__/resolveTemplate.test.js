@@ -31,6 +31,9 @@ describe('resolveTemplate', () => {
       template: {
         name: 'index-file.js',
         dir: path.resolve(__dirname, 'templates'),
+        context: {
+          componentName: 'TestComponent',
+        },
       },
     }
 
@@ -76,6 +79,9 @@ describe('resolveTemplate', () => {
           expect(resolveTemplate(config, fileProps)).toEqual({
             name: 'index-file.js',
             dir: '/home/project/app/templates',
+            context: {
+              componentName: 'TestComponent',
+            },
           })
         })
       })

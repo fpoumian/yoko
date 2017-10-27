@@ -11,17 +11,18 @@ export default (fs: IFileSystem) =>
     fileProps: FileProps
   ): Object | null {
     if (!fileProps.template) return null
-    const templateName = fileProps.template.name
+    const { name, context } = fileProps.template
 
     // If global config object does NOT have a templates path specified
     // then return the default template object from plugin.
     if (!has(config, 'paths.templates') || config.paths.templates.trim() === '')
       return fileProps.template
 
-    return fs.pathExistsSync(path.resolve(config.paths.templates, templateName))
+    return fs.pathExistsSync(path.resolve(config.paths.templates, name))
       ? {
-          name: templateName,
+          name,
           dir: config.paths.templates,
+          context,
         }
       : fileProps.template
   }
