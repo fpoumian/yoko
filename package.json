@@ -32,8 +32,15 @@
     "major": "npm version major && npm publish",
     "format-all": "prettier --config ./.prettierrc --write './src/**/*.js' './__tests__/**/*.js'",
     "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
+    "precommit": "lint-staged",
     "prepublish": "npm run lint && npm test && npm run build",
     "postpublish": "git push origin master --follow-tags"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "watch": {
     "test": "{src,__test__}/*.js",
@@ -97,8 +104,10 @@
     "eslint-plugin-standard": "^3.0.1",
     "event-to-promise": "^0.8.0",
     "flow-bin": "^0.50.0",
+    "husky": "^0.14.3",
     "jest": "^20.0.4",
     "jest-cli": "^20.0.0",
+    "lint-staged": "^4.3.0",
     "mock-fs": "^4.4.1",
     "npm-watch": "^0.2.0",
     "opn-cli": "^3.1.0",
