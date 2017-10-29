@@ -32,7 +32,10 @@ export default (
 
     const cachedPlugins = initCache.get('plugins')
 
-    if (typeof cachedPlugins === 'undefined') {
+    if (
+      typeof cachedPlugins === 'undefined' ||
+      process.env.NODE_ENV === 'test'
+    ) {
       const registeredPlugins = registerPlugins(config)
       initEmitter.emit('pluginsRegistered', registeredPlugins)
 
